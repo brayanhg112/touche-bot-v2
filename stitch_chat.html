@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Touche Essencielle - Digital Sommelier</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@300;400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #131318;
+            color: #e4e1e9;
+            font-family: 'Manrope', sans-serif;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-chat-ai {
+            background: rgba(31, 31, 37, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        .glass-chat-user {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(242, 202, 80, 0.05));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(242, 202, 80, 0.2);
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #f2ca50, #d4af37);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(242, 202, 80, 0.2);
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#1f1f25",
+                        "secondary-container": "#af8d11",
+                        "surface": "#131318",
+                        "secondary-fixed-dim": "#eac249",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#b4c5ff",
+                        "outline-variant": "#4d4635",
+                        "error-container": "#93000a",
+                        "primary-fixed": "#ffe088",
+                        "outline": "#99907c",
+                        "on-secondary-container": "#352800",
+                        "surface-dim": "#131318",
+                        "primary-fixed-dim": "#e9c349",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed": "#ffe08a",
+                        "on-tertiary-fixed": "#00174b",
+                        "primary-container": "#d4af37",
+                        "tertiary": "#bfcdff",
+                        "surface-variant": "#35343a",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#97b0ff",
+                        "background": "#131318",
+                        "surface-container-lowest": "#0e0e13",
+                        "on-primary-container": "#554300",
+                        "inverse-primary": "#735c00",
+                        "inverse-on-surface": "#303036",
+                        "on-tertiary-fixed-variant": "#27438a",
+                        "on-primary-fixed": "#241a00",
+                        "surface-bright": "#39383e",
+                        "on-surface-variant": "#d0c5af",
+                        "on-secondary-fixed": "#241a00",
+                        "on-primary": "#3c2f00",
+                        "surface-container-low": "#1b1b20",
+                        "surface-container-high": "#2a292f",
+                        "inverse-surface": "#e4e1e9",
+                        "surface-container-highest": "#35343a",
+                        "on-secondary-fixed-variant": "#574400",
+                        "primary": "#f2ca50",
+                        "tertiary-fixed": "#dbe1ff",
+                        "secondary": "#eac249",
+                        "surface-tint": "#e9c349",
+                        "on-tertiary-container": "#254188",
+                        "on-tertiary": "#082b72",
+                        "on-background": "#e4e1e9",
+                        "on-secondary": "#3d2f00",
+                        "on-primary-fixed-variant": "#574500",
+                        "on-surface": "#e4e1e9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#131318]/70 backdrop-blur-xl flex justify-between items-center px-6 h-20 shadow-[0_0_40px_rgba(242,202,80,0.04)]">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#f2ca50]">menu</span>
+<h1 class="text-xl font-bold tracking-tighter text-[#f2ca50] font-['Noto_Serif']">Touche Essencielle</h1>
+</div>
+<div class="w-10 h-10 rounded-full border border-primary/20 overflow-hidden bg-surface-container-high flex items-center justify-center">
+<img alt="Perfil de usuario" class="w-full h-full object-cover" data-alt="Close up portrait of a sophisticated man with a groomed beard and elegant attire against a dark moody background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTkyp3nthGBS4vrv5dzYPCQxIDTibNpku_yE1Wg0C9DNa7rkZtMxyj4hzcUEep_g2aGdyHgzTKNz2eSYYy3ef383Bd_L9r6BYRQ_2-i3Qsa175xgbP1Rzsz8a-VZi94gTKJ1khKvMxjMxMON38FEbgNDq40y851qmazpeuNBK-mCi-Ei6Xw3uTbP0L1YcOMAgX0xv6y8vtYtsikOE-DIZUIHNPjL4iTDAvm6Aqb9XAIAL93vZbeC8sJG_1sfpxNJzzliRKmNs4FLc"/>
+</div>
+</header>
+<main class="pt-24 pb-32 min-h-screen flex flex-col max-w-2xl mx-auto px-4">
+<!-- Welcome Message -->
+<div class="mb-12 mt-4 text-center">
+<h2 class="text-3xl font-headline font-bold text-primary mb-2">Sommelier Digital</h2>
+<p class="text-sm font-body text-on-surface/60 tracking-wider">ENCUENTRA TU ESENCIA PERFECTA</p>
+</div>
+<!-- Chat Container -->
+<div class="flex-grow space-y-6 custom-scrollbar">
+<!-- AI Message -->
+<div class="flex items-end gap-3 max-w-[85%]">
+<div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center flex-shrink-0 shadow-lg">
+<span class="material-symbols-outlined text-on-primary text-sm" style="font-variation-settings: 'FILL' 1;">storm</span>
+</div>
+<div class="glass-chat-ai p-5 rounded-t-2xl rounded-r-2xl">
+<p class="font-body text-sm leading-relaxed">Bienvenido al atelier digital de Touche Essencielle. Soy su Sommelier personal. Para comenzar nuestra alquimia, ¿qué ocasión busca acompañar hoy?</p>
+</div>
+</div>
+<!-- Chips Section -->
+<div class="flex flex-wrap gap-2 py-4 justify-end">
+<button class="px-5 py-2 rounded-full border border-outline-variant/30 bg-surface-container-high text-on-surface text-xs font-semibold tracking-wide hover:border-primary/50 transition-all duration-300">Uso diario</button>
+<button class="px-5 py-2 rounded-full border border-outline-variant/30 bg-surface-container-high text-on-surface text-xs font-semibold tracking-wide hover:border-primary/50 transition-all duration-300">Noche especial</button>
+<button class="px-5 py-2 rounded-full bg-primary text-on-primary text-xs font-semibold tracking-wide shadow-[0_0_15px_rgba(242,202,80,0.3)]">Cita romántica</button>
+</div>
+<!-- User Message -->
+<div class="flex justify-end gap-3 ml-auto max-w-[85%]">
+<div class="glass-chat-user p-5 rounded-t-2xl rounded-l-2xl text-on-surface">
+<p class="font-body text-sm leading-relaxed">Busco algo para una cita romántica, algo que deje una impresión duradera y elegante.</p>
+</div>
+</div>
+<!-- AI Typing / Response -->
+<div class="flex items-end gap-3 max-w-[85%]">
+<div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-on-primary text-sm" style="font-variation-settings: 'FILL' 1;">storm</span>
+</div>
+<div class="glass-chat-ai p-5 rounded-t-2xl rounded-r-2xl">
+<div class="flex items-center gap-6 mb-4">
+<img alt="Perfume bottle" class="w-20 h-24 object-cover rounded-md shadow-2xl border border-primary/10" data-alt="Exquisite dark perfume bottle with gold accents on a black marble surface with dramatic rim lighting and soft vapor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVvuCvGaCLkX5izOZaGX79xBtewMrOMqM8dFFb8Rxa9WJypSYfo_8vpR155xJ8xlNW6p5D-5QANjdDolbBZOTMbdRB2jUyxf9aErIEZK1G07TSWfL9r-RvzpEm5mqVdab8xVyemrzxFHaPHeSLWt5yg5s6L_8DsCVX5F_9wv3l1nETfhmk6p1JEpQaE-vPsVnoALNavCFsp-OGSbLoAIodLzMT94IEBQ7fiydszvDfTTchfihQ0CS8MLSW0EP9_e2ySiZ5B9mA03s"/>
+<div>
+<span class="text-[10px] uppercase tracking-widest text-primary font-semibold">Sugerencia de Alquimia</span>
+<h3 class="font-headline text-lg text-on-surface">Obsidian Oud</h3>
+<p class="text-xs text-on-surface/50 font-body">Notas de cuero, sándalo y azafrán.</p>
+</div>
+</div>
+<p class="font-body text-sm leading-relaxed">Excelente elección. Para una cita romántica, Obsidian Oud ofrece un aura de misterio y sofisticación. ¿Desea conocer la composición detallada de esta fragancia?</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Input Area -->
+<div class="fixed bottom-24 w-full max-w-2xl left-1/2 -translate-x-1/2 px-4 z-40">
+<div class="relative group">
+<input class="w-full bg-[#1b1b20]/90 backdrop-blur-xl border-b-2 border-outline-variant/20 focus:border-primary focus:ring-0 text-on-surface py-5 px-6 rounded-t-2xl transition-all duration-500 placeholder:text-on-surface/30 font-body text-sm" placeholder="Escribe tu respuesta..." type="text"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full gold-gradient flex items-center justify-center text-on-primary shadow-lg hover:scale-105 transition-transform duration-300">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full h-24 flex justify-around items-center px-8 pb-4 bg-[#131318]/80 backdrop-blur-2xl z-50 rounded-t-[2rem] border-t border-[#d4af37]/15 shadow-[0_-4px_20px_rgba(0,0,0,0.5)]">
+<a class="flex flex-col items-center justify-center text-[#f2ca50] font-semibold scale-95 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1">storm</span>
+<span class="font-['Manrope'] text-[10px] uppercase tracking-[0.05em]">Sommelier</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#e4e1e9]/40 hover:text-[#f2ca50]/80 transition-colors duration-500" href="#">
+<span class="material-symbols-outlined mb-1">auto_awesome_motion</span>
+<span class="font-['Manrope'] text-[10px] uppercase tracking-[0.05em]">Colecciones</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#e4e1e9]/40 hover:text-[#f2ca50]/80 transition-colors duration-500" href="#">
+<span class="material-symbols-outlined mb-1">bookmark</span>
+<span class="font-['Manrope'] text-[10px] uppercase tracking-[0.05em]">Guardados</span>
+</a>
+</nav>
+<!-- Background Monogram Watermark -->
+<div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20vw] font-headline text-primary opacity-[0.03] pointer-events-none select-none z-0">
+        TE
+    </div>
+</body></html>

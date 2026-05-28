@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "duckduckgo-images-api": "^1.0.5",
+    "papaparse": "^5.5.3"
+  },
+  "devDependencies": {
+    "@types/papaparse": "^5.5.2"
+  }
+}
