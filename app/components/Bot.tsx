@@ -52,7 +52,11 @@ const avoidOptions = [
 
 function uid() { return Math.random().toString(36).slice(2); }
 
-export default function Bot() {
+interface BotProps {
+  stockMap?: Record<string, boolean>;
+}
+
+export default function Bot({ stockMap }: BotProps) {
   const [step, setStep] = useState<Step>('greeting');
   const [messages, setMessages] = useState<Message[]>([]);
   const [nameInput, setNameInput] = useState('');
@@ -61,7 +65,6 @@ export default function Bot() {
   const [tempAvoid, setTempAvoid] = useState<string[]>([]);
   const [referenceInput, setReferenceInput] = useState('');
   const [top3, setTop3] = useState<ScoredPerfume[]>([]);
-  const [stockMap, setStockMap] = useState<Record<string, boolean> | undefined>(undefined);
 
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -75,14 +78,6 @@ export default function Bot() {
     setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 80);
   }, [messages, step]);
 
-  useEffect(() => {
-    fetch('/api/stock')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.stock) setStockMap(data.stock);
-      })
-      .catch((err) => console.error('Failed to load live stock', err));
-  }, []);
 
   useEffect(() => {
     addBot('Bienvenido al atelier digital de Touche Essencielle. Soy Aria — su sommelier de fragancias de lujo. 🌹');

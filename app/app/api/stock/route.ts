@@ -62,6 +62,7 @@ export async function GET() {
     const lines = csvText.split('\n');
 
     let customStockMap: Record<string, boolean> = {};
+    let outOfStock: string[] = [];
     let stockIdx = -1;
     let nameIdx = -1;
 
@@ -95,6 +96,9 @@ export async function GET() {
           if (matched) {
             // 'S' = entrega inmediata, cualquier otra cosa = bajo pedido
             customStockMap[matched.id] = (rawStock === 'S' || rawStock === 'SI' || rawStock === 'SÍ');
+            if (rawStock === 'N' || rawStock === 'NO') {
+              if (!outOfStock.includes(matched.id)) outOfStock.push(matched.id);
+            }
           }
         }
       }
@@ -114,7 +118,10 @@ export async function GET() {
             const hasS = cols.some(c => c.trim().toUpperCase() === 'S');
             const hasN = cols.some(c => c.trim().toUpperCase() === 'N');
             if (hasS) customStockMap[perfume.id] = true;
-            else if (hasN) customStockMap[perfume.id] = false;
+            else if (hasN) {
+              customStockMap[perfume.id] = false;
+              if (!outOfStock.includes(perfume.id)) outOfStock.push(perfume.id);
+            }
           }
         }
       }
@@ -126,9 +133,9 @@ export async function GET() {
       finalStockMap[perfume.id] = customStockMap[perfume.id] === true;
     });
 
-    return NextResponse.json({ stock: finalStockMap });
+    return NextResponse.json({ stock: finalStockMap, outOfStock });
   } catch (err) {
-    return NextResponse.json({ stock: {} });
+    return NextResponse.json({ stock: {}, outOfStock: [] });
   }
 }
 

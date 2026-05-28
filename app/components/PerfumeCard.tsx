@@ -6,16 +6,19 @@ import type { BotAnswers } from '../lib/types';
 import type { ScoredPerfume } from '../lib/recommender';
 import { buildWhatsappPerPerfume, buildSommelierSummary } from '../lib/recommender';
 import { getImagePath } from '../lib/imageMap';
+import { useFavorites } from '../hooks/useFavorites';
 
 interface Props {
   result: ScoredPerfume;
-  rank: number;
-  answers: BotAnswers;
+  rank?: number;
+  answers?: BotAnswers;
 }
 
 export default function PerfumeCard({ result, rank, answers }: Props) {
   const { perfume, isImmediate } = result;
   const [showDetails, setShowDetails] = useState(false);
+  const { favorites, toggleFavorite, isLoaded } = useFavorites();
+  const isFavorite = favorites.includes(perfume.id);
   // Image resolution sequence: 
   // 1. Exact map from imageMap
   // 2. Fallback to /perfumes/[id].png (lowercase)
@@ -33,28 +36,48 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
   const isPlaceholder = imgSrc === null;
 
   const handleBuy = () => {
-    const url = buildWhatsappPerPerfume(answers.name, perfume.name, perfume.brand);
+    const url = answers ? buildWhatsappPerPerfume(answers.name, perfume.name, perfume.brand)
+      : `https://wa.me/573136876673?text=${encodeURIComponent(`Hola Brayan 🌸 Me encantó la fragancia ${perfume.name} de ${perfume.brand} en mis colecciones y quiero pedirla. ¿Me puedes mostrar enseguidita para ensayarla en mi piel? 😍`)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   /** Dynamic, unique match paragraph for this card */
-  const sommelierText = buildSommelierSummary(answers, perfume, rank);
+  const sommelierText = (answers && rank) 
+    ? buildSommelierSummary(answers, perfume, rank)
+    : perfume.emotionalDesc;
 
   return (
     <motion.article
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: rank * 0.18, type: 'spring', stiffness: 80 }}
+      transition={{ delay: (rank || 1) * 0.18, type: 'spring', stiffness: 80 }}
       className="relative mb-12 mt-8"
     >
-      {/* Large rank watermark */}
-      <div className="absolute -top-6 -left-2 z-10 pointer-events-none">
-        <span className="font-headline text-[5rem] font-extrabold text-primary/15 italic select-none">
-          0{rank}
-        </span>
-      </div>
+      {/* Large rank watermark (only if rank is provided) */}
+      {rank !== undefined && (
+        <div className="absolute -top-6 -left-2 z-10 pointer-events-none">
+          <span className="font-headline text-[5rem] font-extrabold text-primary/15 italic select-none">
+            0{rank}
+          </span>
+        </div>
+      )}
 
       <div className="glass-card rounded-[1rem] overflow-hidden obsidian-glow flex flex-col relative z-20">
+        {/* Bookmark Favorite Button */}
+        {isLoaded && (
+          <button 
+            onClick={() => toggleFavorite(perfume.id)}
+            className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-[#111115]/80 backdrop-blur-md flex items-center justify-center border border-primary/20 shadow-lg transition-transform duration-300 hover:scale-110"
+            aria-label={isFavorite ? "Quitar de guardados" : "Guardar en favoritos"}
+          >
+            <span 
+              className={`material-symbols-outlined text-[20px] transition-colors duration-300 ${isFavorite ? 'text-primary' : 'text-on-surface/50'}`}
+              style={{ fontVariationSettings: isFavorite ? "'FILL' 1" : "'FILL' 0" }}
+            >
+              bookmark
+            </span>
+          </button>
+        )}
 
         {/* ── Image area ── */}
         <div className="h-[340px] relative overflow-hidden bg-[#0e0e13]">
