@@ -23,15 +23,21 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
   // 1. Exact map from imageMap
   // 2. Fallback to /perfumes/[id].png (lowercase)
   // 3. Fallback to /perfumes/[id].jpg (lowercase)
-  const fallbackBase = `/perfumes/${perfume.id.trim().toLowerCase()}`;
+  const idSlug = perfume.id.trim().toLowerCase()
+    .replace(/\s+/g, '-')      // Espacios a guiones
+    .replace(/[^\w\-]+/g, '')  // Quita caracteres raros
+    .replace(/\-\-+/g, '-');   // Evita guiones dobles
+
+  const fallbackBase = `/perfumes/${idSlug}`;
+
   const imagePathsToTry = [
     getImagePath(perfume.id.trim()),
-    `${fallbackBase}.png`,
-    `${fallbackBase}.jpg`
+    `${fallbackBase}.png`, // Ahora sí queda bien: /perfumes/narcotic-delight-initio.png
+    `${fallbackBase}.jpg`  // Y aquí: /perfumes/narcotic-delight-initio.jpg
   ].filter(Boolean) as string[];
 
   const [attemptIndex, setAttemptIndex] = useState(0);
-  
+
   const imgSrc = attemptIndex < imagePathsToTry.length ? imagePathsToTry[attemptIndex] : null;
   const isPlaceholder = imgSrc === null;
 
@@ -42,7 +48,7 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
   };
 
   /** Dynamic, unique match paragraph for this card */
-  const sommelierText = (answers && rank) 
+  const sommelierText = (answers && rank)
     ? buildSommelierSummary(answers, perfume, rank)
     : perfume.emotionalDesc;
 
@@ -65,12 +71,12 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
       <div className="glass-card rounded-[1rem] overflow-hidden obsidian-glow flex flex-col relative z-20">
         {/* Bookmark Favorite Button */}
         {isLoaded && (
-          <button 
+          <button
             onClick={() => toggleFavorite(perfume.id)}
             className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-[#111115]/80 backdrop-blur-md flex items-center justify-center border border-primary/20 shadow-lg transition-transform duration-300 hover:scale-110"
             aria-label={isFavorite ? "Quitar de guardados" : "Guardar en favoritos"}
           >
-            <span 
+            <span
               className={`material-symbols-outlined text-[20px] transition-colors duration-300 ${isFavorite ? 'text-primary' : 'text-on-surface/50'}`}
               style={{ fontVariationSettings: isFavorite ? "'FILL' 1" : "'FILL' 0" }}
             >
