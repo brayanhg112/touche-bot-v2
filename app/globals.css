@@ -2,15 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-@theme {
+:root {
+  /* Primary Colors */
   --color-primary: #d4af37;
   --color-primary-container: #846b1d;
   --color-primary-fixed: #fceea1;
   --color-primary-fixed-dim: #dfbb4b;
   --color-on-primary: #1c1605;
 
+  /* Secondary Colors */
   --color-secondary: #c5a059;
 
+  /* Surface Colors */
   --color-surface: #0a0a0a;
   --color-surface-dim: #0a0a0a;
   --color-surface-bright: #1b1b1b;
@@ -21,26 +24,23 @@
   --color-surface-container-highest: #222222;
   --color-surface-variant: #222222;
 
+  /* Outline Colors */
   --color-outline: #8e7526;
   --color-outline-variant: #453912;
 
+  /* On-Surface Colors */
   --color-on-surface: #ffffff;
   --color-on-surface-variant: #e8e8e8;
 
-  --font-headline: "Noto Serif", serif;
-  --font-body: "Manrope", sans-serif;
-  --font-label: "Manrope", sans-serif;
-}
-
-:root {
+  /* Backgrounds */
   --background: #0a0a0a;
   --foreground: #ffffff;
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-body);
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: 'Manrope', sans-serif;
   overflow-x: hidden;
 }
 
