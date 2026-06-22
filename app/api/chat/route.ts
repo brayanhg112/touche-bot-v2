@@ -30,5 +30,11 @@ export async function POST(req: Request) {
         messages: [systemPrompt, ...messages],
     });
 
-    return Response.json({ message: response.content[0].text });
+    const content = response.content[0];
+    if (content.type === 'text') {
+        return Response.json({ message: content.text });
+    } else {
+        // Esto maneja si el bot pensó o hizo otra cosa en vez de responder texto
+        return Response.json({ message: "El bot no generó texto directamente." });
+    }
 }
