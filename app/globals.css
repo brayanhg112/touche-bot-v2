@@ -3,25 +3,22 @@
 @tailwind utilities;
 
 :root {
-  /* Obsidian & Royal Purple Palette */
+  /* Obsidian & Royal Purple Palette - Stitch Design */
   --color-surface: #050505;        /* Obsidian Black */
-  --color-surface-bright: #1A1A1A;
   --color-primary: #7E22CE;       /* Royal Purple */
   --color-primary-container: #581C87;
   --color-on-primary: #FFFFFF;
-  --color-on-surface: #FFFFFF;     /* White text */
-  --color-outline: #4C1D95;
-
+  --color-on-surface: #FFFFFF;     /* White text for contrast */
+  
   --background: #050505;
   --foreground: #FFFFFF;
 }
 
-@layer base {
-  body {
-    @apply bg-surface text-on-surface font-body;
-    min-height: 100dvh;
-    -webkit-font-smoothing: antialiased;
-  }
+/* Aplicación forzada al body para evitar que otros estilos se cuelen */
+body {
+  background-color: var(--color-surface) !important;
+  color: var(--color-on-surface) !important;
+  font-family: 'Manrope', sans-serif;
 }
 
 @layer components {
