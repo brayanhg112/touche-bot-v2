@@ -3,10 +3,17 @@
 @tailwind utilities;
 
 :root {
-  --surface: #131318;
-  --on-surface: #e4e1e9;
-  --primary: #f2ca50;
-  --primary-container: #d4af37;
+  /* Obsidian & Royal Purple Palette */
+  --color-surface: #050505;        /* Obsidian Black */
+  --color-surface-bright: #1A1A1A;
+  --color-primary: #7E22CE;       /* Royal Purple */
+  --color-primary-container: #581C87;
+  --color-on-primary: #FFFFFF;
+  --color-on-surface: #FFFFFF;     /* White text */
+  --color-outline: #4C1D95;
+
+  --background: #050505;
+  --foreground: #FFFFFF;
 }
 
 @layer base {
@@ -19,33 +26,43 @@
 
 @layer components {
   .glass-chat-ai {
-    background: rgba(31, 31, 37, 0.6);
+    background: rgba(126, 34, 206, 0.08);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(126, 34, 206, 0.2);
   }
 
   .glass-chat-user {
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(242, 202, 80, 0.05));
+    background: linear-gradient(135deg, rgba(126, 34, 206, 0.18), rgba(88, 28, 135, 0.08));
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(242, 202, 80, 0.2);
+    border: 1px solid rgba(126, 34, 206, 0.3);
   }
 
+  /* Keep alias for legacy components using .gold-gradient */
   .gold-gradient {
-    background: linear-gradient(135deg, #f2ca50 0%, #d4af37 100%);
+    background: linear-gradient(135deg, #7E22CE 0%, #581C87 100%);
+  }
+
+  .purple-gradient {
+    background: linear-gradient(135deg, #7E22CE 0%, #4C1D95 100%);
   }
 
   .glass-card {
-    background: rgba(31, 31, 37, 0.6);
+    background: rgba(26, 26, 26, 0.7);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(77, 70, 53, 0.15);
+    border: 1px solid rgba(126, 34, 206, 0.12);
   }
 
   .obsidian-glow {
-    box-shadow: 0 0 40px rgba(242, 202, 80, 0.04);
+    box-shadow: 0 0 40px rgba(126, 34, 206, 0.08);
   }
 
+  .text-shadow-purple {
+    text-shadow: 0 0 12px rgba(126, 34, 206, 0.5);
+  }
+
+  /* Legacy alias */
   .text-shadow-gold {
-    text-shadow: 0 0 12px rgba(242, 202, 80, 0.3);
+    text-shadow: 0 0 12px rgba(126, 34, 206, 0.5);
   }
 
   .custom-scrollbar::-webkit-scrollbar {
@@ -57,7 +74,7 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(242, 202, 80, 0.2);
+    background: rgba(126, 34, 206, 0.3);
     border-radius: 10px;
   }
 
