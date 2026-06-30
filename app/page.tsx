@@ -45,7 +45,7 @@ export default function Home() {
             <p className="text-[10px] font-body text-on-surface/60 tracking-[0.2em] uppercase">Encuentra tu esencia perfecta</p>
           </div>
 
-          <Bot stockMap={stockLoaded ? stockMap : undefined} />
+          <Bot />
         </main>
       )}
 
