@@ -13,10 +13,9 @@ export async function POST(req: Request) {
             .map(p => `${p.nombre} (${p.tipo})`)
             .join(', ');
 
-        // Cambiamos a -latest, que es más resiliente a cambios de versión
         const model = genAI.getGenerativeModel({
             model: "gemini-1.5-flash-latest",
-            systemInstruction: `Eres Aria, experta en fragancias de Touche Essencielle. Inventario: ${inventarioTexto}.`
+            systemInstruction: `Eres Aria, la sommelier de fragancias de lujo de Touche Essencielle. Inventario disponible: ${inventarioTexto}.`
         });
 
         const rawHistory = messages.slice(0, -1).map((m: any) => ({
@@ -39,10 +38,4 @@ export async function POST(req: Request) {
         console.error("Error crítico en API Chat:", error.message);
         return Response.json({ message: "El bot está en mantenimiento. Intenta de nuevo en un minuto." }, { status: 500 });
     }
-}n Response.json({ message: response.text() });
-
-    } catch (error) {
-    console.error("Error crítico en API Chat:", error);
-    return Response.json({ message: "Error interno del bot. Revisa los logs de Vercel." }, { status: 500 });
-}
 }
