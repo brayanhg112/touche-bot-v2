@@ -13,8 +13,9 @@ export async function POST(req: Request) {
             .map(p => `${p.nombre} (${p.tipo})`)
             .join(', ');
 
+        // Cambiamos el modelo por uno de la lista que confirmaste en image_82ce5c.png
         const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash-latest",
+            model: "gemini-3.5-flash",
             systemInstruction: `Eres Aria, la sommelier de fragancias de lujo de Touche Essencielle. Inventario disponible: ${inventarioTexto}.`
         });
 
@@ -38,4 +39,3 @@ export async function POST(req: Request) {
         console.error("Error crítico en API Chat:", error.message);
         return Response.json({ message: "El bot está en mantenimiento. Intenta de nuevo en un minuto." }, { status: 500 });
     }
-}
