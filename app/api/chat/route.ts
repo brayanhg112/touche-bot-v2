@@ -10,12 +10,29 @@ export async function POST(req: Request) {
         const inventario = await getInventory();
         const inventarioTexto = inventario
             .filter(p => p.estado === 'ACTIVO')
-            .map(p => `${p.nombre} (${p.tipo})`)
+            .map(p => `${p.nombre} (Notas: ${p.tipo})`)
             .join(', ');
+
+        // ESTA ES LA CAMISA DE FUERZA:
+        const systemInstruction = `Eres Aria, asistente de Touche Essencielle. 
+        TU TRABAJO: Guiar al cliente paso a paso mediante un cuestionario de 4 pasos. 
+        NO seas poética, NO escribas párrafos largos. Sé breve y estructurada.
+
+        FLUJO OBLIGATORIO:
+        Paso 1: Pregunta la OCASIÓN (Ej: A. Oficina, B. Cita, C. Evento).
+        Paso 2: Pregunta qué NOTAS le gustan (Ej: A. Cítrico, B. Amaderado, C. Floral).
+        Paso 3: Pregunta qué NOTAS NO le gustan (Ej: A. Dulce, B. Cítrico, C. Amaderado).
+        Paso 4: Con base en lo anterior y este inventario: ${inventarioTexto}, recomienda 2 perfumes exactos.
+
+        REGLAS DE ORO:
+        - Si el cliente no ha pasado por los 4 pasos, NO recomiendes perfumes todavía.
+        - Muestra siempre opciones como "A) Opción, B) Opción".
+        - Si el cliente escribe algo que no es una opción, ignora el texto y re-haz la pregunta del paso actual.
+        - Tono: Profesional, directo, ejecutivo.`;
 
         const model = genAI.getGenerativeModel({
             model: "gemini-3.5-flash",
-            systemInstruction: `Eres Aria, la sommelier de fragancias de lujo de Touche Essencielle. Inventario disponible: ${inventarioTexto}.`
+            systemInstruction: systemInstruction
         });
 
         const rawHistory = messages.slice(0, -1).map((m: any) => ({
@@ -36,6 +53,6 @@ export async function POST(req: Request) {
 
     } catch (error: any) {
         console.error("Error crítico en API Chat:", error.message);
-        return Response.json({ message: "El bot está en mantenimiento. Intenta de nuevo en un minuto." }, { status: 500 });
+        return Response.json({ message: "Error técnico. Por favor, reinicia." }, { status: 500 });
     }
 }
