@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Bot from './components/Bot';
+import SplashScreen from './components/SplashScreen';
 import Header from './components/layout/Header';
 import BottomNav from './components/layout/BottomNav';
 import CollectionsView from './components/CollectionsView';
@@ -31,6 +32,7 @@ export default function Home() {
 
   return (
     <>
+      <SplashScreen />
       <Header />
 
       {/* Background Monogram Watermark */}

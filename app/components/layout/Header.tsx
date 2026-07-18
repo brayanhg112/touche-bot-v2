@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 export default function Header() {
   return (
@@ -9,8 +10,8 @@ export default function Header() {
           Touche <span className="text-primary">Essencielle</span>
         </h1>
       </div>
-      <div className="w-10 h-10 rounded-full border border-primary/30 overflow-hidden bg-[#1A1A1A] flex items-center justify-center shadow-[0_0_12px_rgba(126,34,206,0.3)]">
-        <span className="material-symbols-outlined text-primary">person</span>
+      <div className="w-10 h-10 rounded-full border border-primary/30 overflow-hidden flex items-center justify-center shadow-[0_0_12px_rgba(126,34,206,0.3)] bg-black">
+        <Image alt="Touche Essencielle" height={32} src="/logo-nuevo.png" width={32} className="object-contain" />
       </div>
     </header>
   );

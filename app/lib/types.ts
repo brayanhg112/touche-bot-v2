@@ -1,6 +1,6 @@
 export type Gender = 'M' | 'F' | 'U';
 export type Occasion = 'diario' | 'noche' | 'trabajo' | 'cita' | 'verano' | 'invierno' | 'evento' | 'deporte';
-export type Feel = 'dulce' | 'fresco' | 'especiado' | 'amaderado' | 'floral' | 'frutal' | 'oud' | 'citrico' | 'gourmand' | 'acuatico' | 'cuero' | 'limpio' | 'verde' | 'atalcado';
+export type Feel = 'dulce' | 'fresco' | 'especiado' | 'amaderado' | 'floral' | 'frutal' | 'oud' | 'citrico' | 'gourmand' | 'acuatico' | 'cuero' | 'limpio' | 'verde' | 'atalcado' | 'polvo';
 export type Projection = 'discreta' | 'moderada' | 'intensa' | '';
 
 export interface Perfume {

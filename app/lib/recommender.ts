@@ -210,7 +210,7 @@ export function recommend(answers: BotAnswers, stockMap?: Record<string, boolean
   // ── Resolve reference perfume ──
   const refMatch = findReferencePerfume(answers.referencePerfume ?? '');
 
-  return catalog
+  const scored = catalog
     // ① Gender filter
     .filter((p) => {
       const g = (answers.gender || '').toUpperCase().trim();
@@ -226,6 +226,24 @@ export function recommend(answers: BotAnswers, stockMap?: Record<string, boolean
       const avoidLow = answers.avoid.map(a => a.toLowerCase().trim());
       const pTagsLow = p.avoidTags.map(t => t.toLowerCase().trim());
       return !avoidLow.some((a) => pTagsLow.includes(a));
+    })
+
+    // Strict filter for occasion and family/feel as requested
+    .filter((p) => {
+      const ansOccasion = (answers.occasion || '').toLowerCase().trim();
+      if (ansOccasion) {
+        const pOccasionsLow = (p.occasions || []).map(o => o.toLowerCase().trim());
+        if (!pOccasionsLow.includes(ansOccasion)) return false;
+      }
+      
+      const ansFeelLow = (answers.feel || []).map(f => f.toLowerCase().trim());
+      if (ansFeelLow.length > 0) {
+        const pFeelsLow = (p.feels || []).map(f => f.toLowerCase().trim());
+        const pFamilyLow = (p.family || '').toLowerCase().trim();
+        const matchesFeel = ansFeelLow.some(ans => pFeelsLow.includes(ans) || pFamilyLow.includes(ans));
+        if (!matchesFeel) return false;
+      }
+      return true;
     })
 
     // ③ HARD LOCK — Versiones 1.1 limitadas sin stock
@@ -312,15 +330,26 @@ export function recommend(answers: BotAnswers, stockMap?: Record<string, boolean
       }
 
       return { perfume: p, score, reasons, sommelierSummary, isImmediate, isNicho };
-    })
+    });
 
-    .sort((a, b) => {
-      if (b.score !== a.score) return b.score - a.score;
-      const a11 = a.perfume.version === '1.1' ? 1 : 0;
-      const b11 = b.perfume.version === '1.1' ? 1 : 0;
-      return b11 - a11;
-    })
-    .slice(0, 3);
+  // ⑤ Deduplicate by ID and Sort
+  let sortedScored = scored.sort((a, b) => {
+    const a11 = a.perfume.version === '1.1' ? 1 : 0;
+    const b11 = b.perfume.version === '1.1' ? 1 : 0;
+    if (a11 !== b11) return b11 - a11;
+    return b.score - a.score;
+  });
+
+  const uniquePerfumes: typeof sortedScored = [];
+  const seenIds = new Set<string>();
+  for (const item of sortedScored) {
+    if (!seenIds.has(item.perfume.id)) {
+      seenIds.add(item.perfume.id);
+      uniquePerfumes.push(item);
+    }
+  }
+
+  return uniquePerfumes.slice(0, 3);
 }
 
 // ── WhatsApp message builders ───────────────────────────────────────────────

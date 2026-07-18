@@ -28,12 +28,16 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
     .replace(/[^\w\-]+/g, '')  // Quita caracteres raros
     .replace(/\-\-+/g, '-');   // Evita guiones dobles
 
+  const formattedName = perfume.name.trim().toLowerCase().replace(/\s+/g, '_');
   const fallbackBase = `/perfumes/${idSlug}`;
 
   const imagePathsToTry = [
+    `/products/${formattedName}.webp`,
+    `/products/${formattedName}.png`,
+    `/products/${formattedName}.jpg`,
     getImagePath(perfume.id.trim()),
-    `${fallbackBase}.png`, // Ahora sí queda bien: /perfumes/narcotic-delight-initio.png
-    `${fallbackBase}.jpg`  // Y aquí: /perfumes/narcotic-delight-initio.jpg
+    `${fallbackBase}.png`,
+    `${fallbackBase}.jpg`
   ].filter(Boolean) as string[];
 
   const [attemptIndex, setAttemptIndex] = useState(0);
@@ -54,9 +58,9 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: (rank || 1) * 0.18, type: 'spring', stiffness: 80 }}
+      initial={{ opacity: 0, y: 20, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay: (rank || 1) * 0.1, type: 'spring', damping: 20, stiffness: 300 }}
       className="relative mb-12 mt-8"
     >
       {/* Large rank watermark (only if rank is provided) */}
@@ -127,9 +131,9 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
             <span className="font-label text-[10px] uppercase tracking-[0.15em] text-primary font-semibold">
               {perfume.brand}
             </span>
-            {isImmediate ? (
+            {perfume.version === '1.1' ? (
               <span className="px-2 py-0.5 text-[8px] uppercase tracking-widest font-bold gold-gradient text-white rounded-sm shadow-[0_0_10px_rgba(212,175,55,0.4)]">
-                ENTREGA INMEDIATA
+                DISPONIBILIDAD: ENTREGA INMEDIATA
               </span>
             ) : (
               <span className="px-2 py-0.5 text-[8px] uppercase tracking-widest font-bold bg-[#1a1a25] text-secondary/80 rounded-sm">
@@ -224,17 +228,39 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
             )}
           </AnimatePresence>
 
+          {/* ── UPSELL BANNER (1.1 Only) ── */}
+          {perfume.version === '1.1' && (
+            <div className="mb-5 rounded-xl bg-gradient-to-br from-primary/20 via-[#1a1a25] to-transparent border border-primary/30 p-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-2 opacity-10 pointer-events-none">
+                <span className="material-symbols-outlined text-6xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>diamond</span>
+              </div>
+              <h4 className="font-label text-[10px] uppercase tracking-[0.15em] text-primary font-extrabold mb-1 drop-shadow opacity-90">
+                ¡Potencia tu selección!
+              </h4>
+              <p className="font-headline text-lg text-white font-bold mb-3 leading-snug">
+                Combo <span className="gold-gradient text-transparent bg-clip-text">Edición Touche</span> (+10.000 COP)
+              </p>
+              <ul className="text-[11px] font-body text-on-surface-variant space-y-1.5 opacity-90 mb-2">
+                <li className="flex gap-2 items-center"><span className="text-primary text-[10px]">✔</span> Tu perfume base (+10gr esencia premium 💧)</li>
+                <li className="flex gap-2 items-center"><span className="text-primary text-[10px]">✔</span> Un perfume de 30ml adicional</li>
+                <li className="flex gap-2 items-center"><span className="text-primary text-[10px]">✔</span> Un decant roll-on de 10ml</li>
+              </ul>
+            </div>
+          )}
+
           {/* ── CTA Button ── */}
-          <button
+          <motion.button
             id={`btn-buy-${perfume.id}`}
             onClick={handleBuy}
-            className="w-full py-4 rounded-full gold-gradient text-[#1c1605] font-label font-extrabold text-[11px] uppercase tracking-[0.15em] shadow-[0_4px_25px_rgba(212,175,55,0.3)] hover:scale-[1.02] hover:shadow-[0_4px_30px_rgba(212,175,55,0.5)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="w-full py-4 rounded-full gold-gradient text-[#1c1605] font-label font-extrabold text-[11px] uppercase tracking-[0.15em] shadow-[0_4px_25px_rgba(212,175,55,0.3)] hover:shadow-[0_4px_30px_rgba(212,175,55,0.5)] transition-all duration-300 flex items-center justify-center gap-2"
           >
             <svg width="16" height="16" viewBox="0 0 32 32" fill="currentColor" className="opacity-90">
               <path d="M16 0C7.163 0 0 7.163 0 16c0 2.83.736 5.484 2.025 7.784L0 32l8.437-2.011A15.927 15.927 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm8.22 22.22c-.34.957-1.983 1.822-2.73 1.938-.739.115-1.662.163-2.682-.168a24.34 24.34 0 0 1-2.426-.897C12.21 21.52 9.624 18.317 9.43 18.07c-.195-.247-1.59-2.117-1.59-4.04s1.008-2.87 1.366-3.263c.357-.394.779-.492.04-.492l-.832.016c-.274 0-.716.103-1.09.492-.373.39-1.428 1.396-1.428 3.406 0 2.01 1.463 3.953 1.667 4.23.204.274 2.878 4.59 7.112 6.278 1.007.39 1.793.623 2.406.797.99.284 1.89.244 2.602.148.793-.107 2.442-.998 2.786-1.963.344-.965.344-1.793.24-1.963-.104-.17-.373-.274-.78-.48z" />
             </svg>
             Pedir por WhatsApp
-          </button>
+          </motion.button>
         </div>
       </div>
     </motion.article>
