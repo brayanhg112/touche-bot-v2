@@ -20,21 +20,23 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
   const { favorites, toggleFavorite, isLoaded } = useFavorites();
   const isFavorite = favorites.includes(perfume.id);
 
-  // 1. Limpieza extrema para reconstruir el nombre de tu Excel (ej: silver-mountain---creed)
+  // 1. Limpieza extrema para reconstruir el nombre de tu Excel
   const cleanStr = (str: string) =>
     str.trim().toLowerCase()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Quita tildes
-      .replace(/['"´°]/g, '')                           // Quita comillas y grados
-      .replace(/[^\w\s-]/g, '')                         // Quita símbolos raros
-      .replace(/\s+/g, '-');                            // Espacios a guiones
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/['"´°]/g, '')
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-');
 
   const excelSlug = `${cleanStr(perfume.name)}---${cleanStr(perfume.brand)}`;
-
-  // 2. Por si acaso, también limpiamos el ID quitándole el prefijo 1.1_
   const originalId = perfume.id.replace(/^1\.1[_-]/, '');
   const formattedName = perfume.name.trim().toLowerCase().replace(/\s+/g, '_');
 
-  // EL FIX DEFINITIVO: Busca TODAS las combinaciones posibles en la carpeta products/
+  // 2. EL ANTI-GRAVITY FIX: Obligamos al mapa viejo a buscar en /products/
+  const mappedPath = getImagePath(perfume.id.trim());
+  const forcedMapPath = mappedPath ? mappedPath.replace('/perfumes/', '/products/') : null;
+
+  // 3. Rutas blindadas
   const imagePathsToTry = [
     `/products/${excelSlug}.webp`,
     `/products/${excelSlug}.png`,
@@ -48,7 +50,7 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
     `/products/${formattedName}.webp`,
     `/products/${formattedName}.png`,
     `/products/${formattedName}.jpg`,
-    getImagePath(perfume.id.trim())
+    forcedMapPath
   ].filter(Boolean) as string[];
 
   const [attemptIndex, setAttemptIndex] = useState(0);
@@ -62,7 +64,6 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  /** Dynamic, unique match paragraph for this card */
   const sommelierText = (answers && rank)
     ? buildSommelierSummary(answers, perfume, rank)
     : perfume.emotionalDesc;
@@ -74,7 +75,6 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
       transition={{ delay: (rank || 1) * 0.1, type: 'spring', damping: 20, stiffness: 300 }}
       className="relative mb-12 mt-8"
     >
-      {/* Large rank watermark */}
       {rank !== undefined && (
         <div className="absolute -top-6 -left-2 z-10 pointer-events-none">
           <span className="font-headline text-[5rem] font-extrabold text-primary/15 italic select-none">
@@ -84,7 +84,6 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
       )}
 
       <div className="glass-card rounded-[1rem] overflow-hidden obsidian-glow flex flex-col relative z-20">
-        {/* Bookmark Favorite Button */}
         {isLoaded && (
           <button
             onClick={() => toggleFavorite(perfume.id)}
@@ -100,11 +99,11 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
           </button>
         )}
 
-        {/* ── Image area ── */}
         <div className="h-[340px] relative overflow-hidden bg-[#0e0e13]">
           {isPlaceholder ? (
-            <div className="w-full h-full flex items-center justify-center relative">
-              <div className="absolute inset-0 bg-gradient-radial from-primary/5 via-transparent to-transparent" />
+            /* FIX DEL PLACEHOLDER: Ya no busca archivo físico, es puro diseño CSS */
+            <div className="w-full h-full flex flex-col items-center justify-center relative">
+              <div className="absolute inset-0 bg-gradient-radial from-primary/10 via-transparent to-transparent" />
               <div
                 className="absolute inset-0 opacity-[0.03]"
                 style={{
@@ -112,11 +111,13 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
                     'repeating-linear-gradient(0deg,#d4af37 0,#d4af37 1px,transparent 1px,transparent 40px),repeating-linear-gradient(90deg,#d4af37 0,#d4af37 1px,transparent 1px,transparent 40px)',
                 }}
               />
-              <img
-                src="/perfumes/placeholder.svg"
-                alt={perfume.name}
-                className="w-[180px] h-[240px] object-contain relative z-10 drop-shadow-[0_0_30px_rgba(212,175,55,0.18)]"
-              />
+              <span
+                className="material-symbols-outlined text-[4rem] text-primary/40 relative z-10 drop-shadow-[0_0_15px_rgba(212,175,55,0.3)] mb-2"
+                style={{ fontVariationSettings: "'FILL' 0, 'wght' 200" }}
+              >
+                liquor
+              </span>
+              <span className="font-label text-[10px] text-primary/50 tracking-[0.2em] uppercase z-10">Touche Essencielle</span>
             </div>
           ) : (
             <img
@@ -129,7 +130,6 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
           <div className="absolute bottom-0 left-0 w-full h-2/5 bg-gradient-to-t from-[#131318] to-transparent pointer-events-none" />
         </div>
 
-        {/* ── Card body ── */}
         <div className="p-6 -mt-10 relative z-30">
           <div className="flex items-center gap-2 mb-1 drop-shadow-md">
             <span className="font-label text-[10px] uppercase tracking-[0.15em] text-primary font-semibold">
