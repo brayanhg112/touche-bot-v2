@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { BotAnswers } from '../lib/types';
 import type { ScoredPerfume } from '../lib/recommender';
 import { buildWhatsappPerPerfume, buildSommelierSummary } from '../lib/recommender';
-import { getImagePath } from '../lib/imageMap';
 import { useFavorites } from '../hooks/useFavorites';
 
 interface Props {
@@ -15,41 +14,31 @@ interface Props {
 }
 
 export default function PerfumeCard({ result, rank, answers }: Props) {
-  const { perfume, isImmediate } = result;
+  const { perfume } = result;
   const [showDetails, setShowDetails] = useState(false);
   const { favorites, toggleFavorite, isLoaded } = useFavorites();
   const isFavorite = favorites.includes(perfume.id);
 
-  // 1. Limpieza extrema idéntica al script de noramlización
-  const cleanStr = (str: string) =>
-    str.trim().toLowerCase()
+  // Función de normalización idéntica al script de Node.js
+  const normalizeFilename = (str: string) => {
+    return str.toLowerCase()
       .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
       .replace(/['"´°]/g, '')
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_]+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-+|-+$/g, '');
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .replace(/-+/g, '-');
+  };
 
-  const slugNameBrand = cleanStr(`${perfume.name}-${perfume.brand}`);
-  const slugId = cleanStr(perfume.id.replace(/^1\.1[_-]/, ''));
-  const slugNameOnly = cleanStr(perfume.name);
+  const cleanId = normalizeFilename(perfume.id);
 
-  // 2. EL ANTI-GRAVITY FIX: Obligamos al mapa viejo a buscar en /products/
-  const mappedPath = getImagePath(perfume.id.trim());
-  const forcedMapPath = mappedPath ? mappedPath.replace('/perfumes/', '/products/') : null;
-
-  // 3. Rutas blindadas (Minimizadas para evitar 404s en cascada)
+  // Intentamos primero con la extensión webp, luego png y jpg
   const imagePathsToTry = [
-    `/products/${slugNameBrand}.webp`,
-    `/products/${slugNameBrand}.png`,
-    `/products/${slugNameBrand}.jpg`,
-    `/products/${slugId}.webp`,
-    `/products/${slugNameOnly}.webp`,
-    forcedMapPath
-  ].filter(Boolean) as string[];
+    `/products/${cleanId}.webp`,
+    `/products/${cleanId}.png`,
+    `/products/${cleanId}.jpg`,
+  ];
 
   const [attemptIndex, setAttemptIndex] = useState(0);
-
   const imgSrc = attemptIndex < imagePathsToTry.length ? imagePathsToTry[attemptIndex] : null;
   const isPlaceholder = imgSrc === null;
 
@@ -59,17 +48,9 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  const cleanTechnicalText = (text: string) => {
-    if (!text) return text;
-    // Remove technical commercial terms from descriptions gracefully
-    return text.replace(/Nuestro contratipo(?: 1\.1)?.*?premium[^\.]*\.?/gi, '')
-               .replace(/Con \+10gr de esencia.*?premium[^\.]*\.?/gi, '')
-               .trim();
-  };
-
-  const sommelierText = cleanTechnicalText((answers && rank)
+  const sommelierText = (answers && rank)
     ? buildSommelierSummary(answers, perfume, rank)
-    : perfume.emotionalDesc);
+    : perfume.emotionalDesc;
 
   return (
     <motion.article
@@ -104,7 +85,6 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
 
         <div className="h-[340px] relative overflow-hidden bg-[#0e0e13]">
           {isPlaceholder ? (
-            /* FIX DEL PLACEHOLDER: Ya no busca archivo físico, es puro diseño CSS */
             <div className="w-full h-full flex flex-col items-center justify-center relative">
               <div className="absolute inset-0 bg-gradient-radial from-primary/10 via-transparent to-transparent" />
               <div
@@ -203,12 +183,11 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
                   </div>
                 </div>
                 <p className="text-[12px] font-body text-on-surface-variant leading-relaxed italic opacity-90 pl-3 mb-5">
-                  "{cleanTechnicalText(perfume.emotionalDesc)}"
+                  "{perfume.emotionalDesc}"
                 </p>
               </motion.div>
             )}
           </AnimatePresence>
-
 
           <motion.button
             id={`btn-buy-${perfume.id}`}
