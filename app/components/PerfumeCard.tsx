@@ -19,25 +19,23 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
   const [showDetails, setShowDetails] = useState(false);
   const { favorites, toggleFavorite, isLoaded } = useFavorites();
   const isFavorite = favorites.includes(perfume.id);
-  // Image resolution sequence: 
-  // 1. Exact map from imageMap
-  // 2. Fallback to /perfumes/[id].png (lowercase)
-  // 3. Fallback to /perfumes/[id].jpg (lowercase)
+
   const idSlug = perfume.id.trim().toLowerCase()
     .replace(/\s+/g, '-')      // Espacios a guiones
     .replace(/[^\w\-]+/g, '')  // Quita caracteres raros
     .replace(/\-\-+/g, '-');   // Evita guiones dobles
 
   const formattedName = perfume.name.trim().toLowerCase().replace(/\s+/g, '_');
-  const fallbackBase = `/perfumes/${idSlug}`;
 
+  // EL FIX: Ahora busca directamente el ID del excel en la carpeta products
   const imagePathsToTry = [
+    `/products/${perfume.id.trim()}.webp`,
+    `/products/${perfume.id.trim()}.png`,
+    `/products/${perfume.id.trim()}.jpg`,
     `/products/${formattedName}.webp`,
     `/products/${formattedName}.png`,
     `/products/${formattedName}.jpg`,
-    getImagePath(perfume.id.trim()),
-    `${fallbackBase}.png`,
-    `${fallbackBase}.jpg`
+    getImagePath(perfume.id.trim())
   ].filter(Boolean) as string[];
 
   const [attemptIndex, setAttemptIndex] = useState(0);
