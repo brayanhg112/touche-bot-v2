@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { BotAnswers } from '../lib/types';
 import type { ScoredPerfume } from '../lib/recommender';
 import { buildWhatsappPerPerfume, buildSommelierSummary } from '../lib/recommender';
+import { getImagePath } from '../lib/imageMap';
 import { useFavorites } from '../hooks/useFavorites';
 
 interface Props {
@@ -19,27 +20,11 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
   const { favorites, toggleFavorite, isLoaded } = useFavorites();
   const isFavorite = favorites.includes(perfume.id);
 
-  // Función de normalización idéntica al script de Node.js
-  const normalizeFilename = (str: string) => {
-    return str.toLowerCase()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-      .replace(/['"´°]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-      .replace(/-+/g, '-');
-  };
+  // Consulta directa al mapa inteligente generado de tus archivos reales
+  const mappedImage = getImagePath(perfume.id);
+  const [imgError, setImgError] = useState(false);
 
-  const cleanId = normalizeFilename(perfume.id);
-
-  // Intentamos primero con la extensión webp, luego png y jpg
-  const imagePathsToTry = [
-    `/products/${cleanId}.webp`,
-    `/products/${cleanId}.png`,
-    `/products/${cleanId}.jpg`,
-  ];
-
-  const [attemptIndex, setAttemptIndex] = useState(0);
-  const imgSrc = attemptIndex < imagePathsToTry.length ? imagePathsToTry[attemptIndex] : null;
+  const imgSrc = (!imgError && mappedImage) ? mappedImage : null;
   const isPlaceholder = imgSrc === null;
 
   const handleBuy = () => {
@@ -48,9 +33,16 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  const sommelierText = (answers && rank)
+  const cleanTechnicalText = (text: string) => {
+    if (!text) return text;
+    return text.replace(/Nuestro contratipo(?: 1\.1)?.*?premium[^\.]*\.?/gi, '')
+      .replace(/Con \+10gr de esencia.*?premium[^\.]*\.?/gi, '')
+      .trim();
+  };
+
+  const sommelierText = cleanTechnicalText((answers && rank)
     ? buildSommelierSummary(answers, perfume, rank)
-    : perfume.emotionalDesc;
+    : perfume.emotionalDesc);
 
   return (
     <motion.article
@@ -107,7 +99,7 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
               src={imgSrc!}
               alt={perfume.name}
               className="w-full h-full object-cover opacity-85"
-              onError={() => setAttemptIndex(prev => prev + 1)}
+              onError={() => setImgError(true)}
             />
           )}
           <div className="absolute bottom-0 left-0 w-full h-2/5 bg-gradient-to-t from-[#131318] to-transparent pointer-events-none" />
@@ -183,7 +175,7 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
                   </div>
                 </div>
                 <p className="text-[12px] font-body text-on-surface-variant leading-relaxed italic opacity-90 pl-3 mb-5">
-                  "{perfume.emotionalDesc}"
+                  "{cleanTechnicalText(perfume.emotionalDesc)}"
                 </p>
               </motion.div>
             )}
