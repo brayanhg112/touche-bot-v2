@@ -145,6 +145,16 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
             {perfume.name}
           </h3>
 
+          {/* --- INICIO DEL CHISMOSO --- */}
+          <div className="bg-red-900/80 p-3 mb-4 text-[11px] text-white font-mono rounded-lg border border-red-500 break-all">
+            <p className="mb-1 text-primary"><strong>ID real del Excel:</strong> {perfume.id}</p>
+            <p><strong>El bot busca estas rutas en tu Vercel:</strong></p>
+            <ul className="list-disc pl-4 mt-1 opacity-80">
+              {imagePathsToTry.map((path, i) => <li key={i}>{path}</li>)}
+            </ul>
+          </div>
+          {/* --- FIN DEL CHISMOSO --- */}
+
           {/* ── Dynamic sommelier match paragraph ── */}
           <div className="mb-5 p-4 rounded-xl bg-primary/[0.08] shadow-[inset_0_0_15px_rgba(212,175,55,0.05)]">
             <div className="flex items-start gap-2">
