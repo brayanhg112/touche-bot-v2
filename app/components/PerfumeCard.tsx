@@ -20,36 +20,31 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
   const { favorites, toggleFavorite, isLoaded } = useFavorites();
   const isFavorite = favorites.includes(perfume.id);
 
-  // 1. Limpieza extrema para reconstruir el nombre de tu Excel
+  // 1. Limpieza extrema idéntica al script de noramlización
   const cleanStr = (str: string) =>
     str.trim().toLowerCase()
       .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
       .replace(/['"´°]/g, '')
       .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-');
+      .replace(/[\s_]+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
 
-  const excelSlug = `${cleanStr(perfume.name)}---${cleanStr(perfume.brand)}`;
-  const originalId = perfume.id.replace(/^1\.1[_-]/, '');
-  const formattedName = perfume.name.trim().toLowerCase().replace(/\s+/g, '_');
+  const slugNameBrand = cleanStr(`${perfume.name}-${perfume.brand}`);
+  const slugId = cleanStr(perfume.id.replace(/^1\.1[_-]/, ''));
+  const slugNameOnly = cleanStr(perfume.name);
 
   // 2. EL ANTI-GRAVITY FIX: Obligamos al mapa viejo a buscar en /products/
   const mappedPath = getImagePath(perfume.id.trim());
   const forcedMapPath = mappedPath ? mappedPath.replace('/perfumes/', '/products/') : null;
 
-  // 3. Rutas blindadas
+  // 3. Rutas blindadas (Minimizadas para evitar 404s en cascada)
   const imagePathsToTry = [
-    `/products/${excelSlug}.webp`,
-    `/products/${excelSlug}.png`,
-    `/products/${excelSlug}.jpg`,
-    `/products/${originalId}.webp`,
-    `/products/${originalId}.png`,
-    `/products/${originalId}.jpg`,
-    `/products/${perfume.id.trim()}.webp`,
-    `/products/${perfume.id.trim()}.png`,
-    `/products/${perfume.id.trim()}.jpg`,
-    `/products/${formattedName}.webp`,
-    `/products/${formattedName}.png`,
-    `/products/${formattedName}.jpg`,
+    `/products/${slugNameBrand}.webp`,
+    `/products/${slugNameBrand}.png`,
+    `/products/${slugNameBrand}.jpg`,
+    `/products/${slugId}.webp`,
+    `/products/${slugNameOnly}.webp`,
     forcedMapPath
   ].filter(Boolean) as string[];
 
@@ -64,9 +59,17 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  const sommelierText = (answers && rank)
+  const cleanTechnicalText = (text: string) => {
+    if (!text) return text;
+    // Remove technical commercial terms from descriptions gracefully
+    return text.replace(/Nuestro contratipo(?: 1\.1)?.*?premium[^\.]*\.?/gi, '')
+               .replace(/Con \+10gr de esencia.*?premium[^\.]*\.?/gi, '')
+               .trim();
+  };
+
+  const sommelierText = cleanTechnicalText((answers && rank)
     ? buildSommelierSummary(answers, perfume, rank)
-    : perfume.emotionalDesc;
+    : perfume.emotionalDesc);
 
   return (
     <motion.article
@@ -200,30 +203,12 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
                   </div>
                 </div>
                 <p className="text-[12px] font-body text-on-surface-variant leading-relaxed italic opacity-90 pl-3 mb-5">
-                  "{perfume.emotionalDesc}"
+                  "{cleanTechnicalText(perfume.emotionalDesc)}"
                 </p>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {perfume.version === '1.1' && (
-            <div className="mb-5 rounded-xl bg-gradient-to-br from-primary/20 via-[#1a1a25] to-transparent border border-primary/30 p-4 relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-2 opacity-10 pointer-events-none">
-                <span className="material-symbols-outlined text-6xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>diamond</span>
-              </div>
-              <h4 className="font-label text-[10px] uppercase tracking-[0.15em] text-primary font-extrabold mb-1 drop-shadow opacity-90">
-                ¡Potencia tu selección!
-              </h4>
-              <p className="font-headline text-lg text-white font-bold mb-3 leading-snug">
-                Combo <span className="gold-gradient text-transparent bg-clip-text">Edición Touche</span> (+10.000 COP)
-              </p>
-              <ul className="text-[11px] font-body text-on-surface-variant space-y-1.5 opacity-90 mb-2">
-                <li className="flex gap-2 items-center"><span className="text-primary text-[10px]">✔</span> Tu perfume base (+10gr esencia premium 💧)</li>
-                <li className="flex gap-2 items-center"><span className="text-primary text-[10px]">✔</span> Un perfume de 30ml adicional</li>
-                <li className="flex gap-2 items-center"><span className="text-primary text-[10px]">✔</span> Un decant roll-on de 10ml</li>
-              </ul>
-            </div>
-          )}
 
           <motion.button
             id={`btn-buy-${perfume.id}`}

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PerfumeCard from './PerfumeCard';
+import TouchePromiseBanner from './TouchePromiseBanner';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import type { ScoredPerfume } from '../lib/recommender';
 import type { BotAnswers } from '../lib/types';
@@ -341,9 +342,14 @@ export default function Bot() {
             </div>
 
             {/* Result message */}
-            <p className="text-center font-body text-on-surface/70 text-sm mb-2">
+            <p className="text-center font-body text-on-surface/70 text-sm mb-6">
               {currentStep.question}
             </p>
+
+            {/* Banner Global 1.1 */}
+            {currentStep.recommendations?.some(r => r.perfume.version === '1.1') && (
+              <TouchePromiseBanner />
+            )}
 
             {/* Perfume cards */}
             {currentStep.recommendations && currentStep.recommendations.length > 0 ? (
