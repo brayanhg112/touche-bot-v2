@@ -20,15 +20,28 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
   const { favorites, toggleFavorite, isLoaded } = useFavorites();
   const isFavorite = favorites.includes(perfume.id);
 
-  const idSlug = perfume.id.trim().toLowerCase()
-    .replace(/\s+/g, '-')      // Espacios a guiones
-    .replace(/[^\w\-]+/g, '')  // Quita caracteres raros
-    .replace(/\-\-+/g, '-');   // Evita guiones dobles
+  // 1. Limpieza extrema para reconstruir el nombre de tu Excel (ej: silver-mountain---creed)
+  const cleanStr = (str: string) =>
+    str.trim().toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Quita tildes
+      .replace(/['"´°]/g, '')                           // Quita comillas y grados
+      .replace(/[^\w\s-]/g, '')                         // Quita símbolos raros
+      .replace(/\s+/g, '-');                            // Espacios a guiones
 
+  const excelSlug = `${cleanStr(perfume.name)}---${cleanStr(perfume.brand)}`;
+
+  // 2. Por si acaso, también limpiamos el ID quitándole el prefijo 1.1_
+  const originalId = perfume.id.replace(/^1\.1[_-]/, '');
   const formattedName = perfume.name.trim().toLowerCase().replace(/\s+/g, '_');
 
-  // EL FIX: Ahora busca directamente el ID del excel en la carpeta products
+  // EL FIX DEFINITIVO: Busca TODAS las combinaciones posibles en la carpeta products/
   const imagePathsToTry = [
+    `/products/${excelSlug}.webp`,
+    `/products/${excelSlug}.png`,
+    `/products/${excelSlug}.jpg`,
+    `/products/${originalId}.webp`,
+    `/products/${originalId}.png`,
+    `/products/${originalId}.jpg`,
     `/products/${perfume.id.trim()}.webp`,
     `/products/${perfume.id.trim()}.png`,
     `/products/${perfume.id.trim()}.jpg`,
@@ -61,7 +74,7 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
       transition={{ delay: (rank || 1) * 0.1, type: 'spring', damping: 20, stiffness: 300 }}
       className="relative mb-12 mt-8"
     >
-      {/* Large rank watermark (only if rank is provided) */}
+      {/* Large rank watermark */}
       {rank !== undefined && (
         <div className="absolute -top-6 -left-2 z-10 pointer-events-none">
           <span className="font-headline text-[5rem] font-extrabold text-primary/15 italic select-none">
@@ -90,10 +103,8 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
         {/* ── Image area ── */}
         <div className="h-[340px] relative overflow-hidden bg-[#0e0e13]">
           {isPlaceholder ? (
-            /* Placeholder: golden bottle SVG centered with ambient glow */
             <div className="w-full h-full flex items-center justify-center relative">
               <div className="absolute inset-0 bg-gradient-radial from-primary/5 via-transparent to-transparent" />
-              {/* Subtle grid texture */}
               <div
                 className="absolute inset-0 opacity-[0.03]"
                 style={{
@@ -108,7 +119,6 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
               />
             </div>
           ) : (
-            /* Real product image */
             <img
               src={imgSrc!}
               alt={perfume.name}
@@ -116,15 +126,11 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
               onError={() => setAttemptIndex(prev => prev + 1)}
             />
           )}
-
-          {/* Bottom gradient to blend with card */}
           <div className="absolute bottom-0 left-0 w-full h-2/5 bg-gradient-to-t from-[#131318] to-transparent pointer-events-none" />
         </div>
 
         {/* ── Card body ── */}
         <div className="p-6 -mt-10 relative z-30">
-
-          {/* Brand row + availability badge */}
           <div className="flex items-center gap-2 mb-1 drop-shadow-md">
             <span className="font-label text-[10px] uppercase tracking-[0.15em] text-primary font-semibold">
               {perfume.brand}
@@ -140,22 +146,10 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
             )}
           </div>
 
-          {/* Perfume name */}
           <h3 className="font-headline text-[1.75rem] leading-tight font-bold mb-4 text-on-surface">
             {perfume.name}
           </h3>
 
-          {/* --- INICIO DEL CHISMOSO --- */}
-          <div className="bg-red-900/80 p-3 mb-4 text-[11px] text-white font-mono rounded-lg border border-red-500 break-all">
-            <p className="mb-1 text-primary"><strong>ID real del Excel:</strong> {perfume.id}</p>
-            <p><strong>El bot busca estas rutas en tu Vercel:</strong></p>
-            <ul className="list-disc pl-4 mt-1 opacity-80">
-              {imagePathsToTry.map((path, i) => <li key={i}>{path}</li>)}
-            </ul>
-          </div>
-          {/* --- FIN DEL CHISMOSO --- */}
-
-          {/* ── Dynamic sommelier match paragraph ── */}
           <div className="mb-5 p-4 rounded-xl bg-primary/[0.08] shadow-[inset_0_0_15px_rgba(212,175,55,0.05)]">
             <div className="flex items-start gap-2">
               <span
@@ -170,7 +164,6 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
             </div>
           </div>
 
-          {/* ── Expandable notes ── */}
           <button
             aria-expanded={showDetails}
             onClick={() => setShowDetails(!showDetails)}
@@ -194,41 +187,18 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
               >
                 <div className="grid grid-cols-3 gap-3 mb-6 text-center py-4 bg-primary/5 rounded-lg">
                   <div>
-                    <span className="block text-[9px] uppercase tracking-tighter text-on-surface/50 font-bold mb-1">
-                      Salida
-                    </span>
-                    <span
-                      className="text-[11px] font-medium text-primary-fixed-dim truncate block"
-                      title={perfume.topNotes}
-                    >
-                      {perfume.topNotes}
-                    </span>
+                    <span className="block text-[9px] uppercase tracking-tighter text-on-surface/50 font-bold mb-1">Salida</span>
+                    <span className="text-[11px] font-medium text-primary-fixed-dim truncate block" title={perfume.topNotes}>{perfume.topNotes}</span>
                   </div>
                   <div>
-                    <span className="block text-[9px] uppercase tracking-tighter text-on-surface/50 font-bold mb-1">
-                      Corazón
-                    </span>
-                    <span
-                      className="text-[11px] font-medium text-primary-fixed-dim truncate block"
-                      title={perfume.heartNotes}
-                    >
-                      {perfume.heartNotes}
-                    </span>
+                    <span className="block text-[9px] uppercase tracking-tighter text-on-surface/50 font-bold mb-1">Corazón</span>
+                    <span className="text-[11px] font-medium text-primary-fixed-dim truncate block" title={perfume.heartNotes}>{perfume.heartNotes}</span>
                   </div>
                   <div>
-                    <span className="block text-[9px] uppercase tracking-tighter text-on-surface/50 font-bold mb-1">
-                      Fondo
-                    </span>
-                    <span
-                      className="text-[11px] font-medium text-primary-fixed-dim truncate block"
-                      title={perfume.baseNotes}
-                    >
-                      {perfume.baseNotes}
-                    </span>
+                    <span className="block text-[9px] uppercase tracking-tighter text-on-surface/50 font-bold mb-1">Fondo</span>
+                    <span className="text-[11px] font-medium text-primary-fixed-dim truncate block" title={perfume.baseNotes}>{perfume.baseNotes}</span>
                   </div>
                 </div>
-
-                {/* Emotional desc as italic quote */}
                 <p className="text-[12px] font-body text-on-surface-variant leading-relaxed italic opacity-90 pl-3 mb-5">
                   "{perfume.emotionalDesc}"
                 </p>
@@ -236,7 +206,6 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
             )}
           </AnimatePresence>
 
-          {/* ── UPSELL BANNER (1.1 Only) ── */}
           {perfume.version === '1.1' && (
             <div className="mb-5 rounded-xl bg-gradient-to-br from-primary/20 via-[#1a1a25] to-transparent border border-primary/30 p-4 relative overflow-hidden">
               <div className="absolute top-0 right-0 p-2 opacity-10 pointer-events-none">
@@ -256,7 +225,6 @@ export default function PerfumeCard({ result, rank, answers }: Props) {
             </div>
           )}
 
-          {/* ── CTA Button ── */}
           <motion.button
             id={`btn-buy-${perfume.id}`}
             onClick={handleBuy}
