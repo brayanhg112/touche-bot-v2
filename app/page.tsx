@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Bot from './components/Bot';
+// import Bot from './components/Bot';
 import SplashScreen from './components/SplashScreen';
 import Header from './components/layout/Header';
 import BottomNav from './components/layout/BottomNav';
 import CollectionsView from './components/CollectionsView';
 import SavedView from './components/SavedView';
+
+import AiGuide from './components/AiGuide';
 
 type Tab = 'sommelier' | 'colecciones' | 'guardados';
 
@@ -41,13 +43,12 @@ export default function Home() {
       </div>
 
       {activeTab === 'sommelier' && (
-        <main className="pt-24 pb-32 min-h-screen flex flex-col max-w-2xl mx-auto px-4 relative z-10">
-          <div className="mb-4 mt-2 text-center">
-            <h2 className="text-3xl font-headline font-bold text-primary mb-1">Sommelier Digital</h2>
-            <p className="text-[10px] font-body text-on-surface/60 tracking-[0.2em] uppercase">Encuentra tu esencia perfecta</p>
+        <main className="pt-24 pb-32 min-h-screen flex flex-col max-w-2xl mx-auto relative z-10 w-full overflow-hidden">
+          <div className="mb-4 mt-2 text-center px-4">
+            <h2 className="text-3xl font-headline font-bold text-primary mb-1">Guía IA</h2>
+            <p className="text-[10px] font-body text-on-surface/60 tracking-[0.2em] uppercase">Especialista Interactivo</p>
           </div>
-
-          <Bot />
+          <AiGuide />
         </main>
       )}
 

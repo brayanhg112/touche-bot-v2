@@ -1,68 +1,72 @@
-@import "tailwindcss";
-
 @theme {
   /* ── OBSIDIAN + PURPLE palette ───────────────────────── */
-  --color-primary:                #a855f7;   /* Vibrant Purple */
-  --color-primary-container:      #6b21a8;   /* Deep Purple */
-  --color-primary-fixed:          #e9d5ff;
-  --color-primary-fixed-dim:      #c084fc;
-  --color-on-primary:             #ffffff;   /* Pure White on purple */
-  --color-on-primary-container:   #f3e8ff;
-  --color-on-primary-fixed:       #3b0764;
+  --color-primary: #a855f7;
+  /* Vibrant Purple */
+  --color-primary-container: #6b21a8;
+  /* Deep Purple */
+  --color-primary-fixed: #e9d5ff;
+  --color-primary-fixed-dim: #c084fc;
+  --color-on-primary: #ffffff;
+  /* Pure White on purple */
+  --color-on-primary-container: #f3e8ff;
+  --color-on-primary-fixed: #3b0764;
   --color-on-primary-fixed-variant: #7e22ce;
 
-  --color-secondary:              #c084fc;
-  --color-secondary-container:    #581c87;
-  --color-on-secondary:           #ffffff;
+  --color-secondary: #c084fc;
+  --color-secondary-container: #581c87;
+  --color-on-secondary: #ffffff;
   --color-on-secondary-container: #f3e8ff;
-  --color-secondary-fixed:        #e9d5ff;
-  --color-secondary-fixed-dim:    #c084fc;
-  --color-on-secondary-fixed:     #3b0764;
+  --color-secondary-fixed: #e9d5ff;
+  --color-secondary-fixed-dim: #c084fc;
+  --color-on-secondary-fixed: #3b0764;
   --color-on-secondary-fixed-variant: #7e22ce;
 
-  --color-tertiary:               #818cf8;
-  --color-tertiary-container:     #3730a3;
-  --color-tertiary-fixed:         #e0e7ff;
-  --color-tertiary-fixed-dim:     #a5b4fc;
-  --color-on-tertiary:            #ffffff;
-  --color-on-tertiary-container:  #e0e7ff;
-  --color-on-tertiary-fixed:      #1e1b4b;
+  --color-tertiary: #818cf8;
+  --color-tertiary-container: #3730a3;
+  --color-tertiary-fixed: #e0e7ff;
+  --color-tertiary-fixed-dim: #a5b4fc;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #e0e7ff;
+  --color-on-tertiary-fixed: #1e1b4b;
   --color-on-tertiary-fixed-variant: #4338ca;
 
-  --color-error:                  #f87171;
-  --color-error-container:        #7f1d1d;
-  --color-on-error:               #ffffff;
-  --color-on-error-container:     #fecaca;
+  --color-error: #f87171;
+  --color-error-container: #7f1d1d;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #fecaca;
 
   /* ── Obsidian Black surfaces ─────────────────────────── */
-  --color-surface:                #0e0e13;   /* Obsidian Black */
-  --color-surface-dim:            #0e0e13;
-  --color-surface-bright:         #2a2a35;
+  --color-surface: #0e0e13;
+  /* Obsidian Black */
+  --color-surface-dim: #0e0e13;
+  --color-surface-bright: #2a2a35;
   --color-surface-container-lowest: #08080d;
   --color-surface-container-low: #151520;
-  --color-surface-container:     #1a1a25;
+  --color-surface-container: #1a1a25;
   --color-surface-container-high: #222230;
   --color-surface-container-highest: #2d2d3d;
-  --color-surface-variant:        #2d2d3d;
-  --color-surface-tint:           #a855f7;
+  --color-surface-variant: #2d2d3d;
+  --color-surface-tint: #a855f7;
 
-  --color-background:             #0e0e13;
-  --color-inverse-surface:        #e4e1f5;
-  --color-inverse-on-surface:     #1a1a25;
-  --color-inverse-primary:        #7e22ce;
+  --color-background: #0e0e13;
+  --color-inverse-surface: #e4e1f5;
+  --color-inverse-on-surface: #1a1a25;
+  --color-inverse-primary: #7e22ce;
 
-  --color-outline:                #7c3aed;
-  --color-outline-variant:        #3b2060;
+  --color-outline: #7c3aed;
+  --color-outline-variant: #3b2060;
 
   /* ── Text colors ─────────────────────────────────────── */
-  --color-on-surface:             #ffffff;   /* Pure White */
-  --color-on-surface-variant:     #e2d9f3;   /* Light lavender-white */
-  --color-on-background:          #ffffff;
+  --color-on-surface: #ffffff;
+  /* Pure White */
+  --color-on-surface-variant: #e2d9f3;
+  /* Light lavender-white */
+  --color-on-background: #ffffff;
 
   /* ── Typography ──────────────────────────────────────── */
   --font-headline: "Noto Serif", serif;
-  --font-body:     "Manrope", sans-serif;
-  --font-label:    "Manrope", sans-serif;
+  --font-body: "Manrope", sans-serif;
+  --font-label: "Manrope", sans-serif;
 }
 
 :root {
@@ -154,6 +158,7 @@ body {
   font-weight: 800;
   transition: transform 0.2s, box-shadow 0.2s;
 }
+
 .btn-gold:hover {
   transform: scale(1.03);
   box-shadow: 0 0 24px rgba(168, 85, 247, 0.35);

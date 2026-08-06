@@ -15,7 +15,7 @@ export default function CollectionsView({ stockMap, outOfStock }: Props) {
   const available = catalog.filter(p => !outOfStock.includes(p.id));
 
   return (
-    <div className="pt-24 pb-28 px-4 max-w-2xl mx-auto min-h-screen">
+    <div className="pt-24 pb-28 px-4 max-w-4xl mx-auto min-h-screen">
 
       <motion.div
         initial={{ opacity: 0, y: 15 }}
@@ -27,10 +27,10 @@ export default function CollectionsView({ stockMap, outOfStock }: Props) {
       </motion.div>
 
       <section className="mb-14">
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
           {available.map((perfume, i) => (
-            <PerfumeCard 
-              key={perfume.id} 
+            <PerfumeCard
+              key={perfume.id}
               result={{
                 perfume,
                 score: 0,

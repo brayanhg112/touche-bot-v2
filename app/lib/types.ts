@@ -35,3 +35,15 @@ export interface BotAnswers {
   avoid: string[];
   referencePerfume?: string; // Perfume de referencia del usuario (ej. 'Sauvage')
 }
+
+/** Ítem del inventario local (data/inventory.json) */
+export interface PerfumeStockItem {
+  id: string;
+  name: string;
+  version: string;
+  active: boolean;
+  gender?: string;
+  olfactory_family?: string;
+  occasion?: string;
+  intensity?: string;
+}

@@ -2,17 +2,17 @@
 
 Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu aroma ideal y pídelo por WhatsApp.
 
-### 1 Million - Paco Rabanne
+### One Million - Paco Rabanne
 *   **Categoría:** Aceite (Clásico)
 *   **Notas principales:** Mandarina, Pomelo, Menta
 *   **Ocasión:** noche, cita, evento, invierno
 
-### 1 Million - Paco Rabanne (1.1)
+### One Million - Paco Rabanne (1.1)
 *   **Categoría:** Versión 1.1
 *   **Notas principales:** Mandarina roja, Pomelo, Menta
 *   **Ocasión:** noche, fiesta, invierno
 
-### 1 Million Lucky - Paco Rabanne
+### One Million Lucky - Paco Rabanne
 *   **Categoría:** Aceite (Masculino)
 *   **Notas principales:** Cidra, Ozono, Ciruela
 *   **Ocasión:** noche, evento
@@ -47,11 +47,6 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Champán, Notas afrutadas
 *   **Ocasión:** diario, cita, evento
 
-### 212 VIP Wild Party - Carolina Herrera
-*   **Categoría:** Aceite (Femenino)
-*   **Notas principales:** Piña, Pomelo
-*   **Ocasión:** noche, evento
-
 ### 273 - Fred Hayman
 *   **Categoría:** Aceite (Femenino)
 *   **Notas principales:** Tuberosa, Durazno, Ciruela, Jazmín
@@ -72,17 +67,17 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Manzana, Lavanda
 *   **Ocasión:** noche, cita, evento
 
-### Acqua di Giò - Giorgio Armani
+### Acqua di Gio - Giorgio Armani
 *   **Categoría:** Aceite (Clásico)
 *   **Notas principales:** Limón, Bergamota, Lima
 *   **Ocasión:** verano, diario, trabajo
 
-### Acqua Di Giò - Armani (1.1)
+### Acqua Di Gio - Armani (1.1)
 *   **Categoría:** Versión 1.1
 *   **Notas principales:** Lima, Limón, Bergamota, Jazmín, Naranja, Mandarina, Neroli
 *   **Ocasión:** diario, verano, trabajo
 
-### Acqua Di Giò Profumo - Armani (1.1)
+### Acqua Di Gio Profumo - Armani (1.1)
 *   **Categoría:** Versión 1.1
 *   **Notas principales:** Notas marinas, Bergamota
 *   **Ocasión:** diario, trabajo, evento
@@ -107,11 +102,6 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Azafrán, Jazmín
 *   **Ocasión:** evento, noche, cita
 
-### Ange ou Démon - Givenchy
-*   **Categoría:** Aceite (Femenino)
-*   **Notas principales:** Azafrán, Tomillo, Mandarina
-*   **Ocasión:** noche, cita, invierno
-
 ### Aqva Pour Homme - Bvlgari
 *   **Categoría:** Aceite (Masculino)
 *   **Notas principales:** Mandarina, Naranja, Petit grain
@@ -126,11 +116,6 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Categoría:** Aceite (Femenino)
 *   **Notas principales:** Frambuesa, Pera, Toronja
 *   **Ocasión:** diario, cita
-
-### Asad - Lattafa
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Naranja, Canela
-*   **Ocasión:** noche, invierno, evento
 
 ### Asad - Lattafa (1.1)
 *   **Categoría:** Versión 1.1
@@ -193,11 +178,6 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Ocasión:** diario, trabajo, cita
 
 ### Boss Bottled - Hugo Boss
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Manzana, Cítricos, Ciruelas
-*   **Ocasión:** diario, trabajo, cita
-
-### Boss Bottled - Hugo Boss
 *   **Categoría:** Aceite (Masculino)
 *   **Notas principales:** Manzana, Ciruela, Bergamota, Limón
 *   **Ocasión:** trabajo, diario
@@ -237,11 +217,6 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Pimienta rosa, Limón, Piña
 *   **Ocasión:** trabajo, diario, cita
 
-### Chance Eau Tendre - Chanel
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Pomelo, Membrillo
-*   **Ocasión:** diario, trabajo, verano
-
 ### Chanel N°5 - Chanel
 *   **Categoría:** Aceite (Femenino)
 *   **Notas principales:** Aldehídos, Ylang-Ylang, Neroli, Limón
@@ -252,7 +227,7 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Lavanda, Pera, Bergamota
 *   **Ocasión:** diario, trabajo, cita
 
-### Cloud 2.0 Intense - Ariana Grande (1.1)
+### Cloud 2.0 - Ariana Grande (1.1)
 *   **Categoría:** Versión 1.1
 *   **Notas principales:** Lavanda, Pera, Bergamota
 *   **Ocasión:** diario, cita, invierno
@@ -278,34 +253,14 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Ocasión:** evento, noche, cita
 
 ### Coco Mademoiselle - Chanel
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Naranja, Bergamota
-*   **Ocasión:** trabajo, cita, evento, noche
-
-### Coco Mademoiselle - Chanel
 *   **Categoría:** Aceite (Femenino)
 *   **Notas principales:** Naranja, Mandarina, Bergamota
 *   **Ocasión:** trabajo, evento, cita
 
-### Coco Noir - Chanel
-*   **Categoría:** Aceite (Femenino)
-*   **Notas principales:** Toronja, Bergamota, Naranja
-*   **Ocasión:** noche, evento, invierno
-
 ### Coconut Passion - Victoria\'s Secret
-*   **Categoría:** Árabe / Mist
-*   **Notas principales:** Coco
-*   **Ocasión:** verano, diario, cita
-
-### Coconut Passion - Victoria\'s Secret
-*   **Categoría:** Árabe / Mist
+*   **Categoría:** Diseñador
 *   **Notas principales:** Coco
 *   **Ocasión:** diario, verano
-
-### Daisy - Marc Jacobs
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Fresa silvestre, Violeta
-*   **Ocasión:** diario, verano, trabajo
 
 ### Déclaration - Cartier
 *   **Categoría:** Aceite (Masculino)
@@ -327,8 +282,8 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Bergamota de Calabria, Toronja, Notas acuáticas
 *   **Ocasión:** diario, verano, trabajo
 
-### Eau Fraîche (Lacoste insp) - Genérica
-*   **Categoría:** Aceite (Femenino)
+### Eau Fraîche - Versace
+*   **Categoría:** Aceite (Masculino)
 *   **Notas principales:** Limón, Bergamota
 *   **Ocasión:** diario, verano
 
@@ -367,17 +322,12 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Mandarina, Pimienta negra, Limón, Chinotto
 *   **Ocasión:** noche, evento
 
-### Euphoria - Calvin Klein
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Granada, Persimón
-*   **Ocasión:** noche, cita, invierno
-
 ### Fahrenheit - Dior
 *   **Categoría:** Aceite (Masculino)
 *   **Notas principales:** Flor del moscadero, Lavanda, Mandarina, Manzanilla
 *   **Ocasión:** noche, invierno
 
-### Flowerbomb - Viktor & Rolf
+### Spicebomb - Viktor & Rolf
 *   **Categoría:** Aceite (Clásico)
 *   **Notas principales:** Bergamota, Té
 *   **Ocasión:** noche, cita, evento, invierno
@@ -392,24 +342,9 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Calipsone, Bayas rojas, Bergamota
 *   **Ocasión:** noche, evento, cita
 
-### Golden Rush - Paris Hilton
-*   **Categoría:** Aceite (Femenino)
-*   **Notas principales:** Nectarina, Bergamota, Manzana
-*   **Ocasión:** noche, evento
-
-### Good Girl - Carolina Herrera
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Almendra, Café, Bergamota
-*   **Ocasión:** noche, cita, evento, invierno
-
 ### Good Girl - Carolina Herrera (1.1)
 *   **Categoría:** Versión 1.1
 *   **Notas principales:** Almendra, Café, Bergamota, Limón
-*   **Ocasión:** noche, cita, evento
-
-### Good Girl Blush - Carolina Herrera
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Lichi, Pomelo
 *   **Ocasión:** noche, cita, evento
 
 ### Good Girl Blush - Carolina Herrera
@@ -442,7 +377,7 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Notas especiadas
 *   **Ocasión:** cita, noche
 
-### Her Elixir de Parfum - Burberry
+### Her Elixir - Burberry
 *   **Categoría:** Aceite (Femenino)
 *   **Notas principales:** Fresa, Mora
 *   **Ocasión:** cita, noche, invierno
@@ -512,20 +447,10 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Frutas tropicales
 *   **Ocasión:** diario, verano
 
-### Khamrah - Lattafa
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Canela, Nuez Moscada
-*   **Ocasión:** noche, invierno, cita
-
 ### Khamrah - Lattafa (1.1)
 *   **Categoría:** Versión 1.1
 *   **Notas principales:** Canela, Nuez moscada, Bergamota
 *   **Ocasión:** noche, invierno, cita
-
-### Khamrah - Lattafa
-*   **Categoría:** Árabe / Mist
-*   **Notas principales:** Canela, Nuez Moscada, Bergamota
-*   **Ocasión:** noche, invierno, evento
 
 ### Khamrah Dukhan - Lattafa (1.1)
 *   **Categoría:** Versión 1.1
@@ -542,20 +467,10 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Naranja, Limón, Bergamota
 *   **Ocasión:** diario, fiesta, cita
 
-### Kirke - Tiziana Terenzi
-*   **Categoría:** Nicho (Lujo)
-*   **Notas principales:** Maracuyá, Melocotón, Pera, Frambuesa, Cassis, Arena
-*   **Ocasión:** diario, verano, evento
-
 ### L\'Aventure Grapefruit - Al Haramain
 *   **Categoría:** Árabe / Mist
 *   **Notas principales:** Toronja, Bergamota
 *   **Ocasión:** verano, trabajo, diario
-
-### La Vie Est Belle - Lancôme
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Grosella Negra, Pera
-*   **Ocasión:** diario, cita, evento
 
 ### La Vie Est Belle - Lancôme
 *   **Categoría:** Aceite (Femenino)
@@ -576,11 +491,6 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Categoría:** Aceite (Masculino)
 *   **Notas principales:** Lavanda, Menta, Cardamomo, Bergamota
 *   **Ocasión:** noche, diario, cita
-
-### Libre - Yves Saint Laurent
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Mandarina, Petitgrain
-*   **Ocasión:** cita, noche, evento
 
 ### Light Blue - Dolce & Gabbana
 *   **Categoría:** Aceite (Femenino)
@@ -622,11 +532,6 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Iris, Peonía, Lirio de los valles
 *   **Ocasión:** evento, cita, trabajo
 
-### Mon Guerlain - Guerlain
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Bergamota, Lavanda
-*   **Ocasión:** diario, cita, verano
-
 ### Moon Sparkle - Escada
 *   **Categoría:** Aceite (Femenino)
 *   **Notas principales:** Fresa, Grosella negra, Frutos rojos, Cítricos
@@ -667,20 +572,10 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Cardamomo
 *   **Ocasión:** noche, evento, invierno
 
-### Ombre Nomade - Louis Vuitton
-*   **Categoría:** Aceite (Masculino)
-*   **Notas principales:** Frambuesa
-*   **Ocasión:** invierno, noche, evento
-
 ### Ombre Nomade - Louis Vuitton (1.1)
 *   **Categoría:** Versión 1.1
 *   **Notas principales:** Frambuesa, Geranio
 *   **Ocasión:** noche, evento, invierno
-
-### Omnia Crystalline - Bvlgari
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Bambú, Nenúfar
-*   **Ocasión:** diario, trabajo, verano
 
 ### Omnia Crystalline - Bvlgari
 *   **Categoría:** Aceite (Femenino)
@@ -701,11 +596,6 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Categoría:** Nicho (Lujo)
 *   **Notas principales:** Maracuyá, Azafrán, Rosa Turca
 *   **Ocasión:** noche, evento, cita
-
-### Oud Maracujá - Maison Crivelli
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Maracuyá, Pimienta Rosa
-*   **Ocasión:** noche, cita, evento
 
 ### Oud Sublime - Lattafa
 *   **Categoría:** Árabe / Mist
@@ -747,19 +637,14 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Rosa
 *   **Ocasión:** diario, cita, trabajo
 
-### Royal Amber - Orientica
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Azafrán, Rosa
-*   **Ocasión:** noche, invierno, evento, cita
-
 ### Royal Amber 💛 - Orientica
 *   **Categoría:** Árabe / Mist
 *   **Notas principales:** Notas verdes, Melón, Piña
 *   **Ocasión:** evento, noche, cita
 
-### Royal Rouge - Orientica (1.1)
+### Royal Amber - Orientica (1.1)
 *   **Categoría:** Versión 1.1
-*   **Notas principales:** Almendra amarga, Azafrán
+*   **Notas principales:** Azafrán, Rosa
 *   **Ocasión:** evento, cita, noche
 
 ### Safeer - Lattafa
@@ -782,11 +667,6 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Bergamota, Pimienta
 *   **Ocasión:** diario, trabajo, cita
 
-### Sauvage Elixir - Dior
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Pomelo, Canela
-*   **Ocasión:** noche, invierno, cita, evento
-
 ### Sauvage Elixir - Dior (1.1)
 *   **Categoría:** Versión 1.1
 *   **Notas principales:** Nuez moscada, Canela, Cardamomo, Pomelo
@@ -807,20 +687,10 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Piña, Toronja
 *   **Ocasión:** diario, evento, cita
 
-### Sì - Giorgio Armani
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Grosella Negra, Mandarina
-*   **Ocasión:** trabajo, cita, diario
-
 ### Silver Mountain - Creed (1.1)
 *   **Categoría:** Versión 1.1
 *   **Notas principales:** Bergamota, Mandarina
 *   **Ocasión:** diario, trabajo, verano
-
-### Silver Mountain Water - Creed
-*   **Categoría:** Aceite (Masculino)
-*   **Notas principales:** Bergamota, Mandarina
-*   **Ocasión:** diario, verano, trabajo
 
 ### Solo - Yanbal
 *   **Categoría:** Aceite (Clásico)
@@ -861,11 +731,6 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Categoría:** Árabe / Mist
 *   **Notas principales:** Manzana, Lichi, Rosa
 *   **Ocasión:** diario, trabajo, evento
-
-### Summer Hammer - Lorenzo Pazzaglia
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Lima, Aldehídos
-*   **Ocasión:** verano, diario
 
 ### Summer Hammer - Lorenzo Pazzaglia
 *   **Categoría:** Nicho (Lujo)
@@ -926,11 +791,6 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Categoría:** Aceite (Masculino)
 *   **Notas principales:** Pimienta Rosa, Pera, Nuez Moscada, Bergamota
 *   **Ocasión:** evento, cita, evento
-
-### Ultra Male - Jean Paul Gaultier
-*   **Categoría:** Aceite (Clásico)
-*   **Notas principales:** Pera, Lavanda
-*   **Ocasión:** noche, cita, invierno
 
 ### Ultra Male - Jean Paul Gaultier
 *   **Categoría:** Aceite (Masculino)
@@ -1001,4 +861,3 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Categoría:** Aceite (Masculino)
 *   **Notas principales:** Limón, Especias
 *   **Ocasión:** deporte, diario
-

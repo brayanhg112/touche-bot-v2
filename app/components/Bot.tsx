@@ -175,7 +175,7 @@ export default function Bot() {
               <div className="absolute inset-0 rounded-full border-t-2 border-primary animate-spin" />
             </div>
             <p className="text-[12px] font-body text-on-surface/50 tracking-widest uppercase animate-pulse">
-              Aria está evaluando…
+              Brian está evaluando…
             </p>
           </motion.div>
         )}

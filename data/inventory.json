@@ -1,0 +1,2317 @@
+{
+  "9pm-rebel---afnan": {
+    "id": "9pm-rebel---afnan",
+    "name": "9pm-rebel---afnan",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "9pm-night-out-armaf": {
+    "id": "9pm-night-out-armaf",
+    "name": "9pm-night-out---armaf",
+    "version": "ESTANDAR",
+    "active": false
+  },
+  "212-heroes---carolina-herrera": {
+    "id": "212-heroes---carolina-herrera",
+    "name": "212-heroes---carolina-herrerahombre",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "HOMBRE"
+  },
+  "212-men-nyc---carolina-herrera": {
+    "id": "212-men-nyc---carolina-herrera",
+    "name": "212-men-nyc---carolina-herrera",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "DEPORTE",
+    "intensity": "MEDIA"
+  },
+  "212-vip---carolina-herrera": {
+    "id": "212-vip---carolina-herrera",
+    "name": "212-vip---carolina-herrera",
+    "version": "1.1",
+    "active": false,
+    "gender": "HOMBRE",
+    "olfactory_family": "DULCE",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "360-for-men---perry-ellis": {
+    "id": "360-for-men---perry-ellis",
+    "name": "360-for-men---perry-ellis",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "adrenalina---yanbal": {
+    "id": "adrenalina---yanbal",
+    "name": "adrenalina---yanbal",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "al-contrario---tiziana-terenzi": {
+    "id": "al-contrario---tiziana-terenzi",
+    "name": "al-contrario---tiziana-terenzi",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "alexandria-ii---xerjoff": {
+    "id": "alexandria-ii---xerjoff",
+    "name": "alexandria-ii---xerjoff",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE"
+  },
+  "allure-home-sport---chanel": {
+    "id": "allure-home-sport---chanel",
+    "name": "allure-home-sport---chanel",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "MEDIA"
+  },
+  "althair---marly": {
+    "id": "althair---marly",
+    "name": "althair---marly",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "amber-dubai-night---al-hamarain": {
+    "id": "amber-dubai-night---al-hamarain",
+    "name": "amber-dubai-night---al-hamarain",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "9pm-night-out---armaf": {
+    "id": "9pm-night-out---armaf",
+    "name": "9pm-night-out---armaf",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "angels-share---kilian": {
+    "id": "angels-share---kilian",
+    "name": "angels-share---kilian",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "aqva---bvlgari": {
+    "id": "aqva---bvlgari",
+    "name": "aqva---bvlgari",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "asad-bourbon---lattafa": {
+    "id": "asad-bourbon---lattafa",
+    "name": "asad-bourbon---lattafa",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "ahli-vega---lataffa": {
+    "id": "ahli-vega---lataffa",
+    "name": "ahli-vega---lataffa",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "UNISEX",
+    "olfactory_family": "DULCES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "MEDIA"
+  },
+  "asad---lattafa": {
+    "id": "asad---lattafa",
+    "name": "asad---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "aventus---creed": {
+    "id": "aventus---creed",
+    "name": "aventus---creed",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "MEDIA"
+  },
+  "azul-la-coste": {
+    "id": "azul-la-coste",
+    "name": "azul---la-coste",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "FRESCO",
+    "occasion": "DEPORTE",
+    "intensity": "BAJA"
+  },
+  "azure-fantasy---orientica": {
+    "id": "azure-fantasy---orientica",
+    "name": "azure-fantasy---orientica",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "UNISEX",
+    "olfactory_family": "CITRICAS",
+    "occasion": "DEPORTE",
+    "intensity": "MEDIA"
+  },
+  "bad-boy---carolina-herrera": {
+    "id": "bad-boy---carolina-herrera",
+    "name": "bad-boy---carolina-herrera",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "MEDIA"
+  },
+  "bharara-onyx---bharara": {
+    "id": "bharara-onyx---bharara",
+    "name": "bharara-onyx---bharara",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "HOMBRE"
+  },
+  "black-xs---paco-rabanne": {
+    "id": "black-xs---paco-rabanne",
+    "name": "black-xs---paco-rabanne",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "black-xs-afrodisiaque---paco-rabanne": {
+    "id": "black-xs-afrodisiaque---paco-rabanne",
+    "name": "black-xs-afrodisiaque---paco-rabanne",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "MEDIA"
+  },
+  "blanc---la-coste": {
+    "id": "blanc---la-coste",
+    "name": "blanc---la-coste",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "blue---polo": {
+    "id": "blue---polo",
+    "name": "blue---polo",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "bleu-channel": {
+    "id": "bleu-channel",
+    "name": "bleu---channel",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "born-in-roma---valentino": {
+    "id": "born-in-roma---valentino",
+    "name": "born-in-roma---valentino",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "bottled-clasica---boss": {
+    "id": "bottled-clasica---boss",
+    "name": "bottled-clasica---boss",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "centaurus---creed": {
+    "id": "centaurus---creed",
+    "name": "centaurus---creed",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "ch-men---carolina-herrera": {
+    "id": "ch-men---carolina-herrera",
+    "name": "ch-men---carolina-herrera",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "BAJA"
+  },
+  "clasica---one-million": {
+    "id": "clasica---one-million",
+    "name": "clasica---one-million",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "clasica-bvlgari---bvlgari": {
+    "id": "clasica-bvlgari---bvlgari",
+    "name": "clasica-bvlgari---bvlgari",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "HOMBRE",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "BAJA"
+  },
+  "club-de-nuit-intense---armaf": {
+    "id": "club-de-nuit-intense---armaf",
+    "name": "club-de-nuit-intense---armaf",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "MEDIA"
+  },
+  "club-de-nuit-sillage---armaf": {
+    "id": "club-de-nuit-sillage---armaf",
+    "name": "club-de-nuit-sillage---armaf",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "club-de-nuit-untold---armaf": {
+    "id": "club-de-nuit-untold---armaf",
+    "name": "club-de-nuit-untold---armaf",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "cool-water---davidoff": {
+    "id": "cool-water---davidoff",
+    "name": "cool-water---davidoff",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "HOMBRE",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "DEPORTE",
+    "intensity": "MEDIA"
+  },
+  "declaration---cartier": {
+    "id": "declaration---cartier",
+    "name": "declaration---cartier",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "diesel-plus-plus---diesel": {
+    "id": "diesel-plus-plus---diesel",
+    "name": "diesel-plus-plus---diesel",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "FRUTALES",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "dylan-blue---versace": {
+    "id": "dylan-blue---versace",
+    "name": "dylan-blue---versace",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "eau-de-cartier---cartier": {
+    "id": "eau-de-cartier---cartier",
+    "name": "eau-de-cartier---cartier",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "OFICINA",
+    "intensity": "BAJA"
+  },
+  "eau-fraiche---versace": {
+    "id": "eau-fraiche---versace",
+    "name": "eau-fraiche---versace",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "elixir---sauvage": {
+    "id": "elixir---sauvage",
+    "name": "elixir---sauvage",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "emblem---montblanc": {
+    "id": "emblem---montblanc",
+    "name": "emblem---montblanc",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "emeer---lattafa": {
+    "id": "emeer---lattafa",
+    "name": "emeer---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "energise---boss": {
+    "id": "energise---boss",
+    "name": "energise---boss",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "erba-pura---xerjoff": {
+    "id": "erba-pura---xerjoff",
+    "name": "erba-pura---xerjoff",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "UNISEX",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "eros---versace": {
+    "id": "eros---versace",
+    "name": "eros---versace",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "FRUTALES",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "eros-flame---versace": {
+    "id": "eros-flame---versace",
+    "name": "eros-flame---versace",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "DEPORTE",
+    "intensity": "ALTA"
+  },
+  "eternity---calvin-klein": {
+    "id": "eternity---calvin-klein",
+    "name": "eternity---calvin-klein",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "fahrenheit---dior": {
+    "id": "fahrenheit---dior",
+    "name": "fahrenheit---dior",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "fhakar-black---lattafa": {
+    "id": "fhakar-black---lattafa",
+    "name": "fhakar-black---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "hawas---rasasi": {
+    "id": "hawas---rasasi",
+    "name": "hawas---rasasi",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "BAJA"
+  },
+  "hawas-fire---rasasi": {
+    "id": "hawas-fire---rasasi",
+    "name": "hawas-fire---rasasi",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "herot---marly": {
+    "id": "herot---marly",
+    "name": "herot---marly",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "HOMBRE"
+  },
+  "il-kakuno---ilmin": {
+    "id": "il-kakuno---ilmin",
+    "name": "il-kakuno---ilmin",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "il-orgasme---ilmin": {
+    "id": "il-orgasme---ilmin",
+    "name": "il-orgasme---ilmin",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "ilmin-erotique---ilmin": {
+    "id": "ilmin-erotique---ilmin",
+    "name": "ilmin-erotique---ilmin",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "imagination---louis-vuitton": {
+    "id": "imagination---louis-vuitton",
+    "name": "imagination---louis-vuitton",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "invictus-clasica---paco-rabanne": {
+    "id": "invictus-clasica---paco-rabanne",
+    "name": "invictus-clasica---paco-rabanne",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "invictus-intense---paco-rabanne": {
+    "id": "invictus-intense---paco-rabanne",
+    "name": "invictus-intense---paco-rabanne",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "irish-tweed---creed": {
+    "id": "irish-tweed---creed",
+    "name": "irish-tweed---creed",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE"
+  },
+  "khamrah-dunkhan---lattafa": {
+    "id": "khamrah-dunkhan---lattafa",
+    "name": "khamrah-dunkhan---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "khamrah-qahwa---lattafa": {
+    "id": "khamrah-qahwa---lattafa",
+    "name": "khamrah-qahwa---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "king---bharara": {
+    "id": "king---bharara",
+    "name": "king---bharara",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "king-of-seduction---antonio-banderas": {
+    "id": "king-of-seduction---antonio-banderas",
+    "name": "king-of-seduction---antonio-banderas",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "limmensite---louis-vuitton": {
+    "id": "limmensite---louis-vuitton",
+    "name": "limmensite---louis-vuitton",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "leau-dissey-miyake": {
+    "id": "leau-dissey-miyake",
+    "name": "leau-dissey-miyake",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "la-coste-essential": {
+    "id": "la-coste-essential",
+    "name": "la-coste-essential",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "la-coste-red": {
+    "id": "la-coste-red",
+    "name": "la-coste-red",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "FRUTALES",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "layton---marly": {
+    "id": "layton---marly",
+    "name": "layton---marly",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "le-beau---jean-paul-gaultier": {
+    "id": "le-beau---jean-paul-gaultier",
+    "name": "le-beau---jean-paul-gaultier",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "FRUTALES",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "le-beau-paradise---jpg": {
+    "id": "le-beau-paradise---jpg",
+    "name": "le-beau-paradise---jpg",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "HOMBRE",
+    "olfactory_family": "FRUTALES",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "le-male---jpg": {
+    "id": "le-male---jpg",
+    "name": "le-male---jpg",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "le-male-le-parfum---jpg": {
+    "id": "le-male-le-parfum---jpg",
+    "name": "le-male-le-parfum---jpg",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "loewe-7---loewe": {
+    "id": "loewe-7---loewe",
+    "name": "loewe-7---loewe",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "man-extreme---bvlgari": {
+    "id": "man-extreme---bvlgari",
+    "name": "man-extreme---bvlgari",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "man-in-black---bvlgari": {
+    "id": "man-in-black---bvlgari",
+    "name": "man-in-black---bvlgari",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "MEDIA"
+  },
+  "mandarin-sky---armaf": {
+    "id": "mandarin-sky---armaf",
+    "name": "mandarin-sky---armaf",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "mandarin-sky-elixir---armaf": {
+    "id": "mandarin-sky-elixir---armaf",
+    "name": "mandarin-sky-elixir---armaf",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "maria-farina---roger-gallet": {
+    "id": "maria-farina---roger-gallet",
+    "name": "maria-farina---roger-gallet",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "megamare---orto-parasi": {
+    "id": "megamare---orto-parasi",
+    "name": "megamare---orto-parasi",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "millesime-imperial---creed": {
+    "id": "millesime-imperial---creed",
+    "name": "millesime-imperial---creed",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "DEPORTE",
+    "intensity": "MEDIA"
+  },
+  "montana-homme---montana": {
+    "id": "montana-homme---montana",
+    "name": "montana-homme---montana",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "nebras---lattafa": {
+    "id": "nebras---lattafa",
+    "name": "nebras---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "niche---bharara": {
+    "id": "niche---bharara",
+    "name": "niche---bharara",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "nitro-red---dumont": {
+    "id": "nitro-red---dumont",
+    "name": "nitro-red---dumont",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "FRUTALES",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "noir-extreme---tom-ford": {
+    "id": "noir-extreme---tom-ford",
+    "name": "noir-extreme---tom-ford",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "oddyssey-aqua---armaf": {
+    "id": "oddyssey-aqua---armaf",
+    "name": "oddyssey-aqua---armaf",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "ohm---yanbal": {
+    "id": "ohm---yanbal",
+    "name": "ohm---yanbal",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "ombre-leather---tom-ford": {
+    "id": "ombre-leather---tom-ford",
+    "name": "ombre-leather---tom-ford",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "ombre-nomade---louis-vuitton": {
+    "id": "ombre-nomade---louis-vuitton",
+    "name": "ombre-nomade---louis-vuitton",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "one---calvin-klein": {
+    "id": "one---calvin-klein",
+    "name": "one---calvin-klein",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "FRESCO",
+    "occasion": "DEPORTE",
+    "intensity": "MEDIA"
+  },
+  "one-million-golden-oud---paco-rabanne": {
+    "id": "one-million-golden-oud---paco-rabanne",
+    "name": "one-million-golden-oud---paco-rabanne",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "one-million-lucky---paco-rabanne": {
+    "id": "one-million-lucky---paco-rabanne",
+    "name": "one-million-lucky---paco-rabanne",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "MEDIA"
+  },
+  "onix---invictus": {
+    "id": "onix---invictus",
+    "name": "onix---invictus",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "opulend-oud---lattafa": {
+    "id": "opulend-oud---lattafa",
+    "name": "opulend-oud---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "osadia---yanbal": {
+    "id": "osadia---yanbal",
+    "name": "osadia---yanbalmujer",
+    "version": "ESTANDAR",
+    "active": false
+  },
+  "oud-maracuja---maison-crivelli": {
+    "id": "oud-maracuja---maison-crivelli",
+    "name": "oud-maracuja---maison-crivelli",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "oud-of-glory---lattafa": {
+    "id": "oud-of-glory---lattafa",
+    "name": "oud-of-glory---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "oud-amethyst---lataffa": {
+    "id": "oud-amethyst---lataffa",
+    "name": "oud-amethyst---lataffa",
+    "version": "1.1",
+    "active": true,
+    "gender": "UNISEX",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "oud-saffron---orientica": {
+    "id": "oud-saffron---orientica",
+    "name": "oud-saffron---orientica",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "HOMBRE"
+  },
+  "phantom---paco-rabanne": {
+    "id": "phantom---paco-rabanne",
+    "name": "phantom---paco-rabanne",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "MEDIA"
+  },
+  "polo-red---ralph-lauren": {
+    "id": "polo-red---ralph-lauren",
+    "name": "polo-red---ralph-lauren",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "profumo---aqua-di-gio": {
+    "id": "profumo---aqua-di-gio",
+    "name": "profumo---aqua-di-gio",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "MEDIA"
+  },
+  "clasica---aqua-di-gio": {
+    "id": "clasica---aqua-di-gio",
+    "name": "clasica---aqua-di-gio",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "DEPORTE",
+    "intensity": "MEDIA"
+  },
+  "ra-ed-silver---lattafa": {
+    "id": "ra-ed-silver---lattafa",
+    "name": "ra-ed-silver---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "santal-33---le-labo": {
+    "id": "santal-33---le-labo",
+    "name": "santal-33---le-labo",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "MEDIA"
+  },
+  "safeer---lataffa": {
+    "id": "safeer---lataffa",
+    "name": "safeer---lataffa",
+    "version": "ESTANDAR",
+    "active": false
+  },
+  "sauvage---dior": {
+    "id": "sauvage---dior",
+    "name": "sauvage---dior",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "scandal-men---jpg": {
+    "id": "scandal-men---jpg",
+    "name": "scandal-men---jpg",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "HOMBRE"
+  },
+  "silver-mountain---creed": {
+    "id": "silver-mountain---creed",
+    "name": "silver-mountain---creed",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "CITRICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "solo---loewe": {
+    "id": "solo---loewe",
+    "name": "solo---loewe",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "solo---yanbal": {
+    "id": "solo---yanbal",
+    "name": "solo---yanbal",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "spice-boom---viktor-rolf": {
+    "id": "spice-boom---viktor-rolf",
+    "name": "spice-boom---viktor-rolf",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "starwalker---montblanc": {
+    "id": "starwalker---montblanc",
+    "name": "starwalker---montblanc",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "FRESCO",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "stronger-with-you---lattafa": {
+    "id": "stronger-with-you---lattafa",
+    "name": "stronger-with-you---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "summer-hammer---lorenzo-pazzaglia": {
+    "id": "summer-hammer---lorenzo-pazzaglia",
+    "name": "summer-hammer---lorenzo-pazzaglia",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "FRUTALES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "sun-gria---lorenzo-pazzaglia": {
+    "id": "sun-gria---lorenzo-pazzaglia",
+    "name": "sun-gria---lorenzo-pazzaglia",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "HOMBRE",
+    "olfactory_family": "FRUTALES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "swiss-army---victorinox": {
+    "id": "swiss-army---victorinox",
+    "name": "swiss-army---victorinox",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "the-most-wanted---azzaro": {
+    "id": "the-most-wanted---azzaro",
+    "name": "the-most-wanted---azzaro",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "MEDIA"
+  },
+  "tommy-hilfiger---tommy": {
+    "id": "tommy-hilfiger---tommy",
+    "name": "tommy-hilfiger---tommy",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "FRESCO",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "toy-boy---moschino": {
+    "id": "toy-boy---moschino",
+    "name": "toy-boy---moschino",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "FRUTALES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "ultramale---jean-paul-gaultier": {
+    "id": "ultramale---jean-paul-gaultier",
+    "name": "ultramale---jean-paul-gaultier",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "uomo---valentino": {
+    "id": "uomo---valentino",
+    "name": "uomo---valentino",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "DEPORTE",
+    "intensity": "BAJA"
+  },
+  "victory---invictus": {
+    "id": "victory---invictus",
+    "name": "victory---invictus",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "voyage---nautica": {
+    "id": "voyage---nautica",
+    "name": "voyage---nautica",
+    "version": "1.1",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "yves-saint-laurent": {
+    "id": "yves-saint-laurent",
+    "name": "yves-saint-laurent",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "AROMATICO",
+    "occasion": "DEPORTE",
+    "intensity": "MEDIA"
+  },
+  "212-heroes-for-her---carolina-herrera": {
+    "id": "212-heroes-for-her---carolina-herrera",
+    "name": "212-heroes-for-her---carolina-herrera",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER"
+  },
+  "212-nyc-for-her---carolina-herrera": {
+    "id": "212-nyc-for-her---carolina-herrera",
+    "name": "212-nyc-for-her---carolina-herrera",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "USO DIARIO",
+    "intensity": "BAJA"
+  },
+  "212-vip-for-her---carolina-herrera": {
+    "id": "212-vip-for-her---carolina-herrera",
+    "name": "212-vip-for-her---carolina-herrera",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "MEDIA"
+  },
+  "212-vip-rose---carolina-herrera": {
+    "id": "212-vip-rose---carolina-herrera",
+    "name": "212-vip-rose---carolina-herrera",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "273---beverly-hills": {
+    "id": "273---beverly-hills",
+    "name": "273---beverly-hills",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "ATALCADO",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "360�---perry-ellis": {
+    "id": "360�---perry-ellis",
+    "name": "360�---perry-ellis",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "acqua-di-gioia---giorgio-armani": {
+    "id": "acqua-di-gioia---giorgio-armani",
+    "name": "acqua-di-gioia---giorgio-armani",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "agua-mistica---sol-de-janeiro": {
+    "id": "agua-mistica---sol-de-janeiro",
+    "name": "agua-mistica---sol-de-janeiro",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "ACUATICAS",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "amber-oud-gold---al-hamarain": {
+    "id": "amber-oud-gold---al-hamarain",
+    "name": "amber-oud-gold---al-hamarain",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "UNISEX",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "amber-rouge---orientica": {
+    "id": "amber-rouge---orientica",
+    "name": "amber-rouge---orientica",
+    "version": "1.1",
+    "active": true,
+    "gender": "UNISEX",
+    "olfactory_family": "DULCES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "amethyste-omnia---bvlgari": {
+    "id": "amethyste-omnia---bvlgari",
+    "name": "amethyste-omnia---bvlgari",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "ATALCADO",
+    "occasion": "USO DIARIO",
+    "intensity": "BAJA"
+  },
+  "arabian-tonka---montale": {
+    "id": "arabian-tonka---montale",
+    "name": "arabian-tonka---montale",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "ari---ariana-grande": {
+    "id": "ari---ariana-grande",
+    "name": "ari---ariana-grande",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "almaz---kajal": {
+    "id": "almaz---kajal",
+    "name": "almaz---kajal",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "atonic-rose---initio": {
+    "id": "atonic-rose---initio",
+    "name": "atonic-rose---initio",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "aventus-for-her---creed": {
+    "id": "aventus-for-her---creed",
+    "name": "aventus-for-her---creed",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER",
+    "olfactory_family": "CITRICAS",
+    "occasion": "DEPORTE",
+    "intensity": "BAJA"
+  },
+  "berry-on-top---lattafa": {
+    "id": "berry-on-top---lattafa",
+    "name": "berry-on-top---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "bff---kim-kardashian": {
+    "id": "bff---kim-kardashian",
+    "name": "bff---kim-kardashian",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "bianco-latte---gardoni-toscana": {
+    "id": "bianco-latte---gardoni-toscana",
+    "name": "bianco-latte---gardoni-toscana",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "bright-crystal---versace": {
+    "id": "bright-crystal---versace",
+    "name": "bright-crystal---versace",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "USO DIARIO",
+    "intensity": "BAJA"
+  },
+  "black-opium---ysaintlaurent": {
+    "id": "black-opium---ysaintlaurent",
+    "name": "black-opium---ysaintlaurent",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "burberry-her---burberry": {
+    "id": "burberry-her---burberry",
+    "name": "burberry-her---burberry",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "burberry-london---burberry": {
+    "id": "burberry-london---burberry",
+    "name": "burberry-london---burberry",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "USO DIARIO",
+    "intensity": "BAJA"
+  },
+  "can-can---paris-hilton": {
+    "id": "can-can---paris-hilton",
+    "name": "can-can---paris-hilton",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "MEDIA"
+  },
+  "clasica---paris-hilton": {
+    "id": "clasica---paris-hilton",
+    "name": "clasica---paris-hilton",
+    "version": "ESTANDAR",
+    "active": true
+  },
+  "candy---yara": {
+    "id": "candy---yara",
+    "name": "candy---yara",
+    "version": "1.1",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "carioca-crush---sol-de-janeiro": {
+    "id": "carioca-crush---sol-de-janeiro",
+    "name": "carioca-crush---sol-de-janeiro",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "DEPORTE",
+    "intensity": "MEDIA"
+  },
+  "ccori---yanbal": {
+    "id": "ccori---yanbal",
+    "name": "ccori---yanbal",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "celos---yanbal": {
+    "id": "celos---yanbal",
+    "name": "celos---yanbal",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "chance---chanel": {
+    "id": "chance---chanel",
+    "name": "chance---chanel",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "USO DIARIO",
+    "intensity": "BAJA"
+  },
+  "chanel-n5---chanel": {
+    "id": "chanel-n5---chanel",
+    "name": "chanel-n5---chanel",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "cielo---yanbal": {
+    "id": "cielo---yanbal",
+    "name": "cielo---yanbal",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "ATALCADO",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "cloud---ariana-grande": {
+    "id": "cloud---ariana-grande",
+    "name": "cloud---ariana-grande",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "cloud-pink---ariana-grande": {
+    "id": "cloud-pink---ariana-grande",
+    "name": "cloud-pink---ariana-grande",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "cloud-2-0---ariana-grande": {
+    "id": "cloud-2-0---ariana-grande",
+    "name": "cloud-2-0---ariana-grande",
+    "version": "1.1",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "club-de-nuit-lionheart---armaf": {
+    "id": "club-de-nuit-lionheart---armaf",
+    "name": "club-de-nuit-lionheart---armaf",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "coco-madmoiselle---chanel": {
+    "id": "coco-madmoiselle---chanel",
+    "name": "coco-madmoiselle---chanel",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "CITRICAS",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "coconut-passion---victoria-secret": {
+    "id": "coconut-passion---victoria-secret",
+    "name": "coconut-passion---victoria-secret",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "cookie-crave---lattafa": {
+    "id": "cookie-crave---lattafa",
+    "name": "cookie-crave---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "cosmic-power-charlotte-tibury": {
+    "id": "cosmic-power-charlotte-tibury",
+    "name": "cosmic-power-charlotte-tibury",
+    "version": "ESTANDAR",
+    "active": true
+  },
+  "delina---marly": {
+    "id": "delina---marly",
+    "name": "delina---marly",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "devotion---dolce-and-gabanna": {
+    "id": "devotion---dolce-and-gabanna",
+    "name": "devotion---dolce-and-gabanna",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "donna---valentino": {
+    "id": "donna---valentino",
+    "name": "donna---valentino",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "eclaire---lattafa": {
+    "id": "eclaire---lattafa",
+    "name": "eclaire---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "eden-juicy-apple---kayaly": {
+    "id": "eden-juicy-apple---kayaly",
+    "name": "eden-juicy-apple---kayaly",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "elixir---shakira": {
+    "id": "elixir---shakira",
+    "name": "elixir---shakira",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER",
+    "olfactory_family": "ATALCADO",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "funny---mochino": {
+    "id": "funny---mochino",
+    "name": "funny---mochino",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "CITRICAS",
+    "occasion": "DEPORTE",
+    "intensity": "MEDIA"
+  },
+  "gaia---yanbal": {
+    "id": "gaia---yanbal",
+    "name": "gaia---yanbal",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "ATALCADO",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "gaultier-divine---jean-paul-gaultier": {
+    "id": "gaultier-divine---jean-paul-gaultier",
+    "name": "gaultier-divine---jean-paul-gaultier",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "MEDIA"
+  },
+  "good-girl---carolina-herrera": {
+    "id": "good-girl---carolina-herrera",
+    "name": "good-girl---carolina-herrera",
+    "version": "1.1",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "good-girl-blush---carolina-herrera": {
+    "id": "good-girl-blush---carolina-herrera",
+    "name": "good-girl-blush---carolina-herrera",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "guess---guess": {
+    "id": "guess---guess",
+    "name": "guess---guess",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "haya---lattafa": {
+    "id": "haya---lattafa",
+    "name": "haya---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "MEDIA"
+  },
+  "her-confession---lattafa": {
+    "id": "her-confession---lattafa",
+    "name": "her-confession---lattafa",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "her-elixir---burberry": {
+    "id": "her-elixir---burberry",
+    "name": "her-elixir---burberry",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "honor-and-glory---lattafa": {
+    "id": "honor-and-glory---lattafa",
+    "name": "honor-and-glory---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "il-femme---ilmin": {
+    "id": "il-femme---ilmin",
+    "name": "il-femme---ilmin",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "intense-cafe---montale": {
+    "id": "intense-cafe---montale",
+    "name": "intense-cafe---montale",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "juiced-berry---victoria-secret": {
+    "id": "juiced-berry---victoria-secret",
+    "name": "juiced-berry---victoria-secret",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "karpos---ahli": {
+    "id": "karpos---ahli",
+    "name": "karpos---ahli",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "khamrah---lattafa": {
+    "id": "khamrah---lattafa",
+    "name": "khamrah---lattafa",
+    "version": "1.1",
+    "active": true,
+    "gender": "UNISEX",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "ladventure-grapefruit---al-hamarain": {
+    "id": "ladventure-grapefruit---al-hamarain",
+    "name": "ladventure-grapefruit---al-hamarain",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "la-vie-est-belle---lancome": {
+    "id": "la-vie-est-belle---lancome",
+    "name": "la-vie-est-belle---lancome",
+    "version": "1.1",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "lady-million-royal---paco-rabanne": {
+    "id": "lady-million-royal---paco-rabanne",
+    "name": "lady-million-royal---paco-rabanne",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "light-blue-for-her---dng": {
+    "id": "light-blue-for-her---dng",
+    "name": "light-blue-for-her---dng",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "CITRICAS",
+    "occasion": "DEPORTE",
+    "intensity": "MEDIA"
+  },
+  "mallow-madness---lattafa": {
+    "id": "mallow-madness---lattafa",
+    "name": "mallow-madness---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "mango-temptation---victoria-secret": {
+    "id": "mango-temptation---victoria-secret",
+    "name": "mango-temptation---victoria-secret",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "marshmallow-blush---paris-corner": {
+    "id": "marshmallow-blush---paris-corner",
+    "name": "marshmallow-blush---paris-corner",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "meow---katty-perry": {
+    "id": "meow---katty-perry",
+    "name": "meow---katty-perry",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "miss-dior-edp---dior": {
+    "id": "miss-dior-edp---dior",
+    "name": "miss-dior-edp---dior",
+    "version": "1.1",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "bleecker-street---bond-n9": {
+    "id": "bleecker-street---bond-n9",
+    "name": "bleecker-street---bond-n9",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "mood-vanilla---ariana-grande": {
+    "id": "mood-vanilla---ariana-grande",
+    "name": "mood-vanilla---ariana-grande",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER"
+  },
+  "moon-sparkle---escada": {
+    "id": "moon-sparkle---escada",
+    "name": "moon-sparkle---escada",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER"
+  },
+  "narcotic-delight---initio": {
+    "id": "narcotic-delight---initio",
+    "name": "narcotic-delight---initio",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "UNISEX",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "noble-blush---lattafa": {
+    "id": "noble-blush---lattafa",
+    "name": "noble-blush---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "MEDIA"
+  },
+  "odyssey-candee---armaf": {
+    "id": "odyssey-candee---armaf",
+    "name": "odyssey-candee---armaf",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "olympea---paco-rabanne": {
+    "id": "olympea---paco-rabanne",
+    "name": "olympea---paco-rabanne",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "omnia-amethyst---bvlgari": {
+    "id": "omnia-amethyst---bvlgari",
+    "name": "omnia-amethyst---bvlgari",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "OFICINA",
+    "intensity": "BAJA"
+  },
+  "omnia-cristaline---bvlgari": {
+    "id": "omnia-cristaline---bvlgari",
+    "name": "omnia-cristaline---bvlgari",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRESCO",
+    "occasion": "USO DIARIO",
+    "intensity": "BAJA"
+  },
+  "oud-sublime---lattafa": {
+    "id": "oud-sublime---lattafa",
+    "name": "oud-sublime---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "paris-hilton---paris-hilton": {
+    "id": "paris-hilton---paris-hilton",
+    "name": "paris-hilton---paris-hilton",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "paradoxe---prada": {
+    "id": "paradoxe---prada",
+    "name": "paradoxe---prada",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "pineapple---dolce-and-gabanna": {
+    "id": "pineapple---dolce-and-gabanna",
+    "name": "pineapple---dolce-and-gabanna",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "pure-seduction---victoria-secret": {
+    "id": "pure-seduction---victoria-secret",
+    "name": "C",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "queen---bharara": {
+    "id": "queen---bharara",
+    "name": "queen---bharara",
+    "version": "1.1",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "ralph-lauren---ralph": {
+    "id": "ralph-lauren---ralph",
+    "name": "ralph-lauren---ralph",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRESCO",
+    "occasion": "DEPORTE",
+    "intensity": "MEDIA"
+  },
+  "roses-musk---montale": {
+    "id": "roses-musk---montale",
+    "name": "roses-musk---montale",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "MEDIA"
+  },
+  "royal-amber---orientica-dorada": {
+    "id": "royal-amber---orientica-dorada",
+    "name": "royal-amber---orientica-dorada",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER"
+  },
+  "sorbetto-rosso---escada": {
+    "id": "sorbetto-rosso---escada",
+    "name": "sorbetto-rosso---escada",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "sublime---lattafa": {
+    "id": "sublime---lattafa",
+    "name": "sublime---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "sunkissed-goddess---killian": {
+    "id": "sunkissed-goddess---killian",
+    "name": "sunkissed-goddess---killian",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER"
+  },
+  "sweet-like-candy---ariana-grande": {
+    "id": "sweet-like-candy---ariana-grande",
+    "name": "sweet-like-candy---ariana-grande",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER"
+  },
+  "temptation---yanbal": {
+    "id": "temptation---yanbal",
+    "name": "temptation---yanbal",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "HOMBRE",
+    "olfactory_family": "FRESCO",
+    "occasion": "DEPORTE",
+    "intensity": "BAJA"
+  },
+  "thank-you-next---ariana-grande": {
+    "id": "thank-you-next---ariana-grande",
+    "name": "thank-you-next---ariana-grande",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "MEDIA"
+  },
+  "tous---yara": {
+    "id": "tous---yara",
+    "name": "tous---yara",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "toy-2---mochino": {
+    "id": "toy-2---mochino",
+    "name": "toy-2---mochino",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "CITRICAS",
+    "occasion": "DEPORTE",
+    "intensity": "MEDIA"
+  },
+  "toy-2-bubblegum---moschino": {
+    "id": "toy-2-bubblegum---moschino",
+    "name": "toy-2-bubblegum---moschino",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "USO DIARIO",
+    "intensity": "ALTA"
+  },
+  "toy-2-pearls---moschino": {
+    "id": "toy-2-pearls---moschino",
+    "name": "toy-2-pearls---moschino",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "AROMATICO",
+    "occasion": "USO DIARIO",
+    "intensity": "MEDIA"
+  },
+  "vanilla-lace---victoria-secret": {
+    "id": "vanilla-lace---victoria-secret",
+    "name": "vanilla-lace---victoria-secret",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "OFICINA",
+    "intensity": "ALTA"
+  },
+  "velvet-gold---orientica": {
+    "id": "velvet-gold---orientica",
+    "name": "velvet-gold---orientica",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "very-good-girl-glam---carolina-herrera": {
+    "id": "very-good-girl-glam---carolina-herrera",
+    "name": "very-good-girl-glam---carolina-herrera",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER",
+    "olfactory_family": "AMADERADAS",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "whipped-pleasure---lattafa": {
+    "id": "whipped-pleasure---lattafa",
+    "name": "whipped-pleasure---lattafa",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "yara---lattafa": {
+    "id": "yara---lattafa",
+    "name": "yara---lattafa",
+    "version": "1.1",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "yara-candy---lattafa": {
+    "id": "yara-candy---lattafa",
+    "name": "yara-candy---lattafa",
+    "version": "1.1",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "DULCES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
+  },
+  "yara-moi---lattafa": {
+    "id": "yara-moi---lattafa",
+    "name": "yara-moi---lattafa",
+    "version": "ESTANDAR",
+    "active": false,
+    "gender": "MUJER",
+    "olfactory_family": "FLORALES",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "yum-yum---armaf": {
+    "id": "yum-yum---armaf",
+    "name": "yum-yum---armaf",
+    "version": "ESTANDAR",
+    "active": true,
+    "gender": "MUJER",
+    "olfactory_family": "FRUTALES",
+    "occasion": "OFICINA",
+    "intensity": "MEDIA"
+  },
+  "212-heroes---carolina-herrerahombre": {
+    "id": "212-heroes---carolina-herrera",
+    "name": "212-heroes---carolina-herrerahombre",
+    "version": "ESTANDAR",
+    "active": false
+  },
+  "azul---la-coste": {
+    "id": "azul-la-coste",
+    "name": "azul---la-coste",
+    "version": "ESTANDAR",
+    "active": true
+  },
+  "bleu---channel": {
+    "id": "bleu-channel",
+    "name": "bleu---channel",
+    "version": "ESTANDAR",
+    "active": true
+  },
+  "osadia---yanbalmujer": {
+    "id": "osadia---yanbal",
+    "name": "osadia---yanbalmujer",
+    "version": "ESTANDAR",
+    "active": false
+  }
+}

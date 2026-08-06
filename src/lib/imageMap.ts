@@ -215,6 +215,8 @@ const imageDatabase: Record<string, string> = {
   "yum-yum-armaf": "/products/yum-yum-armaf.png",
   "yves-saint-laurent": "/products/yves-saint-laurent.png",
   "zlatan-ibrahmovic": "/products/zlatan-ibrahmovic.png",
+};
+
 export function getImagePath(id: string): string | null {
   if (!id) return null;
   const cleanId = id.toLowerCase().replace(/^1\.1[_-]/, '').trim();

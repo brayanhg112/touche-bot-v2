@@ -1,9 +1,10 @@
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-import { getInventory } from '@/lib/googleSheets';
+import fs from 'fs';
+import path from 'path';
 import { recommend } from '../../lib/recommender';
-import type { BotAnswers, Gender, Occasion, Feel } from '../../lib/types';
+import type { BotAnswers, Gender, Occasion, Feel, PerfumeStockItem } from '../../lib/types';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // WIZARD STEPS — strict 6-step definition (no AI, no free text)
@@ -156,19 +157,31 @@ export async function POST(req: Request) {
         : referenceRaw,
     };
 
-    // Load live stock map
+    // Load live stock map + full inventory data from local inventory.json
     let stockMap: Record<string, boolean> | undefined;
+    let inventoryData: Record<string, { gender?: string; olfactory_family?: string; occasion?: string; intensity?: string; active?: boolean }> | undefined;
     try {
-      const inventory = await getInventory();
+      const inventoryPath = path.join(process.cwd(), 'data', 'inventory.json');
+      const raw = fs.readFileSync(inventoryPath, 'utf-8');
+      const inventory: Record<string, PerfumeStockItem> = JSON.parse(raw);
       stockMap = {};
-      for (const item of inventory) {
-        stockMap[item.id] = item.estado === 'ACTIVO';
+      inventoryData = {};
+      for (const item of Object.values(inventory)) {
+        stockMap[item.id] = item.active;
+        inventoryData[item.id] = {
+          gender: item.gender,
+          olfactory_family: item.olfactory_family,
+          occasion: item.occasion,
+          intensity: item.intensity,
+          active: item.active,
+        };
       }
     } catch {
       stockMap = undefined;
+      inventoryData = undefined;
     }
 
-    const results = recommend(botAnswers, stockMap);
+    const results = recommend(botAnswers, stockMap, inventoryData);
 
     return Response.json({
       step: 7,

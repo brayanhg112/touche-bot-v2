@@ -8,56 +8,57 @@ export interface ScoredPerfume {
   sommelierSummary: string; // Personalized match summary
   isImmediate: boolean;
   isNicho: boolean;        // Flag for luxury profile tone
+  isFallback?: boolean;    // True when item comes from Plan B relaxed search
 }
 
 // ── Occasion labels ─────────────────────────────────────────────────────────
 
 const occasionLabel: Record<string, string> = {
-  diario:   'Tu aliada del día a día',
-  trabajo:  'Elegante en la oficina',
-  cita:     'Hecha para seducir',
-  noche:    'Protagonista de la noche',
-  evento:   'Brillante en cada evento',
-  verano:   'Fresca bajo el sol',
+  diario: 'Tu aliada del día a día',
+  trabajo: 'Elegante en la oficina',
+  cita: 'Hecha para seducir',
+  noche: 'Protagonista de la noche',
+  evento: 'Brillante en cada evento',
+  verano: 'Fresca bajo el sol',
   invierno: 'Cálida en temporada fría',
 };
 
 const occasionFriendly: Record<string, string> = {
-  diario:   'el día a día',
-  trabajo:  'la oficina',
-  cita:     'una cita romántica',
-  noche:    'una salida nocturna',
-  evento:   'un evento especial',
-  verano:   'la playa y el verano',
+  diario: 'el día a día',
+  trabajo: 'la oficina',
+  cita: 'una cita romántica',
+  noche: 'una salida nocturna',
+  evento: 'un evento especial',
+  verano: 'la playa y el verano',
   invierno: 'la temporada fría',
 };
 
 const feelFriendly: Record<string, string> = {
-  fresco:    'fresco y limpio',
-  dulce:     'dulce y envolvente',
-  floral:    'floral y romántico',
+  fresco: 'fresco y limpio',
+  dulce: 'dulce y envolvente',
+  floral: 'floral y romántico',
   amaderado: 'cálido y amaderado',
   especiado: 'especiado y misterioso',
-  citrico:   'cítrico y vibrante',
-  frutal:    'frutal y alegre',
-  oud:       'intenso y oriental',
-  acuatico:  'marino y fresco',
-  gourmand:  'gourmand y sensual',
+  citrico: 'cítrico y vibrante',
+  frutal: 'frutal y alegre',
+  oud: 'intenso y oriental',
+  acuatico: 'marino y fresco',
+  gourmand: 'gourmand y sensual',
 };
 
 // ── Dynamic bullet point generators ────────────────────────────────────────
 
 function buildBulletFamily(family: string): string {
   const map: Record<string, string> = {
-    oriental:        'Elegancia de la familia Oriental Amaderada',
-    floral:          'Corazón de la familia Floral Romántica',
-    fresco:          'Frescura de la familia Acuática y Cítrica',
-    amaderado:       'Calidez de la familia Amaderada de Lujo',
-    chipre:          'Sofisticación de la familia Chipre',
-    fougere:         'Energía de la familia Fougère Clásica',
-    gourmand:        'Irresistible familia Gourmand',
-    arabe:           'Misticismo de la familia Árabe Oriental',
-    nicho:           'Exclusividad de la familia Nicho Artesanal',
+    oriental: 'Elegancia de la familia Oriental Amaderada',
+    floral: 'Corazón de la familia Floral Romántica',
+    fresco: 'Frescura de la familia Acuática y Cítrica',
+    amaderado: 'Calidez de la familia Amaderada de Lujo',
+    chipre: 'Sofisticación de la familia Chipre',
+    fougere: 'Energía de la familia Fougère Clásica',
+    gourmand: 'Irresistible familia Gourmand',
+    arabe: 'Misticismo de la familia Árabe Oriental',
+    nicho: 'Exclusividad de la familia Nicho Artesanal',
   };
   const key = family?.toLowerCase().trim() ?? '';
   for (const [k, v] of Object.entries(map)) {
@@ -78,16 +79,16 @@ function buildBulletNotes(topNotes: string, heartNotes: string): string {
 
 function buildBulletEmotional(feels: string[]): string {
   const emotionMap: Record<string, string> = {
-    oud:       'Proyecta un aura de misterio y sofisticación oriental',
+    oud: 'Proyecta un aura de misterio y sofisticación oriental',
     amaderado: 'Transmite elegancia cálida y presencia imponente',
     especiado: 'Evoca sensualidad y carácter indomable',
-    fresco:    'Genera una imagen de frescura y confianza',
-    dulce:     'Envuelve con una calidez dulce y magnética',
-    floral:    'Irradia feminidad, romanticismo y delicadeza',
-    citrico:   'Inspira vitalidad, energía y buen humor',
-    frutal:    'Transmite alegría, juventud y dinamismo',
-    acuatico:  'Evoca libertad, pureza y naturaleza',
-    gourmand:  'Seduce con una presencia irresistible y adictiva',
+    fresco: 'Genera una imagen de frescura y confianza',
+    dulce: 'Envuelve con una calidez dulce y magnética',
+    floral: 'Irradia feminidad, romanticismo y delicadeza',
+    citrico: 'Inspira vitalidad, energía y buen humor',
+    frutal: 'Transmite alegría, juventud y dinamismo',
+    acuatico: 'Evoca libertad, pureza y naturaleza',
+    gourmand: 'Seduce con una presencia irresistible y adictiva',
   };
   for (const feel of feels) {
     const label = emotionMap[feel.toLowerCase().trim()];
@@ -206,140 +207,239 @@ function referenceBonus(perfume: typeof catalog[0], ref: ReferenceMatch): number
 
 // ── Main recommendation engine ──────────────────────────────────────────────
 
-export function recommend(answers: BotAnswers, stockMap?: Record<string, boolean>): ScoredPerfume[] {
-  // ── Resolve reference perfume ──
+export function scorePerfume(
+  p: typeof catalog[0],
+  answers: BotAnswers,
+  stockMap?: Record<string, boolean>,
+  refMatch?: ReferenceMatch
+): ScoredPerfume | null {
+  // Filtro eliminatorio estricto en el género
+  const g = (answers.gender || '').toUpperCase().trim();
+  const validGender = g === 'M' ? (p.gender === 'M' || p.gender === 'U') 
+                    : g === 'F' ? (p.gender === 'F' || p.gender === 'U') 
+                    : (p.gender === 'U');
+  
+  if (!validGender) {
+    return null; // Puntaje 0 / Eliminado estrictamente
+  }
+
+  // HARD FAIL — avoidTags exclusion
+  if (answers.avoid && answers.avoid.length > 0 && p.avoidTags && p.avoidTags.length > 0) {
+    const avoidLow = answers.avoid.map(a => a.toLowerCase().trim());
+    const pTagsLow = p.avoidTags.map(t => t.toLowerCase().trim());
+    if (avoidLow.some(a => pTagsLow.includes(a))) {
+      return null;
+    }
+  }
+
+  // HARD LOCK — Versiones 1.1 limitadas sin stock
+  const isImmediate = stockMap ? stockMap[p.id] === true : p.inStock !== false;
+  if (p.version === '1.1' && p.isLimited && !isImmediate) {
+    return null;
+  }
+
+  let score = 0;
+  const ansOccasion = (answers.occasion || '').toLowerCase().trim();
+  const pOccasionsLow = (p.occasions || []).map(o => o.toLowerCase().trim());
+  const ansFeelLow = (answers.feel || []).map(f => f.toLowerCase().trim());
+  const pFeelsLow = (p.feels || []).map(f => f.toLowerCase().trim());
+  const pFamilyLow = (p.family || '').toLowerCase().trim();
+
+  // Pesos Sólidos: Familia Olfativa y Sentimiento / Acorde (+40 pts)
+  const matchesFeel = ansFeelLow.some(ans => pFeelsLow.includes(ans) || pFamilyLow.includes(ans));
+  if (ansFeelLow.length > 0 && !matchesFeel) {
+    score -= 50; 
+  } else {
+    const feelMatches = ansFeelLow.filter((f) => pFeelsLow.includes(f) || pFamilyLow.includes(f));
+    feelMatches.slice(0, 3).forEach(() => { score += 40; });
+  }
+
+  // Pesos Sólidos: Ocasión de Uso (+40pts por match)
+  if (ansOccasion) {
+    if (pOccasionsLow.includes(ansOccasion)) {
+      score += 40;
+    } else {
+      score -= 20;
+    }
+  }
+
+  // Projection alignment (+12pts)
+  if (answers.projection) {
+    const projMap: Record<string, number> = { discreta: 2, moderada: 3, intensa: 5 };
+    const desired = projMap[answers.projection.toLowerCase().trim()] ?? 3;
+    const diff = Math.abs(p.intensity - desired);
+    if (diff === 0) score += 12;
+    else if (diff === 1) score += 6;
+  }
+
+  // Sweetness alignment (+10pts)
+  const sweetnessDesired = ansFeelLow.includes('dulce') || ansFeelLow.includes('gourmand') ? 4
+    : ansFeelLow.includes('fresco') || ansFeelLow.includes('citrico') ? 1 : 3;
+  const sweetnessDiff = Math.abs(p.sweetness - sweetnessDesired);
+  if (sweetnessDiff === 0) score += 10;
+  else if (sweetnessDiff === 1) score += 5;
+
+  // Freshness alignment (+10pts)
+  const freshnessDesired = ansFeelLow.includes('fresco') || ansFeelLow.includes('acuatico') || ansFeelLow.includes('citrico') ? 4 : 2;
+  const freshnessDiff = Math.abs(p.freshness - freshnessDesired);
+  if (freshnessDiff === 0) score += 10;
+  else if (freshnessDiff === 1) score += 5;
+
+  // Reference perfume similarity bonus (+45pts max)
+  const refBonus = refMatch ? referenceBonus(p, refMatch) : 0;
+  score += refBonus * 1.5;
+
+  const isNicho = p.version === '1.1' || (p.family ?? '').toLowerCase().includes('nicho');
+  
+  // ── Dynamic bullet points ────────────────────────────────────────────
+  const reasons: string[] = [
+    buildBulletFamily(p.family ?? ''),
+    buildBulletNotes(p.topNotes, p.heartNotes),
+    buildBulletEmotional(ansFeelLow.length > 0 ? ansFeelLow : pFeelsLow),
+  ];
+
+  if (p.version === '1.1' && isImmediate) {
+    reasons.unshift('✦ Disponible en versión 1.1 de alta calidad — unidades muy limitadas 🔥');
+    reasons.splice(4);
+  }
+
+  // ── Personalized sommelier summary ──────────────────────────────────
+  const feelWord = ansFeelLow.length > 0
+    ? feelFriendly[ansFeelLow[0]] ?? ansFeelLow[0]
+    : 'especial';
+  const occasionWord = occasionFriendly[ansOccasion] ?? ansOccasion;
+  const heartNote = p.heartNotes?.split(',')[0]?.trim() ?? 'sus notas únicas';
+
+  let sommelierSummary: string;
+  if (answers.referencePerfume && refBonus > 0) {
+    sommelierSummary = `${answers.name || 'Tú'}, como me contaste que te gusta ${answers.referencePerfume}, elegí ${p.name} porque comparten esa esencia ${feelWord} que tanto buscas — su corazón de ${heartNote} lo confirma.`;
+  } else {
+    sommelierSummary = `${answers.name || 'Tú'}, este ${p.name} es tu match perfecto porque buscabas algo ${feelWord} para ${occasionWord} y esta fragancia destaca por su corazón de ${heartNote}.`;
+  }
+
+  return { perfume: p, score, reasons, sommelierSummary, isImmediate, isNicho };
+}
+
+/**
+ * Enhanced inventory cross-reference: checks if a catalog perfume's id exists
+ * in the enriched inventory and whether its extended fields match the user's
+ * filters. Returns a bonus/penalty score.
+ */
+function inventoryCrossRefBonus(
+  p: typeof catalog[0],
+  answers: BotAnswers,
+  inventoryData?: Record<string, { gender?: string; olfactory_family?: string; occasion?: string; intensity?: string; active?: boolean }>
+): { bonus: number; matchCount: number; isInStock: boolean } {
+  if (!inventoryData) return { bonus: 0, matchCount: 0, isInStock: true };
+
+  const invItem = inventoryData[p.id];
+  if (!invItem) return { bonus: 0, matchCount: 0, isInStock: false };
+
+  // Only count active items as in-stock
+  if (invItem.active === false) return { bonus: -200, matchCount: 0, isInStock: false };
+
+  let matchCount = 0;
+  let bonus = 0;
+
+  // Gender cross-ref
+  if (invItem.gender) {
+    const g = (answers.gender || '').toUpperCase();
+    const invG = invItem.gender.toUpperCase();
+    if (g === 'M' && (invG === 'HOMBRE' || invG === 'UNISEX')) { matchCount++; bonus += 5; }
+    else if (g === 'F' && (invG === 'MUJER' || invG === 'UNISEX')) { matchCount++; bonus += 5; }
+    else if (invG === 'UNISEX') { matchCount++; bonus += 3; }
+  }
+
+  // Family cross-ref
+  if (invItem.olfactory_family && answers.feel && answers.feel.length > 0) {
+    const invFamily = invItem.olfactory_family.toLowerCase();
+    const familyFeelMap: Record<string, string[]> = {
+      'orientales/especiadas': ['especiado', 'oud'],
+      'orientales/espec': ['especiado', 'oud'],
+      'dulce': ['dulce', 'gourmand'],
+      'citricas': ['citrico', 'fresco'],
+      'florales': ['floral'],
+      'frutales': ['frutal'],
+      'fresco': ['fresco', 'acuatico'],
+      'aromatico': ['fresco', 'amaderado'],
+      'atalcado': ['limpio'],
+      'acuaticas': ['acuatico', 'fresco'],
+      'amaderado': ['amaderado'],
+    };
+    const ansFeels = answers.feel.map(f => f.toLowerCase());
+    for (const [fam, feels] of Object.entries(familyFeelMap)) {
+      if (invFamily.includes(fam) && ansFeels.some(af => feels.includes(af))) {
+        matchCount++;
+        bonus += 10;
+        break;
+      }
+    }
+  }
+
+  // Occasion cross-ref
+  if (invItem.occasion && answers.occasion) {
+    const invOcc = invItem.occasion.toLowerCase();
+    const ansOcc = answers.occasion.toLowerCase();
+    const occMap: Record<string, string[]> = {
+      'diario': ['uso diario'],
+      'trabajo': ['oficina'],
+      'cita': ['cita romantica', 'cita romatica'],
+      'evento': ['evento formal'],
+      'deporte': ['deporte'],
+    };
+    const matchKeys = occMap[ansOcc] ?? [ansOcc];
+    if (matchKeys.some(k => invOcc.includes(k))) {
+      matchCount++;
+      bonus += 10;
+    }
+  }
+
+  // Intensity cross-ref
+  if (invItem.intensity && answers.projection) {
+    const invInt = invItem.intensity.toUpperCase();
+    const proj = answers.projection.toLowerCase();
+    const projIntMap: Record<string, string> = { discreta: 'BAJA', moderada: 'MEDIA', intensa: 'ALTA' };
+    if (projIntMap[proj] === invInt) {
+      matchCount++;
+      bonus += 5;
+    }
+  }
+
+  return { bonus, matchCount, isInStock: true };
+}
+
+export function recommend(
+  answers: BotAnswers,
+  stockMap?: Record<string, boolean>,
+  inventoryData?: Record<string, { gender?: string; olfactory_family?: string; occasion?: string; intensity?: string; active?: boolean }>
+): ScoredPerfume[] {
   const refMatch = findReferencePerfume(answers.referencePerfume ?? '');
 
-  const scored = catalog
-    // ① Gender filter
-    .filter((p) => {
-      const g = (answers.gender || '').toUpperCase().trim();
-      if (g === 'M') return p.gender === 'M' || p.gender === 'U';
-      if (g === 'F') return p.gender === 'F' || p.gender === 'U';
-      return p.gender === 'U';
-    })
-
-    // ② HARD FAIL — avoidTags exclusion
-    .filter((p) => {
-      if (!answers.avoid || answers.avoid.length === 0) return true;
-      if (!p.avoidTags || p.avoidTags.length === 0) return true;
-      const avoidLow = answers.avoid.map(a => a.toLowerCase().trim());
-      const pTagsLow = p.avoidTags.map(t => t.toLowerCase().trim());
-      return !avoidLow.some((a) => pTagsLow.includes(a));
-    })
-
-    // Strict filter for occasion and family/feel as requested
-    .filter((p) => {
-      const ansOccasion = (answers.occasion || '').toLowerCase().trim();
-      if (ansOccasion) {
-        const pOccasionsLow = (p.occasions || []).map(o => o.toLowerCase().trim());
-        if (!pOccasionsLow.includes(ansOccasion)) return false;
-      }
+  const scored: ScoredPerfume[] = [];
+  
+  for (const p of catalog) {
+    const result = scorePerfume(p, answers, stockMap, refMatch);
+    if (result !== null) {
+      // Apply inventory cross-reference bonus
+      const xref = inventoryCrossRefBonus(p, answers, inventoryData);
+      result.score += xref.bonus;
       
-      const ansFeelLow = (answers.feel || []).map(f => f.toLowerCase().trim());
-      if (ansFeelLow.length > 0) {
-        const pFeelsLow = (p.feels || []).map(f => f.toLowerCase().trim());
-        const pFamilyLow = (p.family || '').toLowerCase().trim();
-        const matchesFeel = ansFeelLow.some(ans => pFeelsLow.includes(ans) || pFamilyLow.includes(ans));
-        if (!matchesFeel) return false;
+      // Only include items that are in stock (active in inventory)
+      if (xref.isInStock || !inventoryData) {
+        scored.push(result);
       }
-      return true;
-    })
+    }
+  }
 
-    // ③ HARD LOCK — Versiones 1.1 limitadas sin stock
-    .filter((p) => {
-      if (p.version === '1.1' && p.isLimited) {
-        const isImmediate = stockMap ? stockMap[p.id] === true : p.inStock !== false;
-        if (!isImmediate) return false;
-      }
-      return true;
-    })
-
-    // ④ Scoring + dynamic copywriting
-    .map((p) => {
-      let score = 0;
-      const ansOccasion = (answers.occasion || '').toLowerCase().trim();
-      const pOccasionsLow = (p.occasions || []).map(o => o.toLowerCase().trim());
-      const ansFeelLow = (answers.feel || []).map(f => f.toLowerCase().trim());
-      const pFeelsLow = (p.feels || []).map(f => f.toLowerCase().trim());
-
-      // Occasion match (+20pts)
-      if (ansOccasion && pOccasionsLow.includes(ansOccasion)) {
-        score += 20;
-      }
-
-      // Feel/vibe match (+15pts each, up to 3)
-      const feelMatches = ansFeelLow.filter((f) => pFeelsLow.includes(f));
-      feelMatches.slice(0, 3).forEach(() => { score += 15; });
-
-      // Projection alignment (+12pts)
-      if (answers.projection) {
-        const projMap: Record<string, number> = { discreta: 2, moderada: 3, intensa: 5 };
-        const desired = projMap[answers.projection.toLowerCase().trim()] ?? 3;
-        const diff = Math.abs(p.intensity - desired);
-        if (diff === 0) score += 12;
-        else if (diff === 1) score += 6;
-      }
-
-      // Sweetness alignment (+10pts)
-      const sweetnessDesired = ansFeelLow.includes('dulce') || ansFeelLow.includes('gourmand') ? 4
-        : ansFeelLow.includes('fresco') || ansFeelLow.includes('citrico') ? 1 : 3;
-      const sweetnessDiff = Math.abs(p.sweetness - sweetnessDesired);
-      if (sweetnessDiff === 0) score += 10;
-      else if (sweetnessDiff === 1) score += 5;
-
-      // Freshness alignment (+10pts)
-      const freshnessDesired = ansFeelLow.includes('fresco') || ansFeelLow.includes('acuatico') || ansFeelLow.includes('citrico') ? 4 : 2;
-      const freshnessDiff = Math.abs(p.freshness - freshnessDesired);
-      if (freshnessDiff === 0) score += 10;
-      else if (freshnessDiff === 1) score += 5;
-
-      // Reference perfume similarity bonus (+20pts max)
-      const refBonus = referenceBonus(p, refMatch);
-      score += refBonus;
-
-      const isImmediate = stockMap ? stockMap[p.id] === true : p.inStock !== false;
-      const isNicho = p.version === '1.1' || (p.family ?? '').toLowerCase().includes('nicho');
-
-      // ── Dynamic bullet points ────────────────────────────────────────────
-      const reasons: string[] = [
-        buildBulletFamily(p.family ?? ''),
-        buildBulletNotes(p.topNotes, p.heartNotes),
-        buildBulletEmotional(ansFeelLow.length > 0 ? ansFeelLow : pFeelsLow),
-      ];
-
-      // Bonus bullet for 1.1 stock
-      if (p.version === '1.1' && isImmediate) {
-        reasons.unshift('✦ Disponible en versión 1.1 de alta calidad — unidades muy limitadas 🔥');
-        reasons.splice(4); // max 4 bullets
-      }
-
-      // ── Personalized sommelier summary ──────────────────────────────────
-      const feelWord = ansFeelLow.length > 0
-        ? feelFriendly[ansFeelLow[0]] ?? ansFeelLow[0]
-        : 'especial';
-      const occasionWord = occasionFriendly[ansOccasion] ?? ansOccasion;
-      const heartNote = p.heartNotes?.split(',')[0]?.trim() ?? 'sus notas únicas';
-
-      // Build sommelier summary — include reference perfume mention if provided
-      let sommelierSummary: string;
-      if (answers.referencePerfume && refBonus > 0) {
-        sommelierSummary = `${answers.name || 'Tú'}, como me contaste que te gusta ${answers.referencePerfume}, elegí ${p.name} porque comparten esa esencia ${feelWord} que tanto buscas — su corazón de ${heartNote} lo confirma.`;
-      } else {
-        sommelierSummary = `${answers.name || 'Tú'}, este ${p.name} es tu match perfecto porque buscabas algo ${feelWord} para ${occasionWord} y esta fragancia destaca por su corazón de ${heartNote}.`;
-      }
-
-      return { perfume: p, score, reasons, sommelierSummary, isImmediate, isNicho };
-    });
-
-  // ⑤ Deduplicate by ID and Sort
-  let sortedScored = scored.sort((a, b) => {
+  // Sort: prioritize 1.1 versions, then by score
+  const sortedScored = scored.sort((a, b) => {
     const a11 = a.perfume.version === '1.1' ? 1 : 0;
     const b11 = b.perfume.version === '1.1' ? 1 : 0;
     if (a11 !== b11) return b11 - a11;
     return b.score - a.score;
   });
 
+  // Deduplicate
   const uniquePerfumes: typeof sortedScored = [];
   const seenIds = new Set<string>();
   for (const item of sortedScored) {
@@ -349,21 +449,49 @@ export function recommend(answers: BotAnswers, stockMap?: Record<string, boolean
     }
   }
 
-  return uniquePerfumes.slice(0, 3);
+  const top3 = uniquePerfumes.slice(0, 3);
+
+  // ── Plan B (Fallback Protocol) ────────────────────────────────────────────
+  // If strict filtering yields fewer than 3 results with positive scores,
+  // re-run with relaxed criteria and mark as fallback
+  if (top3.length < 3 || (top3.length > 0 && top3[top3.length - 1].score < 0)) {
+    // Try without stock filter — find the best matches regardless of availability
+    const relaxed: ScoredPerfume[] = [];
+    for (const p of catalog) {
+      const result = scorePerfume(p, answers, undefined, refMatch);
+      if (result !== null && result.score > 0) {
+        // Check if it's already in top3
+        if (!top3.some(t => t.perfume.id === p.id)) {
+          result.isFallback = true;
+          result.sommelierSummary = `${answers.name || 'Tú'}, no dispongo de esa combinación exacta en este momento, pero basándome en tus notas preferidas, ${p.name} es la joya que más se acerca a lo que buscas.`;
+          relaxed.push(result);
+        }
+      }
+    }
+    relaxed.sort((a, b) => b.score - a.score);
+    
+    // Fill remaining slots
+    const needed = 3 - top3.filter(t => t.score > 0).length;
+    const validTop3 = top3.filter(t => t.score > 0);
+    const fallbackItems = relaxed.slice(0, needed);
+    return [...validTop3, ...fallbackItems].slice(0, 3);
+  }
+
+  return top3;
 }
 
 // ── WhatsApp message builders ───────────────────────────────────────────────
 
 /** Per-perfume link (one button per card) */
 export function buildWhatsappPerPerfume(userName: string, perfumeName: string, brandName: string): string {
-  const text = `Hola Brayan, soy ${userName} 🌸 Aria me recomendó ${perfumeName} de ${brandName} y quiero pedirlo. ¿Me puedes mostrar enseguidita para ensayarlo en mi piel? 😍`;
+  const text = `Hola Brian, soy ${userName} 🌸 Me encantó tu recomendación de ${perfumeName} de ${brandName} y quiero pedirlo. ¿Me puedes mostrar enseguidita para ensayarlo en mi piel? 😍`;
   return `https://wa.me/573136876673?text=${encodeURIComponent(text)}`;
 }
 
 /** Summary link (footer CTA with all 3) */
 export function buildWhatsappSummary(userName: string, top3: ScoredPerfume[]): string {
   const names = top3.map((r) => `${r.perfume.name} de ${r.perfume.brand}`).join(', ');
-  const text = `Hola Brayan, soy ${userName} 🌸 Aria me recomendó estas fragancias: ${names}. ¿Me puedes mostrar enseguidita para ensayarlas en mi piel? 😍`;
+  const text = `Hola Brian, soy ${userName} 🌸 Tú me recomendaste estas fragancias: ${names}. ¿Me puedes mostrar enseguidita para ensayarlas en mi piel? 😍`;
   return `https://wa.me/573136876673?text=${encodeURIComponent(text)}`;
 }
 
@@ -389,16 +517,16 @@ export function buildSommelierSummary(answers: BotAnswers, perfume: Perfume, ran
 
   // Note matching map: feel keyword → note keywords to look for
   const feelToNoteKeywords: Record<string, string[]> = {
-    dulce:     ['vainilla', 'caramelo', 'miel', 'cacao', 'praline', 'tonka'],
-    fresco:    ['bergamota', 'limón', 'pepino', 'menta', 'té verde', 'aloe'],
-    floral:    ['jazmín', 'rosa', 'nardo', 'iris', 'ylang', 'lirio', 'peony'],
+    dulce: ['vainilla', 'caramelo', 'miel', 'cacao', 'praline', 'tonka'],
+    fresco: ['bergamota', 'limón', 'pepino', 'menta', 'té verde', 'aloe'],
+    floral: ['jazmín', 'rosa', 'nardo', 'iris', 'ylang', 'lirio', 'peony'],
     amaderado: ['sándalo', 'cedro', 'palo santo', 'vetiver', 'guayaco'],
     especiado: ['canela', 'cardamomo', 'pimienta', 'clavo', 'nuez moscada'],
-    citrico:   ['bergamota', 'limón', 'naranja', 'pomelo', 'mandarina'],
-    frutal:    ['manzana', 'pera', 'melocotón', 'frambuesa', 'frutos rojos'],
-    oud:       ['oud', 'incienso', 'resina', 'ámbar', 'mirra'],
-    acuatico:  ['algas', 'sal marina', 'agua', 'ozone', 'brisa'],
-    gourmand:  ['vainilla', 'azúcar', 'cacao', 'helado', 'caramelo'],
+    citrico: ['bergamota', 'limón', 'naranja', 'pomelo', 'mandarina'],
+    frutal: ['manzana', 'pera', 'melocotón', 'frambuesa', 'frutos rojos'],
+    oud: ['oud', 'incienso', 'resina', 'ámbar', 'mirra'],
+    acuatico: ['algas', 'sal marina', 'agua', 'ozone', 'brisa'],
+    gourmand: ['vainilla', 'azúcar', 'cacao', 'helado', 'caramelo'],
   };
 
   // Find best matching note for the client's feel profile
@@ -413,12 +541,12 @@ export function buildSommelierSummary(answers: BotAnswers, perfume: Perfume, ran
 
   // ── Occasion phrasing ──
   const occasionFriendlyLocal: Record<string, string> = {
-    diario:   'el día a día',
-    trabajo:  'la oficina',
-    cita:     'una cita romántica',
-    noche:    'una salida nocturna',
-    evento:   'un evento especial',
-    verano:   'la playa y el verano',
+    diario: 'el día a día',
+    trabajo: 'la oficina',
+    cita: 'una cita romántica',
+    noche: 'una salida nocturna',
+    evento: 'un evento especial',
+    verano: 'la playa y el verano',
     invierno: 'la temporada fría',
   };
   const occasionWord = occasionFriendlyLocal[answers.occasion ?? ''] ?? answers.occasion ?? 'tu estilo';

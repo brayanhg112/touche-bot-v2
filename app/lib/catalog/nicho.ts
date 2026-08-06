@@ -38,8 +38,8 @@ export const nichoPerfumes: Perfume[] = [
     emotionalDesc: 'Una explosión de frutas mediterráneas sobre un fondo de almizcle aterciopelado. Energía pura.',
   },
   {
-    id: 'kirke-tiziana-terenzi',
-    name: 'Kirke',
+    id: 'alcontrario-tiziana-terenzi',
+    name: 'Al Contrario',
     brand: 'Tiziana Terenzi',
     gender: 'U',
     family: 'Chipre Frutal',
