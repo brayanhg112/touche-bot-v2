@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { catalog } from '../../lib/catalog';
-import { supabase } from '../../lib/supabase';
+import { supabase } from '@/lib/supabase';
 import type { AiGuideAnswers, AiGuideResult } from '../../lib/aiGuideTypes';
 
 export async function POST(req: Request) {
@@ -18,11 +18,14 @@ export async function POST(req: Request) {
       console.error("❌ Error conectando a Supabase:", error);
     } else if (inventory) {
       for (const item of inventory) {
-        const id = (item.id || item.name)?.trim().toLowerCase();
+        const id = (item.id || item.nombre_perfume || item.name)?.trim().toLowerCase();
         if (id) {
           adminOverrides[id] = {
             ...item,
-            active: item.active !== undefined ? item.active : (item.inStock !== undefined ? item.inStock : true)
+            active: item.estado !== undefined ? item.estado : (item.active !== undefined ? item.active : true),
+            gender: item.genero || item.gender,
+            family: item.familia_olfativa || item.family,
+            occasion: item.ocasion || item.occasion
           };
         }
       }
