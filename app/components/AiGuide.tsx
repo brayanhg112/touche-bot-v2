@@ -64,26 +64,6 @@ export default function AiGuide() {
     setStep(prev => prev + 1);
   };
 
-  const submitAnswers = async () => {
-    setIsLoading(true);
-    setStep(5);
-    try {
-      const res = await fetch('/api/ai-guide', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(answers),
-      });
-      const data = await res.json();
-      setResults(data.recommendations || []);
-      setStep(0);
-    } catch (e) {
-      console.error(e);
-      setStep(1);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const getWhatsAppLink = (perfume: AiGuideResult) => {
     const text = `Hola, me interesó la recomendación del Sommelier IA: ${perfume.name} de ${perfume.brand}. ¿Podrían darme más información?`;
     return `https://wa.me/573136876673?text=${encodeURIComponent(text)}`;
@@ -211,8 +191,27 @@ export default function AiGuide() {
                   onClick={() => {
                     if (opt.action) opt.action();
                     else if (content.actionKey && step === 4) {
-                      setAnswers((prev: any) => ({ ...prev, [content.actionKey as string]: opt.value }));
-                      submitAnswers();
+                      const updatedAnswers = { ...answers, noteFamily: opt.value };
+                      setAnswers(updatedAnswers);
+                      setIsLoading(true);
+                      setStep(5);
+                      fetch('/api/ai-guide', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updatedAnswers),
+                      })
+                        .then(res => res.json())
+                        .then(data => {
+                          setResults(data.recommendations || []);
+                          setStep(0);
+                        })
+                        .catch(e => {
+                          console.error(e);
+                          setStep(1);
+                        })
+                        .finally(() => {
+                          setIsLoading(false);
+                        });
                     }
                     else if (content.actionKey) {
                       handleNext(content.actionKey, opt.value);
@@ -228,7 +227,7 @@ export default function AiGuide() {
                      ${opt.highlight
                       ? 'gold-gradient text-black border-transparent shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)]'
                       : 'border-primary/30 bg-surface-container/50 backdrop-blur-md text-on-surface/80 hover:border-primary/60 hover:text-primary'}
-                   `}
+                  `}
                 >
                   {opt.label}
                 </motion.button>
