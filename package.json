@@ -11,7 +11,9 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",
     "@google/generative-ai": "^0.24.1",
+    "@supabase/supabase-js": "^2.112.2",
     "@tanstack/react-virtual": "^3.14.5",
+    "dotenv": "^17.4.2",
     "duckduckgo-images-api": "^1.0.5",
     "framer-motion": "^12.40.0",
     "google-auth-library": "^10.7.0",
