@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const body: AiGuideAnswers = await req.json();
     console.log("📥 Petición recibida con filtros:", body);
 
-    // 1. Fetch del inventario y overrides desde Supabase con índice múltiple robusto
+    // 1. Fetch del inventario y overrides directo desde Supabase (Fuente de Verdad en la Nube)
     let adminOverrides: Record<string, any> = {};
     const { data: inventory, error } = await supabase
       .from('inventory')
@@ -18,38 +18,29 @@ export async function POST(req: Request) {
       console.error("❌ Error conectando a Supabase:", error);
     } else if (inventory) {
       for (const item of inventory) {
-        const nombre = (item.nombre_perfume || '').trim().toLowerCase();
-        const itemId = String(item.id || '').trim().toLowerCase();
+        // Mapeo robusto para capturar tanto el nombre como el ID que viene de Supabase
+        const dbName = (item.nombre_perfume || item.name || '').trim().toLowerCase();
+        const dbId = String(item.id || '').trim().toLowerCase();
 
         const itemData = {
           ...item,
-          active: item.estado !== undefined ? item.estado : true,
-          gender: item.genero || '',
-          family: item.familia_olfativa || '',
-          occasion: item.ocasion || ''
+          active: item.estado !== undefined ? item.estado : (item.active !== undefined ? item.active : true),
+          gender: item.genero || item.gender || '',
+          family: item.familia_olfativa || item.family || '',
+          occasion: item.ocasion || item.occasion || ''
         };
 
-        if (nombre) adminOverrides[nombre] = itemData;
-        if (itemId) adminOverrides[itemId] = itemData;
+        if (dbName) adminOverrides[dbName] = itemData;
+        if (dbId) adminOverrides[dbId] = itemData;
       }
     }
 
-    // 2. Fusionar el catálogo base con Supabase usando búsqueda flexible de coincidencias
+    // 2. Fusionar el catálogo base con los datos de Supabase respetando los IDs originales
     let liveCatalog = catalog.map(p => {
-      const pId = (p.id || '').trim().toLowerCase();
-      const pName = (p.name || '').trim().toLowerCase();
+      const pIdLower = p.id?.trim().toLowerCase() || '';
+      const pNameLower = p.name?.trim().toLowerCase() || '';
 
-      // Búsqueda inteligente por ID, por Nombre, o por inclusión parcial (salva los slugs con guiones)
-      let override = adminOverrides[pId] || adminOverrides[pName];
-
-      if (!override) {
-        const matchedKey = Object.keys(adminOverrides.raw || adminOverrides).find(
-          k => k.includes(pId) || pId.includes(k) || k.includes(pName) || pName.includes(k)
-        );
-        if (matchedKey) override = adminOverrides[matchedKey];
-      }
-
-      override = override || {};
+      const override = adminOverrides[pIdLower] || adminOverrides[pNameLower] || {};
 
       return {
         ...p,
@@ -60,16 +51,16 @@ export async function POST(req: Request) {
       };
     });
 
-    // 3. Sistema de puntajes con EXCLUSIÓN ESTRICTA DE GÉNERO (Candado Absoluto)
+    // 3. Sistema de puntajes con EXCLUSIÓN ESTRICTA DE GÉNERO (Candado Absoluto original)
     let scored = liveCatalog.map(p => {
       let score = 10;
 
-      // --- FILTRO DE GÉNERO ESTRICTO ---
+      // --- FILTRO DE GÉNERO ESTRICTO (Candado Absoluto) ---
       const ansGenderRaw = (body.gender || '').toUpperCase();
       const pGenderRaw = (p.gender || '').toUpperCase();
 
-      let ansGender = ansGenderRaw.includes('HOMBRE') || ansGenderRaw === 'M' ? 'HOMBRE' : ansGenderRaw.includes('MUJER') || ansGenderRaw === 'F' ? 'MUJER' : ansGenderRaw === 'U' ? 'UNISEX' : ansGenderRaw;
-      let pGender = pGenderRaw.includes('HOMBRE') || pGenderRaw === 'M' ? 'HOMBRE' : pGenderRaw.includes('MUJER') || pGenderRaw === 'F' ? 'MUJER' : 'UNISEX';
+      let ansGender = ansGenderRaw === 'M' || ansGenderRaw === 'HOMBRE' ? 'HOMBRE' : ansGenderRaw === 'F' || ansGenderRaw === 'MUJER' ? 'MUJER' : ansGenderRaw === 'U' ? 'UNISEX' : ansGenderRaw;
+      let pGender = pGenderRaw === 'M' || pGenderRaw === 'HOMBRE' ? 'HOMBRE' : pGenderRaw === 'F' || pGenderRaw === 'MUJER' ? 'MUJER' : 'UNISEX';
 
       if (ansGender && ansGender !== 'UNISEX') {
         if (pGender !== ansGender && pGender !== 'UNISEX') {
@@ -128,7 +119,7 @@ export async function POST(req: Request) {
       return { perfume: p, score };
     });
 
-    // Ordenar y aplicar el filtro estricto (score > 0)
+    // Ordenar y filtrar solo los que superen la prueba de fuego (score > 0)
     scored.sort((a, b) => b.score - a.score);
 
     const validScored = scored.filter(item => item.score > 0 && item.perfume.active !== false);
