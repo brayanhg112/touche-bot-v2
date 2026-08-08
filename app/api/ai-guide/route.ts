@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const body: AiGuideAnswers = await req.json();
     console.log("📥 Petición recibida con filtros:", body);
 
-    // 1. Fetch del inventario y overrides desde Supabase con matching robusto
+    // 1. Fetch del inventario y overrides desde Supabase con índice múltiple robusto
     let adminOverrides: Record<string, any> = {};
     const { data: inventory, error } = await supabase
       .from('inventory')
@@ -18,27 +18,38 @@ export async function POST(req: Request) {
       console.error("❌ Error conectando a Supabase:", error);
     } else if (inventory) {
       for (const item of inventory) {
-        // Llave basada en el nombre del perfume para enlazar con el catálogo
-        const key = (item.nombre_perfume || '').trim().toLowerCase();
-        if (key) {
-          adminOverrides[key] = {
-            ...item,
-            active: item.estado !== undefined ? item.estado : true,
-            gender: item.genero || '',
-            family: item.familia_olfativa || '',
-            occasion: item.ocasion || ''
-          };
-        }
+        const nombre = (item.nombre_perfume || '').trim().toLowerCase();
+        const itemId = String(item.id || '').trim().toLowerCase();
+
+        const itemData = {
+          ...item,
+          active: item.estado !== undefined ? item.estado : true,
+          gender: item.genero || '',
+          family: item.familia_olfativa || '',
+          occasion: item.ocasion || ''
+        };
+
+        if (nombre) adminOverrides[nombre] = itemData;
+        if (itemId) adminOverrides[itemId] = itemData;
       }
     }
 
-    // 2. Fusionar el catálogo base con los datos reales de Supabase
+    // 2. Fusionar el catálogo base con Supabase usando búsqueda flexible de coincidencias
     let liveCatalog = catalog.map(p => {
-      const pId = p.id?.trim().toLowerCase() || '';
-      const pName = p.name?.trim().toLowerCase() || '';
+      const pId = (p.id || '').trim().toLowerCase();
+      const pName = (p.name || '').trim().toLowerCase();
 
-      // Buscamos override por id del catálogo o por nombre exacto
-      const override = adminOverrides[pId] || adminOverrides[pName] || {};
+      // Búsqueda inteligente por ID, por Nombre, o por inclusión parcial (salva los slugs con guiones)
+      let override = adminOverrides[pId] || adminOverrides[pName];
+
+      if (!override) {
+        const matchedKey = Object.keys(adminOverrides.raw || adminOverrides).find(
+          k => k.includes(pId) || pId.includes(k) || k.includes(pName) || pName.includes(k)
+        );
+        if (matchedKey) override = adminOverrides[matchedKey];
+      }
+
+      override = override || {};
 
       return {
         ...p,
