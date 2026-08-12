@@ -69,11 +69,11 @@ export default function AiGuide() {
     return `https://wa.me/573136876673?text=${encodeURIComponent(text)}`;
   };
 
-  // Ajustes finos de encuadre por escena
+  // Ajustes finos de encuadre por escena (Centrado perfecto en móvil, ajustes específicos en PC)
   const getVideoClass = () => {
-    if (step === 2) return "w-full h-full object-cover object-[center_8%]";   // Segunda escena: subida
-    if (step === 0) return "w-full h-full object-cover object-[center_35%]"; // Última escena: centrada con espacio para la cabeza
-    return "w-full h-full object-cover object-top";                          // Demás escenas por defecto
+    if (step === 2) return "w-full h-full object-cover object-center md:object-[center_8%]";
+    if (step === 0) return "w-full h-full object-cover object-center md:object-[center_35%]";
+    return "w-full h-full object-cover object-center md:object-top";
   };
 
   const getStepContent = () => {
@@ -223,7 +223,7 @@ export default function AiGuide() {
                   whileHover={{ scale: 1.02, backgroundColor: 'rgba(212, 175, 55, 0.1)' }}
                   whileTap={{ scale: 0.98 }}
                   className={`
-                     w-full py-4 px-6 rounded-xl border text-center font-label text-sm uppercase tracking-wider font-bold transition-all duration-300
+                     w-full py-4 px-6 rounded-xl border text-center font-label text-sm uppercase tracking-wider font-bold transition-all duration-300 select-none
                      ${opt.highlight
                       ? 'gold-gradient text-black border-transparent shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)]'
                       : 'border-primary/30 bg-surface-container/50 backdrop-blur-md text-on-surface/80 hover:border-primary/60 hover:text-primary'}
@@ -324,4 +324,5 @@ export default function AiGuide() {
       </AnimatePresence>
     </div>
   );
+}
 }
