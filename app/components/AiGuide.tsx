@@ -140,7 +140,7 @@ export default function AiGuide() {
   const content = getStepContent();
 
   return (
-    <div className="w-full max-w-lg mx-auto flex flex-col gap-6 min-h-[85vh] relative z-10 px-4">
+    <div className="w-full max-w-lg mx-auto flex flex-col gap-4 md:gap-6 min-h-[100dvh] md:min-h-[85vh] relative z-10 px-4 pb-8 md:pb-0 justify-center">
 
       <audio ref={audioRef} src="/audio/mafia-song.mp3" loop className="hidden" />
 
@@ -184,7 +184,7 @@ export default function AiGuide() {
               "{content.message}"
             </p>
 
-            <div className="flex flex-col gap-3 mt-4">
+            <div className="flex flex-col gap-3 mt-2 md:mt-4 max-h-[45vh] md:max-h-none overflow-y-auto md:overflow-visible no-scrollbar pb-4 md:pb-0 scroll-smooth">
               {content.options.map((opt: any, i) => (
                 <motion.button
                   key={opt.value || opt.label}
