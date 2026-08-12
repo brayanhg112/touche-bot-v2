@@ -51,10 +51,15 @@ export default function AiGuide() {
     return () => video.removeEventListener('timeupdate', handleTimeUpdate);
   }, [step]);
 
+  // Forzamos la carga y reproducción para burlar el bloqueo de celulares
   const startExperience = () => {
     if (audioRef.current) {
       audioRef.current.volume = 0.15;
-      audioRef.current.play().catch(e => console.warn("Audio blocked", e));
+      audioRef.current.load(); // Truco vital para iOS/Android
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(e => console.warn("Audio bloqueado por política del móvil o modo silencio", e));
+      }
     }
     setStep(2);
   };
@@ -69,11 +74,11 @@ export default function AiGuide() {
     return `https://wa.me/573136876673?text=${encodeURIComponent(text)}`;
   };
 
-  // Ajustes finos de encuadre por escena (Centrado perfecto en móvil, ajustes específicos en PC)
+  // Ajustes finos de encuadre por escena (Porcentajes calibrados para Celular | PC protegido)
   const getVideoClass = () => {
-    if (step === 2) return "w-full h-full object-cover object-center md:object-[center_8%]";
-    if (step === 0) return "w-full h-full object-cover object-center md:object-[center_35%]";
-    return "w-full h-full object-cover object-center md:object-top";
+    if (step === 2) return "w-full h-full object-cover object-[center_15%] md:object-[center_8%]";
+    if (step === 0) return "w-full h-full object-cover object-[center_25%] md:object-[center_35%]";
+    return "w-full h-full object-cover object-[center_15%] md:object-top";
   };
 
   const getStepContent = () => {
@@ -142,7 +147,8 @@ export default function AiGuide() {
   return (
     <div className="w-full max-w-lg mx-auto flex flex-col gap-4 md:gap-6 min-h-[100dvh] md:min-h-[85vh] relative z-10 px-4 pb-8 md:pb-0 justify-center">
 
-      <audio ref={audioRef} src="/audio/mafia-song.mp3" loop className="hidden" />
+      {/* Etiqueta de audio blindada para móviles */}
+      <audio ref={audioRef} src="/audio/mafia-song.mp3" loop preload="auto" playsInline className="hidden" />
 
       <div className="fixed inset-0 pointer-events-none z-[-1] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1d052d] via-background to-background opacity-80" />
 
