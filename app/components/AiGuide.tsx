@@ -51,14 +51,44 @@ export default function AiGuide() {
     return () => video.removeEventListener('timeupdate', handleTimeUpdate);
   }, [step]);
 
-  // Forzamos la carga y reproducción para burlar el bloqueo de celulares
+  // ─── AUDIO UNLOCK ──────────────────────────────────────────────────────────
+  // Patrón robusto para iOS Safari / Chrome Android:
+  // 1. Se crea un AudioContext y se reproduce un buffer silencioso en el mismo
+  //    tick del evento de usuario → esto desbloquea la política de autoplay.
+  // 2. Luego se invoca .play() sobre el <audio> real.
+  // Todo ocurre síncronamente dentro del handler del clic, que es el único
+  // momento en que iOS permite iniciar audio sin restricciones.
   const startExperience = () => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.15;
-      audioRef.current.load(); // Truco vital para iOS/Android
-      const playPromise = audioRef.current.play();
+    const audio = audioRef.current;
+    if (audio) {
+      // Paso 1 – desbloquear AudioContext con buffer silencioso (truco iOS)
+      try {
+        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+        if (AudioCtx) {
+          const ctx = new AudioCtx();
+          const silentBuffer = ctx.createBuffer(1, 1, 22050);
+          const source = ctx.createBufferSource();
+          source.buffer = silentBuffer;
+          source.connect(ctx.destination);
+          source.start(0);
+          // Cerramos el contexto auxiliar después de que cumpla su función
+          source.onended = () => ctx.close().catch(() => {});
+        }
+      } catch (_) {
+        // Si el navegador no soporta AudioContext, continuamos sin el truco
+      }
+
+      // Paso 2 – preparar y reproducir el audio real
+      audio.volume = 0.15;
+      audio.muted = false;
+      // .load() fuerza el re-fetch en iOS cuando el src aún no estaba cargado
+      audio.load();
+      // .play() debe llamarse en el mismo tick del gesto del usuario
+      const playPromise = audio.play();
       if (playPromise !== undefined) {
-        playPromise.catch(e => console.warn("Audio bloqueado por política del móvil o modo silencio", e));
+        playPromise.catch((e) =>
+          console.warn('[AiGuide] Audio bloqueado (modo silencio o política del navegador):', e)
+        );
       }
     }
     setStep(2);
@@ -147,12 +177,25 @@ export default function AiGuide() {
   return (
     <div className="w-full max-w-lg mx-auto flex flex-col gap-4 md:gap-6 min-h-[100dvh] md:min-h-[85vh] relative z-10 px-4 pb-8 md:pb-0 justify-center">
 
-      <audio ref={audioRef} src="/audio/mafia-song.mp3" loop preload="auto" playsInline className="hidden" />
+      {/* PROBLEMA 2 FIX: playsInline + preload="auto" son clave para iOS/Android.
+           El desbloqueo real del AudioContext ocurre en startExperience() */}
+      <audio
+        ref={audioRef}
+        src="/audio/mafia-song.mp3"
+        loop
+        preload="auto"
+        playsInline
+        className="hidden"
+      />
 
       <div className="fixed inset-0 pointer-events-none z-[-1] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1d052d] via-background to-background opacity-80" />
 
+      {/* PROBLEMA 1 FIX:
+           Mobile → aspect-auto + max-h-[55vh] : el video se adapta a su relación
+           de aspecto real y nunca recorta la cabeza del personaje.
+           Desktop → md:aspect-[9/16] md:max-h-[52vh] (diseño original protegido) */}
       {step !== -1 && (
-        <div className={`relative w-full aspect-[9/16] max-h-[52vh] bg-black rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(100,20,150,0.15)] flex flex-col items-center justify-center border border-primary/30 transition-all duration-500 ${step === 0 ? 'scale-95 border-primary/50 shadow-[0_0_30px_rgba(212,175,55,0.4)]' : ''}`}>
+        <div className={`relative w-full aspect-auto max-h-[55vh] md:aspect-[9/16] md:max-h-[52vh] bg-black rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(100,20,150,0.15)] flex flex-col items-center justify-center border border-primary/30 transition-all duration-500 ${step === 0 ? 'scale-95 border-primary/50 shadow-[0_0_30px_rgba(212,175,55,0.4)]' : ''}`}>
           <video
             ref={videoRef}
             className={`w-full h-full transition-all duration-300 ${getVideoClass()}`}
