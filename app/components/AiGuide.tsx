@@ -74,10 +74,10 @@ export default function AiGuide() {
     return `https://wa.me/573136876673?text=${encodeURIComponent(text)}`;
   };
 
-  // Ajustes finos de encuadre por escena (Cabeza a salvo en móvil, PC protegido)
+  // Ajustes finos de encuadre por escena (Fijamos el top absoluto en celular, PC protegido)
   const getVideoClass = () => {
-    if (step === 2) return "w-full h-full object-cover object-[center_2%] md:object-[center_8%]";
-    if (step === 0) return "w-full h-full object-cover object-[center_8%] md:object-[center_35%]";
+    if (step === 2) return "w-full h-full object-cover object-top md:object-[center_8%]";
+    if (step === 0) return "w-full h-full object-cover object-top md:object-[center_35%]";
     return "w-full h-full object-cover object-top md:object-top";
   };
 
