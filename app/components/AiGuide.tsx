@@ -91,12 +91,10 @@ export default function AiGuide() {
     return `https://wa.me/573136876673?text=${encodeURIComponent(text)}`;
   };
 
-  // ─── AQUÍ MODIFICAS EL ENCUADRE DEL CELULAR ───────────────────────────────
-  // Si quieres que el Sommelier baje más, sube el "20%" a "25%" o "30%".
+  // ─── FIX DEFINITIVO PARA EL RECORTE EN MÓVIL ───────────────────────────────
+  // Usamos object-contain para asegurar que el 100% del video quepa en la pantalla
   const getVideoClass = () => {
-    if (step === 2 || step === 3 || step === 4) return "w-full h-full object-cover object-[center_20%] md:object-cover md:object-[center_8%]";
-    if (step === 0) return "w-full h-full object-cover object-[center_25%] md:object-cover md:object-[center_35%]";
-    return "w-full h-full object-cover object-[center_20%] md:object-cover md:object-top";
+    return "w-full h-full object-cover object-top";
   };
 
   const getStepContent = () => {
@@ -177,7 +175,7 @@ export default function AiGuide() {
       <div className="fixed inset-0 pointer-events-none z-[-1] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1d052d] via-background to-background opacity-80" />
 
       {step !== -1 && (
-        <div className={`relative w-full aspect-auto max-h-[55vh] md:aspect-[9/16] md:max-h-[52vh] bg-black rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(100,20,150,0.15)] flex flex-col items-center justify-center border border-primary/30 transition-all duration-500 ${step === 0 ? 'scale-95 border-primary/50 shadow-[0_0_30px_rgba(212,175,55,0.4)]' : ''}`}>
+        <div className={`relative w-full aspect-[9/16] max-h-[75vh] md:max-h-[52vh] bg-black rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(100,20,150,0.15)] flex flex-col items-center justify-center border border-primary/30 transition-all duration-500 ${step === 0 ? 'scale-95 border-primary/50 shadow-[0_0_30px_rgba(212,175,55,0.4)]' : ''}`}>
           <video
             ref={videoRef}
             className={`w-full h-full transition-all duration-300 ${getVideoClass()}`}
