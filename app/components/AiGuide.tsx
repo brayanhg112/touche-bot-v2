@@ -93,7 +93,7 @@ export default function AiGuide() {
 
   // ─── ENCUADRE A LA CARA EN MÓVIL ───────────────────────────────
   const getVideoClass = () => {
-    return "w-full h-full object-cover object-[center_50%] md:object-cover md:object-top";
+    return "w-full h-full object-cover object-[center_5%] md:object-cover md:object-top";
   };
 
   const getStepContent = () => {
