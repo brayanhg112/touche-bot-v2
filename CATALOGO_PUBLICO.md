@@ -407,11 +407,6 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Notas principales:** Cidra, Bergamota de Calabria, Naranja dulce
 *   **Ocasión:** diario, trabajo, verano
 
-### In2U - Calvin Klein
-*   **Categoría:** Aceite (Femenino)
-*   **Notas principales:** Hojas del grosellero rojo, Toronja, Bergamota
-*   **Ocasión:** diario, verano, trabajo
-
 ### Intense Cafe - Montale
 *   **Categoría:** Nicho (Lujo)
 *   **Notas principales:** Notas Florales
@@ -726,11 +721,6 @@ Aquí tienes nuestra colección de fragancias de alta calidad. Encuentra tu arom
 *   **Categoría:** Aceite (Masculino)
 *   **Notas principales:** Cardamomo, Pimienta Rosa, Hojas de violeta, Menta
 *   **Ocasión:** cita, noche, invierno
-
-### Sublime - Lattafa
-*   **Categoría:** Árabe / Mist
-*   **Notas principales:** Manzana, Lichi, Rosa
-*   **Ocasión:** diario, trabajo, evento
 
 ### Summer Hammer - Lorenzo Pazzaglia
 *   **Categoría:** Nicho (Lujo)

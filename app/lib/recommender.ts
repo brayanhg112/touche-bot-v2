@@ -1,5 +1,6 @@
 import type { BotAnswers, Perfume } from './types';
 import { catalog } from './catalog';
+import { TOUCHE_INSIGNIA_PERFUMES } from './insignia';
 
 export interface ScoredPerfume {
   perfume: typeof catalog[0];
@@ -205,6 +206,20 @@ function referenceBonus(perfume: typeof catalog[0], ref: ReferenceMatch): number
   return 0;
 }
 
+function checkStockFlexible(pId: string, stockMap?: Record<string, boolean>): boolean {
+  if (!stockMap) return true;
+  if (stockMap[pId] !== undefined) return stockMap[pId];
+  const cleanId = pId.toLowerCase().replace(/[^a-z0-9]/g, '');
+  for (const [key, val] of Object.entries(stockMap)) {
+    const cleanKey = key.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const cleanPrefix = cleanKey.split('---')[0];
+    if (cleanKey === cleanId || cleanPrefix === cleanId || cleanKey.includes(cleanId) || cleanId.includes(cleanPrefix)) {
+      return val;
+    }
+  }
+  return true;
+}
+
 // ── Main recommendation engine ──────────────────────────────────────────────
 
 export function scorePerfume(
@@ -233,7 +248,7 @@ export function scorePerfume(
   }
 
   // HARD LOCK — Versiones 1.1 limitadas sin stock
-  const isImmediate = stockMap ? stockMap[p.id] === true : p.inStock !== false;
+  const isImmediate = stockMap ? checkStockFlexible(p.id, stockMap) : p.inStock !== false;
   if (p.version === '1.1' && p.isLimited && !isImmediate) {
     return null;
   }
@@ -321,7 +336,32 @@ export function scorePerfume(
 }
 
 /**
- * Enhanced inventory cross-reference: checks if a catalog perfume's id exists
+ * Finds an inventory record matching a catalog perfume by exact id, name, or flexible prefix/suffix match.
+ */
+function findInventoryEntry(
+  p: typeof catalog[0],
+  inventoryData?: Record<string, { gender?: string; olfactory_family?: string; occasion?: string; intensity?: string; active?: boolean }>
+) {
+  if (!inventoryData) return undefined;
+  if (inventoryData[p.id]) return inventoryData[p.id];
+  const pClean = p.id.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const pNameClean = p.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+  for (const [key, val] of Object.entries(inventoryData)) {
+    const keyClean = key.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const keyPart = key.split('---')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (keyClean === pClean || keyPart === pClean || keyClean === pNameClean || keyPart === pNameClean) {
+      return val;
+    }
+    if (keyClean.includes(pClean) || pClean.includes(keyPart)) {
+      return val;
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Enhanced inventory cross-reference: checks if a catalog perfume exists
  * in the enriched inventory and whether its extended fields match the user's
  * filters. Returns a bonus/penalty score.
  */
@@ -332,10 +372,13 @@ function inventoryCrossRefBonus(
 ): { bonus: number; matchCount: number; isInStock: boolean } {
   if (!inventoryData) return { bonus: 0, matchCount: 0, isInStock: true };
 
-  const invItem = inventoryData[p.id];
-  if (!invItem) return { bonus: 0, matchCount: 0, isInStock: false };
+  const invItem = findInventoryEntry(p, inventoryData);
+  if (!invItem) {
+    // Si no está registrado en el inventario extendido, asumimos el stock del catálogo
+    return { bonus: 0, matchCount: 0, isInStock: p.inStock !== false };
+  }
 
-  // Only count active items as in-stock
+  // Only count explicitly inactive items as out of stock
   if (invItem.active === false) return { bonus: -200, matchCount: 0, isInStock: false };
 
   let matchCount = 0;
@@ -345,26 +388,26 @@ function inventoryCrossRefBonus(
   if (invItem.gender) {
     const g = (answers.gender || '').toUpperCase();
     const invG = invItem.gender.toUpperCase();
-    if (g === 'M' && (invG === 'HOMBRE' || invG === 'UNISEX')) { matchCount++; bonus += 5; }
-    else if (g === 'F' && (invG === 'MUJER' || invG === 'UNISEX')) { matchCount++; bonus += 5; }
-    else if (invG === 'UNISEX') { matchCount++; bonus += 3; }
+    if (g === 'M' && (invG === 'HOMBRE' || invG === 'UNISEX' || invG === 'M')) { matchCount++; bonus += 5; }
+    else if (g === 'F' && (invG === 'MUJER' || invG === 'UNISEX' || invG === 'F')) { matchCount++; bonus += 5; }
+    else if (invG === 'UNISEX' || invG === 'U') { matchCount++; bonus += 3; }
   }
 
   // Family cross-ref
   if (invItem.olfactory_family && answers.feel && answers.feel.length > 0) {
     const invFamily = invItem.olfactory_family.toLowerCase();
     const familyFeelMap: Record<string, string[]> = {
-      'orientales/especiadas': ['especiado', 'oud'],
-      'orientales/espec': ['especiado', 'oud'],
+      'oriental': ['especiado', 'oud', 'dulce'],
+      'especiad': ['especiado', 'oud'],
       'dulce': ['dulce', 'gourmand'],
-      'citricas': ['citrico', 'fresco'],
-      'florales': ['floral'],
-      'frutales': ['frutal'],
-      'fresco': ['fresco', 'acuatico'],
-      'aromatico': ['fresco', 'amaderado'],
-      'atalcado': ['limpio'],
-      'acuaticas': ['acuatico', 'fresco'],
-      'amaderado': ['amaderado'],
+      'citric': ['citrico', 'fresco'],
+      'floral': ['floral'],
+      'frutal': ['frutal'],
+      'fresc': ['fresco', 'acuatico'],
+      'aromatic': ['fresco', 'amaderado'],
+      'atalcad': ['limpio'],
+      'acuatic': ['acuatico', 'fresco'],
+      'amaderad': ['amaderado'],
     };
     const ansFeels = answers.feel.map(f => f.toLowerCase());
     for (const [fam, feels] of Object.entries(familyFeelMap)) {
@@ -376,16 +419,16 @@ function inventoryCrossRefBonus(
     }
   }
 
-  // Occasion cross-ref
+  // Occasion cross-ref (admite 'cita romantica' y 'cita romatica')
   if (invItem.occasion && answers.occasion) {
     const invOcc = invItem.occasion.toLowerCase();
     const ansOcc = answers.occasion.toLowerCase();
     const occMap: Record<string, string[]> = {
-      'diario': ['uso diario'],
-      'trabajo': ['oficina'],
-      'cita': ['cita romantica', 'cita romatica'],
-      'evento': ['evento formal'],
-      'deporte': ['deporte'],
+      'diario': ['uso diario', 'diario'],
+      'trabajo': ['oficina', 'trabajo'],
+      'cita': ['cita romantica', 'cita romatica', 'cita'],
+      'evento': ['evento formal', 'evento'],
+      'deporte': ['deporte', 'fresco'],
     };
     const matchKeys = occMap[ansOcc] ?? [ansOcc];
     if (matchKeys.some(k => invOcc.includes(k))) {
@@ -424,7 +467,7 @@ export function recommend(
       const xref = inventoryCrossRefBonus(p, answers, inventoryData);
       result.score += xref.bonus;
       
-      // Only include items that are in stock (active in inventory)
+      // Only include items that are in stock
       if (xref.isInStock || !inventoryData) {
         scored.push(result);
       }
@@ -449,35 +492,54 @@ export function recommend(
     }
   }
 
-  const top3 = uniquePerfumes.slice(0, 3);
+  let finalRecommendations = uniquePerfumes.slice(0, 3);
 
-  // ── Plan B (Fallback Protocol) ────────────────────────────────────────────
-  // If strict filtering yields fewer than 3 results with positive scores,
-  // re-run with relaxed criteria and mark as fallback
-  if (top3.length < 3 || (top3.length > 0 && top3[top3.length - 1].score < 0)) {
-    // Try without stock filter — find the best matches regardless of availability
+  // ── Plan B (Fallback Protocol — Búsqueda Relajada) ─────────────────────────
+  // Si el filtrado estricto entrega menos de 3 resultados, relajamos criterios de stock y ocasión
+  if (finalRecommendations.length < 3) {
     const relaxed: ScoredPerfume[] = [];
     for (const p of catalog) {
       const result = scorePerfume(p, answers, undefined, refMatch);
-      if (result !== null && result.score > 0) {
-        // Check if it's already in top3
-        if (!top3.some(t => t.perfume.id === p.id)) {
+      if (result !== null) {
+        if (!finalRecommendations.some(t => t.perfume.id === p.id)) {
           result.isFallback = true;
-          result.sommelierSummary = `${answers.name || 'Tú'}, no dispongo de esa combinación exacta en este momento, pero basándome en tus notas preferidas, ${p.name} es la joya que más se acerca a lo que buscas.`;
+          result.sommelierSummary = `${answers.name || 'Tú'}, aunque esta fragancia explora acordes complementarios, ${p.name} es una creación seleccionada por nuestro sommelier que conecta de forma asombrosa con tu perfil.`;
           relaxed.push(result);
         }
       }
     }
     relaxed.sort((a, b) => b.score - a.score);
-    
-    // Fill remaining slots
-    const needed = 3 - top3.filter(t => t.score > 0).length;
-    const validTop3 = top3.filter(t => t.score > 0);
-    const fallbackItems = relaxed.slice(0, needed);
-    return [...validTop3, ...fallbackItems].slice(0, 3);
+
+    for (const item of relaxed) {
+      if (finalRecommendations.length >= 3) break;
+      finalRecommendations.push(item);
+    }
   }
 
-  return top3;
+  // ── Plan C (Garantía Touche Essencielle Insignia — NUNCA PANTALLA VACÍA) ────
+  // Si aún con búsqueda relajada faltan puestos, se completan con los perfumes insignia
+  if (finalRecommendations.length < 3) {
+    for (const insignia of TOUCHE_INSIGNIA_PERFUMES) {
+      if (!finalRecommendations.some(r => r.perfume.id === insignia.id || r.perfume.name === insignia.name)) {
+        finalRecommendations.push({
+          perfume: insignia,
+          score: 100,
+          reasons: [
+            '✦ Fragancia insignia de Touche Essencielle de máxima concentración 1.1',
+            'Composición maestra de aceites esenciales puros y fijación superior',
+            'Firma olfativa inolvidable diseñada para cautivar en toda ocasión'
+          ],
+          sommelierSummary: `${answers.name || 'Tú'}, como buscamos una experiencia verdaderamente inolvidable, ${insignia.name} es la joya insignia de Touche Essencielle que proyectará tu esencia con distinción suprema.`,
+          isImmediate: true,
+          isNicho: true,
+          isFallback: true
+        });
+      }
+      if (finalRecommendations.length === 3) break;
+    }
+  }
+
+  return finalRecommendations.slice(0, 3);
 }
 
 // ── WhatsApp message builders ───────────────────────────────────────────────

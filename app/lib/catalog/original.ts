@@ -310,7 +310,7 @@ export const catalog: Perfume[] = [
   },
   {
     id: 'one-million',
-    name: '1 Million',
+    name: 'One Million',
     brand: 'Paco Rabanne',
     gender: 'M',
     family: 'Oriental Especiado',

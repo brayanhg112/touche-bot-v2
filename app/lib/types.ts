@@ -43,6 +43,7 @@ export interface PerfumeStockItem {
   version: string;
   active: boolean;
   gender?: string;
+  genero?: string;
   olfactory_family?: string;
   occasion?: string;
   intensity?: string;

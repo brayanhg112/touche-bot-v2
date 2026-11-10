@@ -309,7 +309,7 @@ export const hombresNuevos: Perfume[] = [
   },
   {
     id: 'one-million-lucky-pr',
-    name: '1 Million Lucky',
+    name: 'One Million Lucky',
     brand: 'Paco Rabanne',
     gender: 'M',
     family: 'Cuero Especiado',

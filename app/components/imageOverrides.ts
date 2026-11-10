@@ -2,7 +2,7 @@ export const customImageMap: Record<string, string> = {
     // Mapeos anteriores y clásicos
     "212-heroes-woman": "212-heroes-carolina-herreramujer.png",
     "ultra-male": "ultramale-jean-paul-gaultier.png",
-    "1-million": "clasica-one-million.png",
+    "One-million": "clasica-one-million.png",
     "acqua-di-gio": "profumo-acqua-di-gio.png",
     "bleu-de-chanel": "bleu-channel.png",
     "royal-amber": "royal-amber-orientica-dorada.png",

@@ -27,9 +27,12 @@ export type AiGuideNoteFamily =
   | 'oud';
 
 export interface AiGuideAnswers {
-  occasion: AiGuideOccasion | '';
-  expression: AiGuideExpression | '';
-  noteFamily: AiGuideNoteFamily | '';
+  gender?: string;
+  occasion?: string;
+  expression?: string;
+  noteFamily?: string;
+  family?: string;
+  intensity?: string;
 }
 
 export interface AiGuideResult {

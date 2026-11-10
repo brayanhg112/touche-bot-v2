@@ -224,6 +224,10 @@ export const imageMap: Record<string, string> = {
   'dessert-night-armaf':         '/perfumes/dessert-night-armaf.png',
   'yum-yum-armaf':               '/perfumes/yum-yum-armaf.png',
   'summer-hammer-lorenzo':       '/perfumes/summer-hammer-lorenzo-pazzaglia.jpg',
+  // Touche Essencielle Insignia
+  'nuit-de-marbre':              '/products/nuit-de-marbre.png',
+  'oud-celeste':                 '/products/oud-celeste.png',
+  'rose-imperiale':              '/products/rose-imperiale.png',
 };
 
 /** Returns the image path for a perfume ID, or undefined (→ falls back to placeholder) */

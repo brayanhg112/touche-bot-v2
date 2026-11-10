@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 import { catalog } from '../../lib/catalog';
 import { supabase } from '@/lib/supabase';
+import { TOUCHE_INSIGNIA_AI_RESULTS } from '../../lib/insignia';
 import type { AiGuideAnswers, AiGuideResult } from '../../lib/aiGuideTypes';
 
 const sanitize = (str: string) => {
@@ -17,186 +20,349 @@ const normalizeText = (str: string) => {
     .trim();
 };
 
+const formatTitle = (str: string) => {
+  if (!str) return '';
+  return str
+    .split(/[-_\s]+/)
+    .filter(Boolean)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+};
+
+interface InventoryItemRaw {
+  id?: string;
+  name?: string;
+  nombre_perfume?: string;
+  genero?: string;
+  gender?: string;
+  familia_olfativa?: string;
+  olfactory_family?: string;
+  family?: string;
+  ocasion?: string;
+  occasion?: string;
+  intensidad?: string;
+  intensity?: string;
+  estado?: boolean;
+  active?: boolean;
+  tipo?: string;
+  version?: string;
+}
+
 export async function POST(req: Request) {
   try {
     const body: AiGuideAnswers = await req.json();
-    console.log("📥 [DEBUG TOTAL] Payload recibido del cliente:", JSON.stringify(body, null, 2));
+    console.log("📥 [AI-GUIDE] Payload recibido del cliente:", JSON.stringify(body, null, 2));
 
-    const { data: inventory, error } = await supabase
-      .from('inventory')
-      .select('*');
+    // 1. Cargar inventario resiliente (Supabase con fallback local inmediato)
+    let rawInventory: InventoryItemRaw[] = [];
 
-    if (error) {
-      console.error("❌ [AI-GUIDE] Error conectando a Supabase:", error);
-      return NextResponse.json({ recommendations: [] });
+    try {
+      const { data, error } = await supabase
+        .from('inventory')
+        .select('*');
+
+      if (!error && Array.isArray(data) && data.length > 0) {
+        rawInventory = data;
+        console.log(`✅ [AI-GUIDE] ${data.length} ítems cargados desde Supabase.`);
+      } else if (error) {
+        console.warn("⚠️ [AI-GUIDE] Supabase reportó error, activando respaldo local:", error.message);
+      }
+    } catch (supaErr) {
+      console.warn("⚠️ [AI-GUIDE] Conexión a Supabase no disponible, usando inventario local.");
     }
 
-    if (!inventory || inventory.length === 0) {
-      console.warn("⚠️ [AI-GUIDE] Inventario vacío en Supabase.");
-      return NextResponse.json({ recommendations: [] });
+    // Fallback a data/inventory.json si Supabase no entregó datos
+    if (rawInventory.length === 0) {
+      try {
+        const inventoryPath = path.join(process.cwd(), 'data', 'inventory.json');
+        if (fs.existsSync(inventoryPath)) {
+          const fileRaw = fs.readFileSync(inventoryPath, 'utf-8');
+          const parsed = JSON.parse(fileRaw);
+          rawInventory = Object.values(parsed);
+          console.log(`✅ [AI-GUIDE] ${rawInventory.length} ítems cargados desde data/inventory.json.`);
+        }
+      } catch (fileErr) {
+        console.error("❌ [AI-GUIDE] Error leyendo inventario local:", fileErr);
+      }
     }
 
-    const activeInventory = inventory.filter(item => item.estado === true || item.active === true);
+    // Si aún está vacío, usar el catálogo en memoria directamente
+    if (rawInventory.length === 0) {
+      console.warn("⚠️ [AI-GUIDE] Usando catálogo en memoria como inventario base.");
+      rawInventory = catalog.map(p => ({
+        id: p.id,
+        name: p.name,
+        genero: p.gender === 'M' ? 'HOMBRE' : p.gender === 'F' ? 'MUJER' : 'UNISEX',
+        familia_olfativa: p.family,
+        ocasion: p.occasions?.[0] || 'USO DIARIO',
+        intensidad: 'MEDIA',
+        active: true,
+        version: p.version || 'ESTANDAR'
+      }));
+    }
 
-    const catalogMap = new Map();
+    // Filtrar activos
+    const activeInventory = rawInventory.filter(item =>
+      item.estado === true || item.active === true || (item.estado === undefined && item.active === undefined)
+    );
+
+    const itemsToProcess = activeInventory.length > 0 ? activeInventory : rawInventory;
+
+    // 2. Construir mapa rápido de catálogo para enriquecer notas, descripción, marca, etc.
+    const catalogMapById = new Map<string, typeof catalog[0]>();
+    const catalogMapByName = new Map<string, typeof catalog[0]>();
+
     catalog.forEach(p => {
-      catalogMap.set(sanitize(p.id), p);
-      catalogMap.set(sanitize(p.name), p);
+      catalogMapById.set(sanitize(p.id), p);
+      catalogMapByName.set(sanitize(p.name), p);
     });
 
-    let liveCatalog = activeInventory.map(item => {
-      const rawName = item.nombre_perfume || item.name || '';
+    const findCatalogMatch = (rawId: string, rawName: string) => {
+      const cleanId = sanitize(rawId);
       const cleanName = sanitize(rawName);
 
-      const baseItem = catalogMap.get(cleanName) || {
-        id: cleanName,
-        name: rawName,
-        brand: 'Touche Essencielle',
-        topNotes: ['Notas de Salida'],
-        heartNotes: ['Notas de Corazón'],
-        baseNotes: ['Notas de Fondo'],
-        emotionalDesc: 'Una creación exclusiva adaptada a tus sentidos.',
-        version: item.tipo || 'ESTANDAR'
-      };
+      // Descomponer "perfume---marca"
+      const idParts = rawId.split('---');
+      const nameParts = rawName.split('---');
+      const perfumeIdPart = sanitize(idParts[0]);
+      const perfumeNamePart = sanitize(nameParts[0]);
 
-      return {
-        ...baseItem,
-        id: String(item.id || baseItem.id),
-        name: rawName || baseItem.name,
-        gender: String(item.genero || item.gender || '').trim().toUpperCase(),
-        family: String(item.familia_olfativa || '').trim().toUpperCase(),
-        occasion: String(item.ocasion || '').trim().toUpperCase(),
-        intensity: String(item.intensidad || '').trim().toUpperCase(),
-        occasions: item.ocasion ? [String(item.ocasion).trim().toUpperCase()] : (baseItem.occasions || []),
-        active: true
-      };
-    });
+      if (catalogMapById.has(cleanId)) return catalogMapById.get(cleanId);
+      if (catalogMapById.has(perfumeIdPart)) return catalogMapById.get(perfumeIdPart);
+      if (catalogMapByName.has(cleanName)) return catalogMapByName.get(cleanName);
+      if (catalogMapByName.has(perfumeNamePart)) return catalogMapByName.get(perfumeNamePart);
 
-    // 1. Género limpio
-    const ansGenderRaw = String(body.gender || '').toUpperCase();
-    let ansGender = ansGenderRaw.includes('HOMBRE') || ansGenderRaw === 'M' || ansGenderRaw === 'H' ? 'HOMBRE'
-      : ansGenderRaw.includes('MUJER') || ansGenderRaw === 'F' || ansGenderRaw === 'DAMA' ? 'MUJER'
-        : 'UNISEX';
-
-    // 2. Extracción infalible de la familia olfativa (Revisando cualquier posible clave del frontend)
-    const rawInputFamily =
-      (body as any).noteFamily ||
-      (body as any).family ||
-      (body as any).familia ||
-      (body as any).olfactiveFamily ||
-      (body as any).note_family ||
-      (body as any).selectedFamily || '';
-
-    const rawFamilyInput = normalizeText(rawInputFamily);
-
-    let resolvedFamily = rawFamilyInput;
-    if (rawFamilyInput.includes('oriental') || rawFamilyInput.includes('especiada')) resolvedFamily = 'orientales/especiadas';
-    else if (rawFamilyInput.includes('amaderada')) resolvedFamily = 'amaderadas';
-    else if (rawFamilyInput.includes('citrica')) resolvedFamily = 'citricas';
-    else if (rawFamilyInput.includes('dulce')) resolvedFamily = 'dulces';
-    else if (rawFamilyInput.includes('frutal')) resolvedFamily = 'frutales';
-    else if (rawFamilyInput.includes('floral')) resolvedFamily = 'florales';
-    else if (rawFamilyInput.includes('acuatica') || rawFamilyInput.includes('marino')) resolvedFamily = 'acuaticas';
-
-    const ansOccasionNorm = normalizeText(body.occasion);
-    const ansIntensityNorm = normalizeText(body.intensity);
-
-    console.log(`🔎 [CAPTURADOR] Familia cruda recibida: [${rawInputFamily}] -> Traducida: [${resolvedFamily}] | Género: [${ansGender}] | Ocasión: [${ansOccasionNorm}]`);
-
-    const familyMappings: Record<string, string[]> = {
-      'orientales/especiadas': ['oriental', 'especiad', 'ambar', 'oud', 'arab', 'vainilla', 'especiada'],
-      'amaderadas': ['amaderad', 'madera', 'cedro', 'sandalo', 'vetiver', 'pachuli', 'amaderada'],
-      'citricas': ['citric', 'bergamota', 'limon', 'naranja', 'fresco'],
-      'dulces': ['dulce', 'gourmand', 'vainilla', 'caramelo', 'pralin', 'azucar'],
-      'frutales': ['frutal', 'fruta', 'manzana', 'cereza', 'pina', 'mango', 'durazno'],
-      'florales': ['floral', 'flor', 'rosa', 'jazmin', 'iris', 'peonia'],
-      'acuaticas': ['acuatic', 'marino', 'mar', 'agua', 'salado'],
-      'fresco': ['fresco', 'fresca', 'citric', 'acuatic', 'aromatic'],
-      'aromatico': ['aromatic', 'fresco', 'herbal']
+      // Búsqueda difusa en el catálogo
+      return catalog.find(p => {
+        const pId = sanitize(p.id);
+        const pName = sanitize(p.name);
+        return (
+          pId === perfumeIdPart ||
+          pName === perfumeNamePart ||
+          cleanName.includes(pId) ||
+          cleanName.includes(pName) ||
+          (perfumeIdPart && (pId.includes(perfumeIdPart) || perfumeIdPart.includes(pId))) ||
+          (perfumeNamePart && (pName.includes(perfumeNamePart) || perfumeNamePart.includes(pName)))
+        );
+      });
     };
 
-    const familyKeywords = familyMappings[resolvedFamily] || [resolvedFamily];
+    // 3. Normalizar catálogo unificado
+    const unifiedCatalog = itemsToProcess.map(item => {
+      const rawId = String(item.id || '');
+      const rawName = String(item.nombre_perfume || item.name || rawId);
+      const matched = findCatalogMatch(rawId, rawName);
 
-    // 3. Sistema de puntendación con la Ley Suprema de la Familia (Si llega vacía, no destruye la búsqueda pero prioriza lo demás)
-    let scored = liveCatalog.map(p => {
-      let score = 100;
+      // Extraer nombre y marca limpios
+      let displayName = matched?.name;
+      let displayBrand = matched?.brand;
 
-      const pGenderRaw = String(p.gender || '').toUpperCase();
-      let pGender = pGenderRaw.includes('HOMBRE') || pGenderRaw === 'M' || pGenderRaw === 'H' ? 'HOMBRE'
-        : pGenderRaw.includes('MUJER') || pGenderRaw === 'F' || pGenderRaw === 'DAMA' ? 'MUJER'
-          : 'UNISEX';
-
-      // Género
-      if (ansGender === 'HOMBRE') {
-        if (pGender !== 'HOMBRE' && pGender !== 'UNISEX') return { perfume: p, score: -9999 };
-        score += (pGender === 'HOMBRE') ? 1500 : 500;
-      } else if (ansGender === 'MUJER') {
-        if (pGender !== 'MUJER' && pGender !== 'UNISEX') return { perfume: p, score: -9999 };
-        score += (pGender === 'MUJER') ? 1500 : 500;
-      } else {
-        score += (pGender === 'UNISEX') ? 1500 : 800;
+      if (!displayName) {
+        const parts = rawName.split('---');
+        displayName = formatTitle(parts[0]) || 'Fragancia Exclusiva';
+        displayBrand = parts[1] ? formatTitle(parts[1]) : 'Touche Essencielle';
       }
 
-      // Familia Olfativa (La Ley Suprema solo si el usuario la mandó)
-      const pFamilyNorm = normalizeText(p.family);
-      if (resolvedFamily && resolvedFamily !== '') {
-        const isFamilyMatch = pFamilyNorm === resolvedFamily ||
-          pFamilyNorm.includes(resolvedFamily) ||
-          resolvedFamily.includes(pFamilyNorm) ||
-          familyKeywords.some(k => pFamilyNorm.includes(k) || k.includes(pFamilyNorm));
+      // Normalizar notas a string
+      const topNotes = matched?.topNotes || 'Notas cítricas y aromáticas de apertura';
+      const heartNotes = matched?.heartNotes || 'Acorde envolvente de corazón floral y maderas';
+      const baseNotes = matched?.baseNotes || 'Fondo aterciopelado de fijación prolongada';
+      const emotionalDesc = matched?.emotionalDesc || 'Una creación única y cautivadora que resalta tu presencia con elegancia atemporal.';
 
-        if (isFamilyMatch) {
-          score += 15000;
-        } else {
-          score -= 12000;
-        }
+      const genderRaw = String(item.genero || item.gender || matched?.gender || 'UNISEX').toUpperCase();
+      let normalizedGender = 'UNISEX';
+      if (genderRaw.includes('HOMBRE') || genderRaw === 'M' || genderRaw === 'H' || genderRaw.includes('CABALLERO')) {
+        normalizedGender = 'HOMBRE';
+      } else if (genderRaw.includes('MUJER') || genderRaw === 'F' || genderRaw === 'DAMA') {
+        normalizedGender = 'MUJER';
       }
 
-      // Ocasión
-      const pOccasionNorm = normalizeText(p.occasion);
-      if (ansOccasionNorm && ansOccasionNorm !== 'empty') {
-        if (pOccasionNorm && pOccasionNorm !== 'empty' && pOccasionNorm !== 'activo') {
-          const isOccasionMatch = pOccasionNorm.includes(ansOccasionNorm) || ansOccasionNorm.includes(pOccasionNorm);
-          if (isOccasionMatch) score += 1000;
-          else score -= 200;
-        }
-      }
+      const rawFamily = String(item.familia_olfativa || item.olfactory_family || item.family || matched?.family || 'Amaderado');
+      const rawOccasion = String(item.ocasion || item.occasion || matched?.occasions?.[0] || 'USO DIARIO');
+      const rawIntensity = String(item.intensidad || item.intensity || 'MEDIA');
+      const version = String(item.tipo || item.version || matched?.version || 'ESTANDAR').toUpperCase();
 
-      // Intensidad
-      const pIntensityNorm = normalizeText(p.intensity);
-      if (ansIntensityNorm && ansIntensityNorm !== 'empty') {
-        if (pIntensityNorm && pIntensityNorm !== 'empty' && pIntensityNorm !== 'activo') {
-          const isIntensityMatch = pIntensityNorm.includes(ansIntensityNorm) || ansIntensityNorm.includes(pIntensityNorm);
-          if (isIntensityMatch) score += 500;
-        }
-      }
-
-      score += Math.random() * 2;
-      return { perfume: p, score };
+      return {
+        id: rawId || sanitize(displayName),
+        name: displayName,
+        brand: displayBrand || 'Touche Essencielle',
+        family: rawFamily,
+        topNotes,
+        heartNotes,
+        baseNotes,
+        emotionalDesc,
+        version: version.includes('1.1') ? '1.1' : 'ESTANDAR',
+        gender: normalizedGender,
+        occasion: rawOccasion,
+        intensity: rawIntensity,
+        feels: matched?.feels || [],
+        occasions: matched?.occasions || [rawOccasion]
+      };
     });
 
-    scored.sort((a, b) => b.score - a.score);
-
-    let validScored = scored.filter(item => item.score > 0);
-    if (validScored.length === 0) {
-      validScored = scored.filter(item => item.score > -9999).slice(0, 5);
+    // 4. Normalizar respuestas del usuario
+    const ansGenderRaw = String(body.gender || '').toUpperCase();
+    let ansGender = 'UNISEX';
+    if (ansGenderRaw.includes('HOMBRE') || ansGenderRaw === 'M' || ansGenderRaw.includes('CABALLERO')) {
+      ansGender = 'HOMBRE';
+    } else if (ansGenderRaw.includes('MUJER') || ansGenderRaw === 'F' || ansGenderRaw.includes('DAMA')) {
+      ansGender = 'MUJER';
     }
 
-    const uniquePerfumes: typeof validScored = [];
-    const seenIds = new Set<string>();
-    for (const item of validScored) {
-      const pIdStr = String(item.perfume.id);
-      if (!seenIds.has(pIdStr)) {
-        seenIds.add(pIdStr);
-        uniquePerfumes.push(item);
+    const rawInputFamily = (body.noteFamily || body.family || (body as any).familia || (body as any).olfactiveFamily || '').toString();
+    const normInputFamily = normalizeText(rawInputFamily);
+
+    let resolvedFamilyKey = normInputFamily;
+    if (normInputFamily.includes('oriental') || normInputFamily.includes('especiad')) resolvedFamilyKey = 'orientales/especiadas';
+    else if (normInputFamily.includes('amaderad')) resolvedFamilyKey = 'amaderadas';
+    else if (normInputFamily.includes('citric')) resolvedFamilyKey = 'citricas';
+    else if (normInputFamily.includes('dulce') || normInputFamily.includes('gourmand')) resolvedFamilyKey = 'dulces';
+    else if (normInputFamily.includes('frutal')) resolvedFamilyKey = 'frutales';
+    else if (normInputFamily.includes('floral')) resolvedFamilyKey = 'florales';
+    else if (normInputFamily.includes('acuatica') || normInputFamily.includes('marino')) resolvedFamilyKey = 'acuaticas';
+
+    // Mapeo exhaustivo de palabras clave por familia
+    const familyKeywordsMap: Record<string, string[]> = {
+      'orientales/especiadas': ['oriental', 'especiad', 'ambar', 'oud', 'arab', 'vainilla', 'incienso', 'resina', 'canela', 'azafran', 'cuero'],
+      'amaderadas': ['amaderad', 'madera', 'cedro', 'sandalo', 'vetiver', 'pachuli', 'guayaco', 'fougere', 'bosque'],
+      'citricas': ['citric', 'bergamota', 'limon', 'naranja', 'mandarina', 'pomelo', 'fresco', 'neroli'],
+      'dulces': ['dulce', 'gourmand', 'vainilla', 'caramelo', 'pralin', 'azucar', 'miel', 'tonka', 'cacao', 'chocolate'],
+      'frutales': ['frutal', 'fruta', 'manzana', 'pera', 'durazno', 'cereza', 'maracuya', 'frambuesa', 'frutos', 'pina', 'mango', 'lorenzo'],
+      'florales': ['floral', 'flor', 'rosa', 'jazmin', 'iris', 'peonia', 'nardo', 'violeta', 'lavanda', 'ylang', 'orquidea'],
+      'acuaticas': ['acuatic', 'marino', 'mar', 'agua', 'sal', 'ozono', 'brisa', 'ocean', 'fresco'],
+    };
+
+    const targetKeywords = familyKeywordsMap[resolvedFamilyKey] || [resolvedFamilyKey];
+
+    // Familias afines para fallback parcial
+    const relatedChordsMap: Record<string, string[]> = {
+      'orientales/especiadas': ['dulce', 'amaderad', 'oud', 'ambar'],
+      'amaderadas': ['oriental', 'especiad', 'fresco', 'fougere'],
+      'citricas': ['acuatic', 'fresco', 'aromatic', 'verde'],
+      'dulces': ['oriental', 'frutal', 'ambar', 'floral'],
+      'frutales': ['dulce', 'floral', 'citric', 'fresco'],
+      'florales': ['frutal', 'dulce', 'ambar', 'fresco'],
+      'acuaticas': ['citric', 'fresco', 'aromatic', 'amaderad'],
+    };
+    const relatedKeywords = relatedChordsMap[resolvedFamilyKey] || [];
+
+    const normOccasion = normalizeText(body.occasion || '');
+
+    // 5. Algoritmo de Coincidencia Flexible y Fallback Multi-Nivel
+    interface ScoredItem {
+      perfume: typeof unifiedCatalog[0];
+      score: number;
+      tier: number; // 1 = Match estricto, 2 = Match parcial/notas, 3 = Match por género/1.1
+    }
+
+    const scoredItems: ScoredItem[] = [];
+
+    for (const p of unifiedCatalog) {
+      // Compatibilidad de género
+      const matchesGender =
+        ansGender === 'UNISEX' ||
+        p.gender === 'UNISEX' ||
+        p.gender === ansGender;
+
+      if (!matchesGender) continue;
+
+      const pFamilyNorm = normalizeText(p.family);
+      const pNotesNorm = normalizeText(`${p.topNotes} ${p.heartNotes} ${p.baseNotes} ${p.emotionalDesc}`);
+      const pOccasionNorm = normalizeText(`${p.occasion} ${(p.occasions || []).join(' ')}`);
+
+      // Match directo de familia
+      const isDirectFamilyMatch =
+        targetKeywords.some(kw => pFamilyNorm.includes(kw) || kw.includes(pFamilyNorm));
+
+      // Match en notas olfativas
+      const isNotesFamilyMatch =
+        targetKeywords.some(kw => pNotesNorm.includes(kw));
+
+      // Match en acordes afines (para fallback flexible)
+      const isRelatedChordMatch =
+        relatedKeywords.some(kw => pFamilyNorm.includes(kw) || pNotesNorm.includes(kw));
+
+      // Match de ocasión
+      const isOccasionMatch = normOccasion ? pOccasionNorm.includes(normOccasion) || normOccasion.includes(pOccasionNorm) : false;
+
+      let score = 0;
+      let tier = 3;
+
+      if (isDirectFamilyMatch) {
+        score += 5000;
+        tier = 1;
+      } else if (isNotesFamilyMatch) {
+        score += 3000;
+        tier = 1;
+      } else if (isRelatedChordMatch) {
+        score += 1500;
+        tier = 2;
+      } else {
+        score += 500;
+        tier = 3;
+      }
+
+      // Bonus por versión 1.1 exclusiva
+      if (p.version === '1.1') score += 1500;
+
+      // Bonus por ocasión
+      if (isOccasionMatch) score += 600;
+
+      // Bonus por género exacto (vs unisex)
+      if (ansGender !== 'UNISEX' && p.gender === ansGender) score += 400;
+
+      scoredItems.push({ perfume: p, score, tier });
+    }
+
+    // Ordenar por nivel (Tier ascendente) y puntaje descendente
+    scoredItems.sort((a, b) => {
+      if (a.tier !== b.tier) return a.tier - b.tier;
+      return b.score - a.score;
+    });
+
+    // Desduplicar manteniendo el mejor resultado
+    const selected: typeof unifiedCatalog = [];
+    const seenNames = new Set<string>();
+
+    for (const item of scoredItems) {
+      const cleanKey = sanitize(item.perfume.name);
+      if (!seenNames.has(cleanKey)) {
+        seenNames.add(cleanKey);
+        selected.push(item.perfume);
+      }
+      if (selected.length === 3) break;
+    }
+
+    // 6. Respaldo Final Garantizado: Touche Essencielle Insignia ("Nuit de Marbre", "Oud Céleste", "Rose Impériale")
+    // Si aún con búsqueda relajada faltan puestos, se completan con las fragancias insignia para que NUNCA quede vacía
+    if (selected.length < 3) {
+      console.log(`ℹ️ [AI-GUIDE] Activando respaldo insignia de Touche Essencielle. Cupos actuales: ${selected.length}/3`);
+      for (const insignia of TOUCHE_INSIGNIA_AI_RESULTS) {
+        const cleanKey = sanitize(insignia.name);
+        if (!seenNames.has(cleanKey)) {
+          seenNames.add(cleanKey);
+          selected.push({
+            id: insignia.id,
+            name: insignia.name,
+            brand: insignia.brand,
+            family: insignia.family,
+            topNotes: insignia.topNotes,
+            heartNotes: insignia.heartNotes,
+            baseNotes: insignia.baseNotes,
+            emotionalDesc: insignia.emotionalDesc,
+            version: insignia.version || '1.1',
+            gender: 'UNISEX',
+            occasion: 'EVENTO FORMAL',
+            intensity: 'ALTA',
+            feels: ['amaderado', 'oud', 'floral'],
+            occasions: ['evento', 'noche', 'cita', 'diario']
+          });
+        }
+        if (selected.length === 3) break;
       }
     }
 
-    let top3 = uniquePerfumes.slice(0, 3).map(x => x.perfume);
-
-    console.log("🏆 [AI-GUIDE FINAL] Top 3 elegidos:", top3.map(p => `${p.name} (Género: ${p.gender}, Familia: ${p.family})`));
-
-    const recommendations = top3.map(p => ({
+    const recommendations: AiGuideResult[] = selected.slice(0, 3).map(p => ({
       id: p.id,
       name: p.name,
       brand: p.brand,
@@ -207,12 +373,15 @@ export async function POST(req: Request) {
       emotionalDesc: p.emotionalDesc,
       version: p.version,
       gender: p.gender
-    } as AiGuideResult));
+    }));
+
+    console.log("🏆 [AI-GUIDE FINAL] Revelaciones entregadas con éxito:", recommendations.map(r => `${r.name} (${r.brand})`));
 
     return NextResponse.json({ recommendations });
 
   } catch (error) {
-    console.error("❌ Error crítico en API de AiGuide:", error);
-    return NextResponse.json({ message: 'Error interno del servidor' }, { status: 500 });
+    console.error("❌ [AI-GUIDE] Error inesperado en API:", error);
+    // En caso de excepción crítica, responder siempre con las fragancias insignia de Touche Essencielle
+    return NextResponse.json({ recommendations: TOUCHE_INSIGNIA_AI_RESULTS });
   }
 }

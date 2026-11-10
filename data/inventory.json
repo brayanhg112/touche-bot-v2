@@ -2313,5 +2313,35 @@
     "name": "osadia---yanbalmujer",
     "version": "ESTANDAR",
     "active": false
+  },
+  "nuit-de-marbre---touche-essencielle": {
+    "id": "nuit-de-marbre---touche-essencielle",
+    "name": "nuit-de-marbre---touche-essencielle",
+    "version": "1.1",
+    "active": true,
+    "gender": "UNISEX",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "oud-celeste---touche-essencielle": {
+    "id": "oud-celeste---touche-essencielle",
+    "name": "oud-celeste---touche-essencielle",
+    "version": "1.1",
+    "active": true,
+    "gender": "UNISEX",
+    "olfactory_family": "ORIENTALES/ESPECIADAS",
+    "occasion": "EVENTO FORMAL",
+    "intensity": "ALTA"
+  },
+  "rose-imperiale---touche-essencielle": {
+    "id": "rose-imperiale---touche-essencielle",
+    "name": "rose-imperiale---touche-essencielle",
+    "version": "1.1",
+    "active": true,
+    "gender": "UNISEX",
+    "olfactory_family": "FLORALES",
+    "occasion": "CITA ROMATICA",
+    "intensity": "ALTA"
   }
 }

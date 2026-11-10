@@ -44,5 +44,3 @@ mapContent += `}\n`;
 
 fs.mkdirSync(path.dirname(outputFile), { recursive: true });
 fs.writeFileSync(outputFile, mapContent);
-
-console.log('🎉 ¡Mapa de imágenes generado con éxito en src/lib/imageMap.ts!');

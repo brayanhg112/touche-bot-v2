@@ -1,6 +1,8 @@
 import type { Perfume } from '../types';
+import { TOUCHE_INSIGNIA_PERFUMES } from '../insignia';
 
 export const nichoPerfumes: Perfume[] = [
+  ...TOUCHE_INSIGNIA_PERFUMES,
   {
     id: 'baccarat-rouge-540',
     name: 'Baccarat Rouge 540',

@@ -4,6 +4,19 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { AiGuideResult } from '../lib/aiGuideTypes';
 import { assistantContent } from '../lib/assistantContent';
+import { TOUCHE_INSIGNIA_AI_RESULTS } from '../lib/insignia';
+
+// ─── PERFIL BYPASS MAP ──────────────────────────────────────────────────────
+// Mapea cada valor de ?perfil=X a las respuestas que se envían a la API.
+// Agrega / modifica perfiles aquí sin tocar nada más del componente.
+const PERFIL_ANSWERS: Record<string, { gender: string; occasion: string; noteFamily: string }> = {
+  magnetismo: { gender: 'UNISEX', occasion: 'CITA ROMATICA', noteFamily: 'ORIENTALES/ESPECIADAS' },
+  elegante: { gender: 'UNISEX', occasion: 'EVENTO FORMAL', noteFamily: 'AMADERADAS' },
+  imponente: { gender: 'UNISEX', occasion: 'EVENTO FORMAL', noteFamily: 'ORIENTALES/ESPECIADAS' },
+  vibrante: { gender: 'UNISEX', occasion: 'USO DIARIO', noteFamily: 'CITRICAS' },
+  sensual: { gender: 'UNISEX', occasion: 'CITA ROMATICA', noteFamily: 'FLORALES' },
+  diferente: { gender: 'UNISEX', occasion: 'USO DIARIO', noteFamily: 'AMADERADAS' },
+};
 
 export default function AiGuide() {
   const [step, setStep] = useState<number>(1);
@@ -16,6 +29,45 @@ export default function AiGuide() {
 
   const [results, setResults] = useState<AiGuideResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // ─── BYPASS: Lee ?perfil= al montar. Si existe, salta al resultado. ─────────
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const perfil = params.get('perfil')?.toLowerCase();
+    if (!perfil) return; // Carga normal: sin parámetro → quiz completo
+
+    const presetAnswers = PERFIL_ANSWERS[perfil];
+    if (!presetAnswers) {
+      console.warn(`[Bypass] Perfil desconocido: "${perfil}". Iniciando quiz normal.`);
+      return;
+    }
+
+    console.log(`[Bypass] Perfil detectado: "${perfil}". Saltando al resultado.`);
+    setAnswers(presetAnswers);
+    setIsLoading(true);
+    setStep(5); // Muestra pantalla de loading mientras consulta la API
+
+    fetch('/api/ai-guide', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(presetAnswers),
+    })
+      .then(res => res.json())
+      .then(data => {
+        const recs = (data.recommendations && data.recommendations.length > 0)
+          ? data.recommendations
+          : TOUCHE_INSIGNIA_AI_RESULTS;
+        setResults(recs);
+        setStep(0); // Salta directamente a los resultados
+      })
+      .catch(e => {
+        console.error('[Bypass] Error al obtener resultados, aplicando fallback insignia:', e);
+        setResults(TOUCHE_INSIGNIA_AI_RESULTS);
+        setStep(0);
+      })
+      .finally(() => setIsLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Solo se ejecuta UNA vez al montar
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -229,12 +281,16 @@ export default function AiGuide() {
                       })
                         .then(res => res.json())
                         .then(data => {
-                          setResults(data.recommendations || []);
+                          const recs = (data.recommendations && data.recommendations.length > 0)
+                            ? data.recommendations
+                            : TOUCHE_INSIGNIA_AI_RESULTS;
+                          setResults(recs);
                           setStep(0);
                         })
                         .catch(e => {
-                          console.error(e);
-                          setStep(1);
+                          console.error('[AiGuide] Error al obtener resultados, aplicando fallback insignia:', e);
+                          setResults(TOUCHE_INSIGNIA_AI_RESULTS);
+                          setStep(0);
                         })
                         .finally(() => {
                           setIsLoading(false);
@@ -335,12 +391,32 @@ export default function AiGuide() {
               ))}
 
               {results.length === 0 && (
-                <p className="text-center text-on-surface/50 font-body text-sm py-10">No logramos encontrar un match perfecto en stock. Por favor, intenta de nuevo ampliando tus opciones.</p>
+                <div className="flex flex-col items-center gap-3 py-6 text-center">
+                  <p className="text-sm font-body text-on-surface/70">
+                    Presentamos nuestras creaciones insignia de alta concentración:
+                  </p>
+                  <button
+                    onClick={() => setResults(TOUCHE_INSIGNIA_AI_RESULTS)}
+                    className="gold-gradient text-black font-label text-xs uppercase tracking-wider font-bold py-2.5 px-6 rounded-xl shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] transition-all"
+                  >
+                    Ver Creaciones Insignia
+                  </button>
+                </div>
               )}
             </div>
 
             <button
-              onClick={() => { setStep(1); setAnswers({ gender: '', occasion: '', noteFamily: '' }); }}
+              onClick={() => {
+                // Limpia el parámetro ?perfil= de la URL sin recargar la página
+                const url = new URL(window.location.href);
+                url.searchParams.delete('perfil');
+                window.history.replaceState({}, '', url.toString());
+
+                // Reinicia el estado al quiz normal
+                setResults([]);
+                setAnswers({ gender: '', occasion: '', noteFamily: '' });
+                setStep(1);
+              }}
               className="mt-4 mx-auto flex items-center gap-2 text-on-surface/50 hover:text-primary transition-colors font-label text-xs uppercase tracking-widest font-bold"
             >
               <span className="material-symbols-outlined text-[16px]">restart_alt</span>
