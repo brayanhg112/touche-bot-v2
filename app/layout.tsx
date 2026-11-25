@@ -1,10 +1,57 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import AppShell from './components/layout/AppShell';
 import './globals.css';
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : 'https://touche-bot-v2.vercel.app');
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#050505',
+};
+
 export const metadata: Metadata = {
-  title: 'Touche Essencielle · Plataforma CFO & ERP Operativo',
-  description: 'Sistema integral de gestión de ventas POS, insumos, finanzas personales y recomendador sommelier de fragancias.',
+  metadataBase: new URL(siteUrl),
+  title: 'Touche Essencielle | Sommelier Digital',
+  description:
+    'Descubre tu fragancia ideal con Aria, el Sommelier Digital de Touche Essencielle. Asesoría olfativa personalizada, alta perfumería e inventario en vivo.',
+  icons: {
+    icon: [
+      { url: '/logo-nuevo.png', type: 'image/png' },
+      { url: '/favicon.ico' },
+    ],
+    apple: [{ url: '/logo-nuevo.png', type: 'image/png' }],
+  },
+  openGraph: {
+    title: 'Touche Essencielle | Sommelier Digital',
+    description:
+      'Encuentra tu firma olfativa ideal en segundos con Aria, nuestro Sommelier Digital de alta perfumería. Asesoría personalizada y stock en vivo.',
+    type: 'website',
+    locale: 'es_CO',
+    siteName: 'Touche Essencielle',
+    images: [
+      {
+        url: '/logo-nuevo.png',
+        width: 1024,
+        height: 1024,
+        alt: 'Touche Essencielle — Sommelier Digital',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Touche Essencielle | Sommelier Digital',
+    description:
+      'Encuentra tu firma olfativa ideal con Aria, nuestro Sommelier Digital de alta perfumería.',
+    images: ['/logo-nuevo.png'],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

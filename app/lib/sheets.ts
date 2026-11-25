@@ -1,43 +1,18 @@
 /**
- * sheets.ts — Cliente compartido para Google Sheets API v4
- * Usa la Service Account configurada en .env.local
+ * sheets.ts — Cliente compartido para Google Sheets API v4 (InventarioBot en vivo)
+ * Usa la Service Account configurada en .env.local y consulta SIEMPRE con cache: 'no-store'.
  */
 import { google } from 'googleapis';
 
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 
 export const SHEET_ID = process.env.GOOGLE_SHEET_ID || '1eVNytdcAy2zP0n0bgxVuoHgyDbUA6SGjaV10HjMlD9o';
 
-/** Nombres exactos de las hojas en el Spreadsheet */
 export const SHEETS = {
-  TRACKER: 'TRACKER DIARIO COMPLETO',
-  TOUCHE: 'TOUCHE ESSENCIELLE',
   INVENTARIO_BOT: 'InventarioBot',
 } as const;
 
 export const INVENTARIO_RANGE = 'InventarioBot!A1:H1000';
-
-/** Columnas del TRACKER DIARIO COMPLETO (A=0 … H=7) */
-export const TRACKER_COLS = {
-  FECHA:       'A', // Fecha de la venta
-  HOMBRE:      'B', // Nombre del perfume si es masculino
-  MUJER:       'C', // Nombre del perfume si es femenino
-  ML_30:       'D', // Cantidad vendida en 30ml
-  ML_50:       'E', // Cantidad vendida en 50ml
-  ML_100:      'F', // Cantidad vendida en 100ml
-  RECARGAS:    'G', // Cantidad de recargas
-  VENDIDOS_A:  'H', // Nombres de compradores
-} as const;
-
-/** Celdas de insumos en TOUCHE ESSENCIELLE */
-export const INSUMO_CELLS = {
-  ESENCIA:       'C3',
-  ROLONES_10ML:  'C7',
-  BALA_30ML:     'C10',
-  ALCOHOL:       'C19',
-  FEROMONAS:     'C20',
-  FIJADOR:       'C21',
-} as const;
 
 export interface PerfumeSheetRow {
   id: string;
@@ -50,40 +25,157 @@ export interface PerfumeSheetRow {
   genero: string;
 }
 
-/** Construye un cliente autenticado de Google Sheets */
-export async function getSheetsClient() {
-  const rawKey = process.env.GOOGLE_PRIVATE_KEY ?? '';
-  const privateKey = rawKey.replace(/^["']|["']$/g, '').replace(/\\n/g, '\n');
+export interface RawSheetAuditRow extends PerfumeSheetRow {
+  rowNumber: number;
+  rawId: string;
+  rawName: string;
+  rawFamilia: string;
+  rawOcasion: string;
+  rawIntensidad: string;
+  rawGenero: string;
+  rawTipo: string;
+}
+
+export interface InventorySheetsSnapshot {
+  allRows: RawSheetAuditRow[];
+  activeRows: PerfumeSheetRow[];
+  inactiveRows: RawSheetAuditRow[];
+}
+
+const INVALID_ID_TOKENS = new Set(['VENDIDO', 'ACTIVO', 'INACTIVO', 'AGOTADO', '']);
+const CORRUPTED_META_TOKENS = new Set(['ACTIVO', 'INACTIVO', 'VENDIDO']);
+
+async function optOutNextCache(): Promise<void> {
+  try {
+    const nextCache = await import('next/cache');
+    if (typeof nextCache.unstable_noStore === 'function') {
+      nextCache.unstable_noStore();
+    }
+  } catch {
+    // Ejecución fuera de Next.js (ej. scripts CLI como test_recommender.ts)
+  }
+}
+
+function parseGoogleCredentials(): { clientEmail: string; privateKey: string } {
+  let clientEmail = (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL ?? '')
+    .trim()
+    .replace(/^["']|["']$/g, '');
+  let rawKey = (process.env.GOOGLE_PRIVATE_KEY ?? '').trim();
+
+  // Soportar si el usuario pegó el JSON completo de la Service Account en GOOGLE_PRIVATE_KEY
+  if (rawKey.startsWith('{')) {
+    try {
+      const parsed = JSON.parse(rawKey) as { private_key?: string; client_email?: string };
+      if (parsed.private_key) rawKey = parsed.private_key;
+      if (!clientEmail && parsed.client_email) clientEmail = parsed.client_email.trim();
+    } catch {
+      throw new Error(
+        'GOOGLE_PRIVATE_KEY parece un objeto JSON pero no se pudo parsear. Verifica el formato en Vercel.'
+      );
+    }
+  } else if (rawKey.startsWith('"') && rawKey.endsWith('"')) {
+    try {
+      const unquoted = JSON.parse(rawKey);
+      if (typeof unquoted === 'string') rawKey = unquoted;
+    } catch {
+      rawKey = rawKey.slice(1, -1);
+    }
+  } else {
+    rawKey = rawKey.replace(/^["']|["']$/g, '');
+  }
+
+  // Normalizar saltos de línea para Vercel (escapados simples, dobles o CRLF)
+  const privateKey = rawKey
+    .replace(/\\\\n/g, '\n')
+    .replace(/\\r\\n/g, '\n')
+    .replace(/\\n/g, '\n')
+    .replace(/\r\n/g, '\n')
+    .trim();
+
+  if (!clientEmail || !privateKey) {
+    throw new Error(
+      'Faltan credenciales de Google Sheets (GOOGLE_SERVICE_ACCOUNT_EMAIL o GOOGLE_PRIVATE_KEY).'
+    );
+  }
+
+  if (!privateKey.includes('-----BEGIN') || !privateKey.includes('PRIVATE KEY-----')) {
+    throw new Error(
+      'GOOGLE_PRIVATE_KEY tiene un formato PEM inválido (asegúrate de incluir -----BEGIN PRIVATE KEY----- y los saltos de línea \\n).'
+    );
+  }
+
+  return { clientEmail, privateKey };
+}
+
+/** Obtiene un access token fresco para Google Sheets API */
+async function getSheetsAccessToken(): Promise<string> {
+  const { clientEmail, privateKey } = parseGoogleCredentials();
 
   const auth = new google.auth.GoogleAuth({
     credentials: {
-      client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+      client_email: clientEmail,
       private_key: privateKey,
     },
     scopes: SCOPES,
   });
 
   const authClient = await auth.getClient();
-  return google.sheets({ version: 'v4', auth: authClient as Parameters<typeof google.sheets>[0]['auth'] });
+  const tokenResponse = await authClient.getAccessToken();
+  const token = typeof tokenResponse === 'string' ? tokenResponse : tokenResponse?.token;
+
+  if (!token) {
+    throw new Error('No se pudo obtener un token de acceso válido para Google Sheets.');
+  }
+
+  return token;
+}
+
+function cleanMetaValue(val: string): string {
+  const trimmed = val.trim();
+  if (CORRUPTED_META_TOKENS.has(trimmed.toUpperCase())) return '';
+  return trimmed;
 }
 
 /**
- * Extrae el inventario desde la pestaña 'InventarioBot' en el rango 'InventarioBot!A1:H1000'.
- * Filtra únicamente los perfumes que tengan la columna estado con el valor exacto de ACTIVO.
+ * Consulta la pestaña 'InventarioBot!A1:H1000' SIEMPRE en vivo usando fetch(..., { cache: 'no-store' }).
+ * Si falla la conexión o la respuesta de Sheets, registra un error explícito en consola y lanza excepción.
  */
-export async function getInventoryFromSheets(): Promise<PerfumeSheetRow[]> {
-  const sheets = await getSheetsClient();
-  const spreadsheetId = process.env.GOOGLE_SHEET_ID || SHEET_ID;
+export async function getAllInventoryRowsFromSheets(): Promise<InventorySheetsSnapshot> {
+  await optOutNextCache();
 
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: INVENTARIO_RANGE,
-  });
+  const spreadsheetId = (process.env.GOOGLE_SHEET_ID || SHEET_ID)
+    .trim()
+    .replace(/^["']|["']$/g, '');
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(spreadsheetId)}/values/${encodeURIComponent(INVENTARIO_RANGE)}`;
 
-  const rows = res.data.values || [];
-  if (rows.length === 0) {
-    console.log("Datos extraídos de Sheets: [] (hoja vacía o sin filas)");
-    return [];
+  let rows: unknown[][] = [];
+  try {
+    const token = await getSheetsAccessToken();
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+      },
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      const errBody = await response.text();
+      throw new Error(`Google Sheets HTTP ${response.status}: ${errBody}`);
+    }
+
+    const payload = (await response.json()) as { values?: unknown[][] };
+    rows = Array.isArray(payload.values) ? payload.values : [];
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error('❌ [Sheets LIVE ERROR] Falló la lectura en vivo de InventarioBot:', message);
+    throw err;
+  }
+
+  if (rows.length <= 1) {
+    console.error('❌ [Sheets LIVE ERROR] La pestaña InventarioBot está vacía o sin filas de datos.');
+    return { allRows: [], activeRows: [], inactiveRows: [] };
   }
 
   // Detectar dinámicamente columnas según cabecera
@@ -97,33 +189,95 @@ export async function getInventoryFromSheets(): Promise<PerfumeSheetRow[]> {
   const generoIdx = headerRow.findIndex((h: string) => h.includes('genero') || h.includes('género'));
 
   const dataRows = rows.slice(1);
-  const allParsed: PerfumeSheetRow[] = dataRows.map((row: unknown[], idx: number) => {
+  const allRows: RawSheetAuditRow[] = [];
+
+  dataRows.forEach((row: unknown[], idx: number) => {
+    const rowNumber = idx + 2;
     const rawId = (row[0] ? String(row[0]) : '').trim();
     const rawName = (row[nameIdx >= 0 ? nameIdx : 1] ? String(row[nameIdx >= 0 ? nameIdx : 1]) : '').trim();
-    const tipo = (row[tipoIdx >= 0 ? tipoIdx : 2] ? String(row[tipoIdx >= 0 ? tipoIdx : 2]) : 'ESTANDAR').trim();
+    const rawTipo = (row[tipoIdx >= 0 ? tipoIdx : 2] ? String(row[tipoIdx >= 0 ? tipoIdx : 2]) : '').trim();
     const estado = (row[estadoIdx >= 0 ? estadoIdx : 3] ? String(row[estadoIdx >= 0 ? estadoIdx : 3]) : '').trim();
-    const familia_olfativa = (row[familyIdx >= 0 ? familyIdx : 4] ? String(row[familyIdx >= 0 ? familyIdx : 4]) : '').trim();
-    const ocasion = (row[ocasionIdx >= 0 ? ocasionIdx : 5] ? String(row[ocasionIdx >= 0 ? ocasionIdx : 5]) : '').trim();
-    const intensidad = (row[intensidadIdx >= 0 ? intensidadIdx : 6] ? String(row[intensidadIdx >= 0 ? intensidadIdx : 6]) : '').trim();
-    const genero = (row[generoIdx >= 0 ? generoIdx : 7] ? String(row[generoIdx >= 0 ? generoIdx : 7]) : '').trim();
+    const rawFamilia = (row[familyIdx >= 0 ? familyIdx : 4] ? String(row[familyIdx >= 0 ? familyIdx : 4]) : '').trim();
+    const rawOcasion = (row[ocasionIdx >= 0 ? ocasionIdx : 5] ? String(row[ocasionIdx >= 0 ? ocasionIdx : 5]) : '').trim();
+    const rawIntensidad = (row[intensidadIdx >= 0 ? intensidadIdx : 6] ? String(row[intensidadIdx >= 0 ? intensidadIdx : 6]) : '').trim();
+    const rawGenero = (row[generoIdx >= 0 ? generoIdx : 7] ? String(row[generoIdx >= 0 ? generoIdx : 7]) : '').trim();
 
-    return {
-      id: rawId || rawName || `perfume-${idx}`,
-      nombre_perfume: rawName,
+    // Saltar filas completamente en blanco
+    const isEmptyRow = !rawId && !rawName && !estado && !rawFamilia && !rawOcasion && !rawGenero;
+    if (isEmptyRow) {
+      allRows.push({
+        rowNumber,
+        id: '',
+        nombre_perfume: '',
+        tipo: '',
+        estado: '',
+        familia_olfativa: '',
+        ocasion: '',
+        intensidad: '',
+        genero: '',
+        rawId,
+        rawName,
+        rawFamilia,
+        rawOcasion,
+        rawIntensidad,
+        rawGenero,
+        rawTipo,
+      });
+      return;
+    }
+
+    // Si nombre_perfume está corrupto (ej. "C") pero la columna A tiene un slug real, úsalo para no mostrar "C" al usuario
+    const effectiveName = rawName.length <= 2 && rawId.includes('---') ? rawId : (rawName || rawId);
+    const effectiveId = !INVALID_ID_TOKENS.has(rawId.toUpperCase())
+      ? rawId
+      : (effectiveName || `perfume-${rowNumber}`);
+
+    allRows.push({
+      rowNumber,
+      id: effectiveId,
+      nombre_perfume: effectiveName,
+      tipo: rawTipo || 'ESTANDAR',
+      estado,
+      familia_olfativa: cleanMetaValue(rawFamilia),
+      ocasion: cleanMetaValue(rawOcasion),
+      intensidad: cleanMetaValue(rawIntensidad),
+      genero: cleanMetaValue(rawGenero),
+      rawId,
+      rawName,
+      rawFamilia,
+      rawOcasion,
+      rawIntensidad,
+      rawGenero,
+      rawTipo,
+    });
+  });
+
+  // Filtrar estrictamente estado === 'ACTIVO' y con nombre válido
+  const activeRows: PerfumeSheetRow[] = allRows
+    .filter((item) => item.estado.trim().toUpperCase() === 'ACTIVO' && item.nombre_perfume.trim().length > 0)
+    .map(({ id, nombre_perfume, tipo, estado, familia_olfativa, ocasion, intensidad, genero }) => ({
+      id,
+      nombre_perfume,
       tipo,
       estado,
       familia_olfativa,
       ocasion,
       intensidad,
       genero,
-    };
-  });
+    }));
 
-  // Filtrar estrictamente los que tengan estado === 'ACTIVO'
-  const stockData = allParsed.filter(item => item.estado?.trim().toUpperCase() === 'ACTIVO');
+  const inactiveRows = allRows.filter(
+    (item) => item.estado.trim().toUpperCase() !== 'ACTIVO' && (item.rawName || item.rawId)
+  );
 
-  // Log crucial requerido
-  console.log("Datos extraídos de Sheets:", stockData);
+  return { allRows, activeRows, inactiveRows };
+}
 
-  return stockData;
+/**
+ * Extrae el inventario ACTIVO desde 'InventarioBot!A1:H1000' en vivo (cache: 'no-store').
+ * Filtra únicamente filas con estado === 'ACTIVO'.
+ */
+export async function getInventoryFromSheets(): Promise<PerfumeSheetRow[]> {
+  const { activeRows } = await getAllInventoryRowsFromSheets();
+  return activeRows;
 }

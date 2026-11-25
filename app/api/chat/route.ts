@@ -1,18 +1,16 @@
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-import fs from 'fs';
-import path from 'path';
 import { Anthropic } from '@anthropic-ai/sdk';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { getInventoryFromSheets, PerfumeSheetRow } from '@/app/lib/sheets';
 import { buildAriaSystemPrompt } from '@/lib/ariaPrompt';
 import { recommend } from '../../lib/recommender';
-import type { BotAnswers, Gender, Occasion, Feel, PerfumeStockItem } from '../../lib/types';
+import type { Gender, Occasion, Feel, Projection } from '../../lib/types';
 import { catalog } from '../../lib/catalog';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// WIZARD STEPS — strict 6-step definition (no AI, no free text)
+// WIZARD STEPS — strict 6-step definition
 // ─────────────────────────────────────────────────────────────────────────────
 
 const STEPS = [
@@ -51,12 +49,12 @@ const STEPS = [
   {
     step: 6,
     question: 'Por último, ¿cuáles han sido los perfumes que más has usado o que más te han gustado? (Selecciona varios)',
-    options: Array.from(new Set(catalog.map(p => p.name))).sort().concat(['Otro / No sé']),
+    options: Array.from(new Set(catalog.map((p) => p.name))).sort().concat(['Otro / No sé']),
   },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Mapping helpers — convert wizard button values → BotAnswers fields
+// Mapping helpers — convert wizard button values → CascadeAnswers fields
 // ─────────────────────────────────────────────────────────────────────────────
 
 function mapGender(val: string): Gender {
@@ -68,13 +66,38 @@ function mapOccasion(val: string): Occasion {
   if (v.includes('oficina')) return 'trabajo';
   if (v.includes('cita')) return 'cita';
   if (v.includes('formal')) return 'evento';
-  if (v.includes('diario')) return 'diario';
-  if (v.includes('deporte')) return 'diario';
+  if (v.includes('deporte')) return 'deporte';
   return 'diario';
+}
+
+function mapProjection(express: string): Projection {
+  const e = express.toLowerCase();
+  if (e.includes('sensualidad') || e.includes('atrevimiento') || e.includes('éxito') || e.includes('poder')) {
+    return 'intensa';
+  }
+  if (e.includes('frescura') || e.includes('limpieza')) {
+    return 'discreta';
+  }
+  if (e.includes('elegancia') || e.includes('seriedad')) {
+    return 'moderada';
+  }
+  return '';
 }
 
 function mapFeels(express: string, notes: string): Feel[] {
   const feels: Feel[] = [];
+
+  const n = notes.toLowerCase();
+  if (n.includes('cítric') || n.includes('citric')) feels.push('citrico');
+  else if (n.includes('amadera')) feels.push('amaderado');
+  else if (n.includes('floral')) feels.push('floral');
+  else if (n.includes('frutal')) feels.push('frutal');
+  else if (n.includes('fresco')) feels.push('fresco');
+  else if (n.includes('aromátic') || n.includes('aromatic')) feels.push('verde');
+  else if (n.includes('atalcado')) feels.push('atalcado', 'polvo');
+  else if (n.includes('oriental') || n.includes('especiad')) feels.push('especiado', 'oud');
+  else if (n.includes('acuátic') || n.includes('acuatic')) feels.push('acuatico', 'fresco');
+  else if (n.includes('dulce')) feels.push('dulce');
 
   const e = express.toLowerCase();
   if (e.includes('sensualidad') || e.includes('atrevimiento')) feels.push('especiado', 'oud');
@@ -82,20 +105,14 @@ function mapFeels(express: string, notes: string): Feel[] {
   else if (e.includes('éxito') || e.includes('poder')) feels.push('amaderado');
   else if (e.includes('elegancia') || e.includes('seriedad')) feels.push('amaderado', 'fresco');
 
-  const n = notes.toLowerCase();
-  if (n.includes('cítric')) feels.push('citrico');
-  else if (n.includes('amadera')) feels.push('amaderado');
-  else if (n.includes('floral')) feels.push('floral');
-  else if (n.includes('frutal')) feels.push('frutal');
-  else if (n.includes('fresco')) feels.push('fresco');
-  else if (n.includes('aromátic')) feels.push('verde');
-  else if (n.includes('atalcado')) feels.push('atalcado', 'polvo');
-  else if (n.includes('oriental') || n.includes('especiad')) feels.push('especiado', 'oud');
-  else if (n.includes('acuátic')) feels.push('acuatico', 'fresco');
-
   const seen = new Set<Feel>();
   const unique: Feel[] = [];
-  for (const f of feels) { if (!seen.has(f)) { seen.add(f); unique.push(f); } }
+  for (const f of feels) {
+    if (!seen.has(f)) {
+      seen.add(f);
+      unique.push(f);
+    }
+  }
   return unique;
 }
 
@@ -104,7 +121,7 @@ function mapAvoid(avoidVal: string): string[] {
   const v = avoidVal.toLowerCase();
   if (v.includes('dulce')) return ['dulce', 'gourmand'];
   if (v.includes('intensa') || v.includes('pesada')) return ['oud'];
-  if (v.includes('cítric')) return ['citrico'];
+  if (v.includes('cítric') || v.includes('citric')) return ['citrico'];
   if (v.includes('amadera')) return ['amaderado'];
   return [];
 }
@@ -118,30 +135,38 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     // ─── 1. MODO CONVERSACIONAL (AI Chat con Aria) ──────────────────────────
-    // Cuando el cliente envía { messages: [...] } para chatear directamente con Aria
     if (Array.isArray(body.messages) && body.messages.length > 0) {
-      // Fetch live stock desde Google Sheets (InventarioBot!A1:H1000) filtrando solo ACTIVO
       let stockData: PerfumeSheetRow[] = [];
       try {
         stockData = await getInventoryFromSheets();
       } catch (err) {
-        console.warn('⚠️ [API Chat Aria] Falló lectura de Sheets, usando inventario local:', err);
+        console.error(
+          '❌ [POST /api/chat - Aria] Error leyendo inventario en vivo de Google Sheets:',
+          err instanceof Error ? err.message : err
+        );
+        return Response.json(
+          { error: 'No se pudo consultar el inventario en vivo de Google Sheets.' },
+          { status: 503 }
+        );
       }
 
-      // Log crucial solicitado justo antes de enviarlo a Claude/OpenAI/Gemini
-      console.log("Datos extraídos de Sheets:", stockData);
+      if (!stockData || stockData.length === 0) {
+        console.error('❌ [POST /api/chat - Aria] InventarioBot devolvió 0 perfumes ACTIVOS.');
+        return Response.json(
+          { error: 'No hay inventario ACTIVO disponible en este momento.' },
+          { status: 503 }
+        );
+      }
 
-      // Construcción del prompt de Aria con instrucciones de familia_olfativa y ocasion
       const systemInstruction = buildAriaSystemPrompt(stockData);
 
-      // Envío a Claude (Anthropic)
       if (process.env.ANTHROPIC_API_KEY) {
         const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
         const response = await anthropic.messages.create({
           model: 'claude-3-5-sonnet-20241022',
           max_tokens: 1024,
           system: systemInstruction,
-          messages: body.messages.map((m: any) => ({
+          messages: body.messages.map((m: { role: string; content: string }) => ({
             role: m.role === 'assistant' ? 'assistant' : 'user',
             content: m.content,
           })),
@@ -151,7 +176,6 @@ export async function POST(req: Request) {
         return Response.json({ message: text, stockData });
       }
 
-      // Envío a OpenAI si está configurado
       if (process.env.OPENAI_API_KEY) {
         const openAiRes = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
@@ -161,19 +185,16 @@ export async function POST(req: Request) {
           },
           body: JSON.stringify({
             model: 'gpt-4o',
-            messages: [
-              { role: 'system', content: systemInstruction },
-              ...body.messages,
-            ],
+            messages: [{ role: 'system', content: systemInstruction }, ...body.messages],
             max_tokens: 1024,
           }),
+          cache: 'no-store',
         });
         const openAiData = await openAiRes.json();
         const text = openAiData.choices?.[0]?.message?.content || 'Sin respuesta';
         return Response.json({ message: text, stockData });
       }
 
-      // Envío a Gemini si está configurado
       if (process.env.GEMINI_API_KEY) {
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({
@@ -181,14 +202,14 @@ export async function POST(req: Request) {
           systemInstruction,
         });
 
-        const allMessages = body.messages.map((m: any) => ({
+        const allMessages = body.messages.map((m: { role: string; content: string }) => ({
           role: m.role === 'assistant' ? 'model' : 'user',
           parts: [{ text: m.content }],
         }));
 
         const lastMessage = allMessages[allMessages.length - 1];
         const history = allMessages.slice(0, -1);
-        const firstUserIndex = history.findIndex((m: any) => m.role === 'user');
+        const firstUserIndex = history.findIndex((m: { role: string }) => m.role === 'user');
         const validHistory = firstUserIndex !== -1 ? history.slice(firstUserIndex) : [];
 
         const chat = model.startChat({ history: validHistory });
@@ -204,13 +225,11 @@ export async function POST(req: Request) {
     }
 
     // ─── 2. MODO WIZARD PASO A PASO ─────────────────────────────────────────
-    // Expect: { step: number, answers: string[] }
     const currentStep: number = typeof body.step === 'number' ? body.step : 0;
     const answers: string[] = Array.isArray(body.answers) ? body.answers : [];
 
     const nextStep = currentStep + 1;
 
-    // Si aún no se completaron los 6 pasos, devolver la siguiente pregunta
     if (nextStep <= 6) {
       const stepDef = STEPS[nextStep - 1];
       return Response.json({
@@ -222,7 +241,6 @@ export async function POST(req: Request) {
       });
     }
 
-    // Respuestas completas: armar BotAnswers
     const genderRaw = answers[0] ?? '';
     const occasionRaw = answers[1] ?? '';
     const expressRaw = answers[2] ?? '';
@@ -230,68 +248,58 @@ export async function POST(req: Request) {
     const avoidRaw = answers[4] ?? '';
     const referenceRaw = answers[5] ?? '';
 
-    const botAnswers: BotAnswers = {
+    const botAnswers = {
       name: '',
       gender: mapGender(genderRaw),
       occasion: mapOccasion(occasionRaw),
-      projection: '',
+      projection: mapProjection(expressRaw),
       feel: mapFeels(expressRaw, notesRaw),
+      familyFilter: notesRaw,
       avoid: mapAvoid(avoidRaw),
-      referencePerfume: referenceRaw.toLowerCase().includes('otro') || referenceRaw.toLowerCase().includes('no sé')
-        ? ''
-        : referenceRaw,
+      referencePerfume:
+        referenceRaw.toLowerCase().includes('otro') || referenceRaw.toLowerCase().includes('no sé')
+          ? ''
+          : referenceRaw,
     };
 
-    // Cargar inventario en vivo de Sheets
-    let stockMap: Record<string, boolean> | undefined;
-    let inventoryData: Record<string, { gender?: string; olfactory_family?: string; occasion?: string; intensity?: string; active?: boolean }> | undefined;
+    // BLOQUE 3: Cargar inventario SIEMPRE en vivo desde Google Sheets (sin respaldo JSON local obsoleto)
+    let sheetsInventory: PerfumeSheetRow[] = [];
     try {
-      const liveStock = await getInventoryFromSheets();
-      if (liveStock && liveStock.length > 0) {
-        stockMap = {};
-        inventoryData = {};
-        for (const item of liveStock) {
-          stockMap[item.id] = true;
-          stockMap[item.nombre_perfume] = true;
-          inventoryData[item.id] = {
-            gender: item.genero,
-            olfactory_family: item.familia_olfativa,
-            occasion: item.ocasion,
-            intensity: item.intensidad,
-            active: true,
-          };
-          inventoryData[item.nombre_perfume] = inventoryData[item.id];
-        }
-      }
+      sheetsInventory = await getInventoryFromSheets();
     } catch (sheetErr) {
-      console.warn('⚠️ [Wizard] Error leyendo Sheets en vivo, recurriendo a inventario local:', sheetErr);
+      console.error(
+        '❌ [POST /api/chat - Wizard] Falló la lectura en vivo de Google Sheets (InventarioBot):',
+        sheetErr instanceof Error ? sheetErr.message : sheetErr
+      );
+      return Response.json(
+        {
+          error: 'No pudimos consultar el inventario en vivo en este momento.',
+          step: 7,
+          question: 'Ocurrió un error al consultar el inventario en vivo. Por favor intenta de nuevo.',
+          options: [],
+          is_finished: true,
+          recommendations: [],
+        },
+        { status: 503 }
+      );
     }
 
-    // Fallback a data/inventory.json si Sheets no devolvió datos
-    if (!stockMap || Object.keys(stockMap).length === 0) {
-      try {
-        const inventoryPath = path.join(process.cwd(), 'data', 'inventory.json');
-        const raw = fs.readFileSync(inventoryPath, 'utf-8');
-        const inventory: Record<string, PerfumeStockItem> = JSON.parse(raw);
-        stockMap = {};
-        inventoryData = {};
-        for (const item of Object.values(inventory)) {
-          stockMap[item.id] = item.active;
-          inventoryData[item.id] = {
-            gender: item.gender,
-            olfactory_family: item.olfactory_family,
-            occasion: item.occasion,
-            intensity: item.intensity,
-            active: item.active,
-          };
-        }
-      } catch {
-        stockMap = undefined;
-        inventoryData = undefined;
-      }
+    if (!sheetsInventory || sheetsInventory.length === 0) {
+      console.error('❌ [POST /api/chat - Wizard] Sheets devolvió 0 perfumes ACTIVOS en InventarioBot.');
+      return Response.json(
+        {
+          error: 'No se encontraron perfumes ACTIVOS en InventarioBot.',
+          step: 7,
+          question: 'No hay fragancias activas disponibles en este momento.',
+          options: [],
+          is_finished: true,
+          recommendations: [],
+        },
+        { status: 503 }
+      );
     }
 
-    const results = recommend(botAnswers, stockMap, inventoryData);
+    const results = recommend(botAnswers, undefined, undefined, sheetsInventory);
 
     return Response.json({
       step: 7,
@@ -301,16 +309,18 @@ export async function POST(req: Request) {
       recommendations: results.slice(0, 3),
       botAnswers,
     });
-
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Error crítico en Wizard/Chat API:', msg);
-    return Response.json({
-      step: 1,
-      question: STEPS[0].question,
-      options: STEPS[0].options,
-      is_finished: false,
-      recommendations: null,
-    }, { status: 500 });
+    console.error('❌ [POST /api/chat] Error crítico en Wizard/Chat API:', msg);
+    return Response.json(
+      {
+        step: 1,
+        question: STEPS[0].question,
+        options: STEPS[0].options,
+        is_finished: false,
+        recommendations: null,
+      },
+      { status: 500 }
+    );
   }
 }

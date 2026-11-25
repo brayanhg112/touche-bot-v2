@@ -6,3 +6,4 @@ node_modules
 .DS_Store
 *.log
 credentials.json
+REPORTE_TEST_BOT.md

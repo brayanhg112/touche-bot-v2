@@ -219,7 +219,7 @@ export default function Bot() {
                       placeholder="Buscar fragancias..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full bg-surface-container-high border border-primary/20 rounded-xl py-3 pl-12 pr-4 text-sm text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all font-body"
+                      className="w-full min-h-[44px] bg-surface-container-high border border-primary/20 rounded-xl py-3 pl-12 pr-4 text-base text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all font-body"
                     />
                   </div>
                   <div ref={virtualizerRef} className="max-h-64 overflow-y-auto pr-2 custom-scrollbar">

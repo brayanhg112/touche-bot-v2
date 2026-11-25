@@ -15,21 +15,27 @@
 }
 
 /* Aplicación forzada al body para evitar que otros estilos se cuelen */
+html,
 body {
   background-color: var(--color-surface) !important;
   color: var(--color-on-surface) !important;
   font-family: 'Manrope', sans-serif;
+  overflow-x: hidden;
+  max-width: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 @layer components {
   .glass-chat-ai {
     background: rgba(126, 34, 206, 0.08);
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(126, 34, 206, 0.2);
   }
 
   .glass-chat-user {
     background: linear-gradient(135deg, rgba(126, 34, 206, 0.18), rgba(88, 28, 135, 0.08));
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(126, 34, 206, 0.3);
   }
@@ -45,6 +51,7 @@ body {
 
   .glass-card {
     background: rgba(26, 26, 26, 0.7);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(126, 34, 206, 0.12);
   }

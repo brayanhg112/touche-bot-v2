@@ -1,108 +1,81 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-import { getInventoryFromSheets, PerfumeSheetRow } from '@/app/lib/sheets';
-import type { PerfumeStockItem } from '../../lib/types';
+import { getAllInventoryRowsFromSheets } from '@/app/lib/sheets';
+import { buildActiveSheetPool } from '@/app/lib/recommender';
 
+// BLOQUE 3: Forzar lectura en vivo — sin cache de Sheets, sin stock congelado
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
-const INVENTORY_PATH = path.join(process.cwd(), 'data', 'inventory.json');
-
-function readLocalFallbackInventory(): Record<string, PerfumeStockItem> {
-  if (fs.existsSync(INVENTORY_PATH)) {
-    return JSON.parse(fs.readFileSync(INVENTORY_PATH, 'utf-8'));
-  }
-  return {};
-}
-
-// ─── GET ──────────────────────────────────────────────────────────────────────
 export async function GET() {
   try {
-    // 1. Intentar extraer inventario en vivo desde Google Sheets (pestaña InventarioBot!A1:H1000)
-    let stockData: PerfumeSheetRow[] = [];
-    try {
-      stockData = await getInventoryFromSheets();
-    } catch (sheetError: unknown) {
-      console.warn(
-        '⚠️ [GET /api/stock] No se pudo conectar a Google Sheets, usando respaldo local:',
-        sheetError instanceof Error ? sheetError.message : sheetError
+    // Extraer inventario en vivo desde Google Sheets (InventarioBot!A1:H1000) con cache: 'no-store'
+    const { activeRows, inactiveRows } = await getAllInventoryRowsFromSheets();
+
+    if (!activeRows || activeRows.length === 0) {
+      console.error(
+        '❌ [GET /api/stock] Google Sheets devolvió 0 perfumes con estado ACTIVO en InventarioBot. No se usará respaldo local obsoleto.'
+      );
+      return NextResponse.json(
+        {
+          error: 'No se encontraron perfumes ACTIVOS en InventarioBot.',
+          total: 0,
+          stock: {},
+          outOfStock: inactiveRows.map((r) => r.id || r.nombre_perfume).filter(Boolean),
+          stockData: [],
+          activeCatalog: [],
+          source: 'google-sheets-empty',
+        },
+        { status: 503 }
       );
     }
 
-    const stock: Record<string, any> = {};
-    const outOfStock: string[] = [];
-
-    if (stockData && stockData.length > 0) {
-      for (const item of stockData) {
-        stock[item.nombre_perfume || item.id] = {
-          id: item.id,
-          name: item.nombre_perfume,
-          version: item.tipo,
-          active: true,
-          gender: item.genero,
-          olfactory_family: item.familia_olfativa,
-          occasion: item.ocasion,
-          intensity: item.intensidad,
-        };
-      }
-
-      return NextResponse.json({
-        total: stockData.length,
-        stock,
-        outOfStock,
-        stockData,
-        source: 'google-sheets',
-      });
+    const stock: Record<string, unknown> = {};
+    for (const item of activeRows) {
+      const entry = {
+        id: item.id,
+        name: item.nombre_perfume,
+        version: item.tipo,
+        active: true,
+        gender: item.genero,
+        olfactory_family: item.familia_olfativa,
+        occasion: item.ocasion,
+        intensity: item.intensidad,
+      };
+      stock[item.id] = entry;
+      stock[item.nombre_perfume] = entry;
     }
 
-    // 2. Fallback a data/inventory.json si Sheets no devolvió datos
-    const fallback = readLocalFallbackInventory();
-    for (const [name, item] of Object.entries(fallback)) {
-      if (item.active) {
-        stock[name] = item;
-      } else {
-        outOfStock.push(name);
-      }
-    }
+    const outOfStock = inactiveRows
+      .map((r) => r.id || r.nombre_perfume)
+      .filter(Boolean);
+
+    // Catálogo enriquecido EXCLUSIVAMENTE con perfumes ACTIVOS de Sheets
+    const activeCatalog = buildActiveSheetPool(activeRows).map((entry) => entry.perfume);
 
     return NextResponse.json({
-      total: Object.keys(fallback).length,
+      total: activeRows.length,
       stock,
       outOfStock,
-      fullInventory: fallback,
-      source: 'local-fallback',
+      stockData: activeRows,
+      activeCatalog,
+      source: 'google-sheets',
     });
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Error interno al consultar el inventario';
-    console.error('[GET /api/stock]', message);
-    return NextResponse.json({ error: message }, { status: 500 });
-  }
-}
-
-// ─── POST ─────────────────────────────────────────────────────────────────────
-export async function POST(req: Request) {
-  try {
-    const body: Record<string, PerfumeStockItem> = await req.json();
-
-    // Validate payload is a non-null object
-    if (!body || typeof body !== 'object' || Array.isArray(body)) {
-      return NextResponse.json(
-        { error: 'Payload inválido. Se esperaba un objeto de inventario.' },
-        { status: 400 }
-      );
-    }
-
-    // Persist to disk
-    fs.writeFileSync(INVENTORY_PATH, JSON.stringify(body, null, 2), 'utf-8');
-
-    return NextResponse.json({
-      success: true,
-      total: Object.keys(body).length,
-      message: `Inventario guardado con éxito (${Object.keys(body).length} perfumes).`,
-    });
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Error al guardar el inventario';
-    console.error('[POST /api/stock]', message);
-    return NextResponse.json({ error: message }, { status: 500 });
+    // BLOQUE 3: Error explícito en consola — NUNCA caer silenciosamente en archivos JSON viejos
+    const message =
+      error instanceof Error ? error.message : 'Error interno al consultar InventarioBot en vivo';
+    console.error('❌ [GET /api/stock] Error leyendo inventario en vivo desde Google Sheets:', message);
+    return NextResponse.json(
+      {
+        error: `Error leyendo inventario en vivo de Google Sheets: ${message}`,
+        total: 0,
+        stock: {},
+        outOfStock: [],
+        stockData: [],
+        activeCatalog: [],
+        source: 'sheets-error',
+      },
+      { status: 503 }
+    );
   }
 }

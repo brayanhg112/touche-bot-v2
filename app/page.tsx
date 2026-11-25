@@ -1,39 +1,56 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-// import Bot from './components/Bot';
 import SplashScreen from './components/SplashScreen';
 import Header from './components/layout/Header';
 import BottomNav from './components/layout/BottomNav';
 import CollectionsView from './components/CollectionsView';
 import SavedView from './components/SavedView';
-
 import AiGuide from './components/AiGuide';
+import type { Perfume } from './lib/types';
 
 type Tab = 'sommelier' | 'colecciones' | 'guardados';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>('sommelier');
   const [stockMap, setStockMap] = useState<Record<string, boolean>>({});
-  const [outOfStock, setOutOfStock] = useState<string[]>([]);
+  const [activeCatalog, setActiveCatalog] = useState<Perfume[]>([]);
   const [stockLoaded, setStockLoaded] = useState(false);
+  const [stockError, setStockError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/stock')
-      .then((res) => res.json())
+    fetch('/api/stock', { cache: 'no-store' })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || 'Error al cargar inventario en vivo');
+        }
+        return data;
+      })
       .then((data) => {
-        if (data.stock) setStockMap(data.stock);
-        if (data.outOfStock) setOutOfStock(data.outOfStock);
+        if (data.stock) {
+          const map: Record<string, boolean> = {};
+          for (const key of Object.keys(data.stock)) {
+            map[key] = true;
+          }
+          setStockMap(map);
+        }
+        if (Array.isArray(data.activeCatalog)) {
+          setActiveCatalog(data.activeCatalog);
+        }
+        setStockError(null);
         setStockLoaded(true);
       })
       .catch((err) => {
-        console.error('Failed to load live stock', err);
+        console.error('❌ Failed to load live stock:', err);
+        setStockError('No pudimos cargar el inventario en vivo en este momento.');
+        setActiveCatalog([]);
         setStockLoaded(true);
       });
   }, []);
 
   return (
-    <>
+    <div className="w-full min-h-[100dvh] flex flex-col overflow-x-hidden">
       <SplashScreen />
       <Header />
 
@@ -43,28 +60,39 @@ export default function Home() {
       </div>
 
       {activeTab === 'sommelier' && (
-        <main className="pt-24 pb-32 min-h-screen flex flex-col max-w-2xl mx-auto relative z-10 w-full overflow-hidden">
-          <div className="mb-4 mt-2 text-center px-4">
+        <main className="pt-[calc(6rem+env(safe-area-inset-top))] pb-[calc(7.5rem+env(safe-area-inset-bottom))] min-h-[100dvh] flex flex-col w-full max-w-4xl mx-auto relative z-10 px-4">
+          <div className="mb-4 mt-2 text-center">
             <h2 className="text-3xl font-headline font-bold text-primary mb-1">Guía IA</h2>
-            <p className="text-[10px] font-body text-on-surface/60 tracking-[0.2em] uppercase">Especialista Interactivo</p>
+            <p className="text-[10px] font-body text-on-surface/60 tracking-[0.2em] uppercase">
+              Especialista Interactivo
+            </p>
           </div>
           <AiGuide />
         </main>
       )}
 
       {activeTab === 'colecciones' && (
-        <div className="relative z-10">
-          <CollectionsView stockMap={stockMap} outOfStock={outOfStock} />
-        </div>
+        <main className="relative z-10 w-full">
+          <CollectionsView
+            activeCatalog={activeCatalog}
+            stockMap={stockMap}
+            stockLoaded={stockLoaded}
+            stockError={stockError}
+          />
+        </main>
       )}
 
       {activeTab === 'guardados' && (
-        <div className="relative z-10">
-          <SavedView stockMap={stockMap} onChangeTab={setActiveTab} />
-        </div>
+        <main className="relative z-10 w-full">
+          <SavedView
+            activeCatalog={activeCatalog}
+            stockMap={stockMap}
+            onChangeTab={setActiveTab}
+          />
+        </main>
       )}
 
       <BottomNav activeTab={activeTab} onChangeTab={setActiveTab} />
-    </>
+    </div>
   );
 }
